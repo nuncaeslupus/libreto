@@ -1,8 +1,15 @@
-# Libreto — requirements research (draft 1)
+# Libreto — requirements research (draft 2)
 
 Input for `specify`. Covers decision D-8 of the Alter Ego backlog and feeds D-4 (file format), D-5 (app type) and D-6 (indexing).
 Priorities use MoSCoW for the **first usable version** (M = must, S = should, C = could, W = won't for now).
 Every requirement has a stable id `R-N`; ids are never renumbered.
+
+## 0. Principles
+
+- P-1 — A professional, standalone application: anyone can install it and start writing. No copy-pasting into AI chats, no uploading or emailing files.
+- P-2 — Standards first. Where an accepted format or practice exists (Markdown, YAML front matter, JSON Schema, gettext/XLIFF, Graphviz DOT/GraphML, ink), use it; invent only what nothing covers.
+- P-3 — Graphics are a view layer. Story, puzzles and world state are data that can be run and tested without any graphics.
+- P-4 — Every step aims at the finished game: what Libreto stores must be what the game runs.
 
 ## 1. Benchmark
 
@@ -17,7 +24,9 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 | Fountain | Plain-text screenplay markup | Human-readable script format | No structure beyond the script |
 | Plottr | Visual plot timelines | Grid of plotlines × chapters, series bible | No logic, no graphs |
 | Aeon Timeline | Timeline for writers | Story time vs narrative order, character participation, dependencies | No script writing; proprietary |
-| Puzzle dependency charts (Ron Gilbert) | Design method | Goals/actions/items as a DAG read backwards from the ending | A method, not a tool |
+| Puzzle dependency charts (Ron Gilbert; Game Developer primer) | Design method | Goals as a DAG read backwards from the ending; layered layout; in/out-degree; layer width = parallelism; ancestor set = what the story may safely mention; Monte Carlo play-time estimates | A method, not a tool |
+| ALAIF design doc (Ivan's own) | Event graph for a software-driven escape room | Typed events, AND dependencies, weak edges, immediate/deferred dilemmas, indivisible sets, hint chains, reactions, 12-step design pipeline (see §2 L) | Live-action parts (GM, actors, panic button) do not transfer |
+| Detroit: Become Human | Game | Post-scene flowchart of the choices made and the ones missed | A game feature, not a tool |
 | literary-critic (own) | LLM manuscript analysis | Stable anchors, Codex knowledge base, evidence-backed checks | Analysis, not authoring |
 | drawspec (own) | JSON → diagrams | LLM-writable graphs without coordinates | Render only, not interactive |
 
@@ -93,7 +102,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-55 W — Bundled model or paid AI service inside the app.
 
 ### H. Simulation and play
-- R-56 S — Play mode: walk the story/puzzle graph as a player, with inventory and known facts.
+- R-56 M — Play mode: walk the story/puzzle graph as a player, with inventory and known facts (see §2 N).
 - R-57 S — Variables and conditions (flags, inventory) evaluated in play mode.
 - R-58 C — Coverage: nodes/lines a set of play-throughs never reached.
 
@@ -111,21 +120,62 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 ### K. UI and platform
 - R-66 M — Works offline; no account needed.
 - R-67 M — Usable by a non-technical writer; keyboard-friendly.
-- R-68 S — Several views of the same data side by side (text, graph, timeline, cards).
+- R-68 M — Several views of the same data side by side (text, graph, timeline, cards); graphs and timelines are interactive: zoom, pan, select, follow links to the text.
 - R-69 S — Visual style consistent with nacho-viewer (optional, I-30).
 - R-70 S — UI in English first, translatable.
 - R-71 C — Dark mode and themes.
 
-## 3. Open questions
+### L. Event model (from ALAIF)
+- R-72 M — Typed nodes. Proposed set: puzzle (a goal, named with a verb: "Get the key"), action (a step that is not a goal), interruption (the world or an NPC acts on the player), trigger (an immediate reaction), collectible (optional, has an availability window), hint, dilemma, decision, side quest, indivisible set.
+- R-73 M — Dependencies are AND by default; OR is either an alternative inside one node ("tape or marker") or a branch through a dilemma. The graph is not a flowchart.
+- R-74 M — Story variables: player state, decision/attitude variables (trust, courage…), counters; decisions set, add to or subtract from them; initial values can be set per playthrough.
+- R-75 M — Immediate dilemmas (the player chooses now, with a default) and deferred dilemmas (a condition over variables picks the branch later, e.g. `trust > 3 and lied_to_police`).
+- R-76 M — Branch pruning: choosing one option removes the unchosen branch up to the first node with a strong dependency outside it; weak (dashed) edges exist only for this.
+- R-77 M — Indivisible sets: a nestable subgraph that behaves as one node and locks out everything else until finished; this is also the collapse unit of R-21.
+- R-78 S — Hint chains: up to 3 levels (plus an optional comic level 4) attached to puzzles and actions, never to decisions; delivered in-world (an NPC line, Gómez's memory voice); usage recorded.
+- R-79 S — Reactions: every node can carry side effects (line of dialogue, sound, music cue, animation id) to be filled in later by the game.
+- R-80 S — Guided design pipeline from ALAIF: three-act plot → variables → puzzle graph → dilemmas → interruptions → side quests → indivisible sets → actions → hints → triggers → collectibles; Libreto shows which steps each chapter has completed.
+- R-81 S — Checks from ALAIF: dialogue must not mention a puzzle that may not be solved yet (ancestor set); overlapping reactions on events that can fire together; branches of very different length; objects useless in a branch (red herrings); "key before the lock".
+- R-82 S — Post-play decision flowchart (Detroit: Become Human style): the path taken, the options missed, and how variables evolved.
+- R-83 C — Graph shape metrics: the "balloon" (narrow start and end, wide middle), maximum open puzzles, linearity per chapter.
 
-1. **Format (D-4):** Markdown + YAML front matter per entity, or something stricter (JSON/TOML/custom)? Proposal: Markdown + front matter for prose entities, JSON for graphs, all schema-validated.
-2. **App type (D-5):** local web app, desktop shell (Tauri/Electron), or CLI + MCP first with UI later? Proposal: data model + CLI/MCP first, UI second.
-3. **Indexing (D-6):** start with anchors + structured index; add embeddings only if search falls short.
-4. **Graph model:** one graph with typed edges (requires, happens-before, reveals, flashback-to) or separate graphs per concern?
-5. **Scope of v1:** the smallest Libreto that lets us start writing Alter Ego. Proposal: R-1–R-3, R-10–R-12, R-18–R-22, R-28–R-30, R-36–R-38, R-48–R-50.
+### M. World over time
+- R-84 M — Locations form a graph; each connection (door, street, phone line…) has a condition over story state, so the map changes with the plot ("the bridge is closed after the fire").
+- R-85 M — Every object, character and exit has a state that can change; the map, the inventory and who is where can be shown at any point of a playthrough or timeline.
+- R-86 S — Map view over time: pick a moment (or scrub the timeline) and see which places are reachable and what is in them.
+
+### N. Headless skeleton runtime
+- R-87 M — A minimal text runtime that runs the project data: rooms, objects, characters, verbs ("Key → Get"), inventory, variables, dialogue. No walking, no art, no animation.
+- R-88 M — A dev console to inspect and change state (inventory, variables, flags, current node).
+- R-89 M — Scripted playthroughs as automated tests: a list of player commands plus expected state, run without any UI (CI-friendly).
+- R-90 S — Solvers on the same data: find every reachable ending, detect dead ends and soft-locks, estimate play time.
+- R-91 S — The real game engine later reads the same data and the same rules; the skeleton is its reference implementation, not a throwaway.
+
+## 3. Decisions so far (Ivan, 2026-11-03)
+
+- Format (D-4): Markdown + YAML front matter to start.
+- App type (D-5): data model + CLI + MCP first; UI after.
+- Indexing (D-6): stable anchors and a structured index first; explanation in §5 before building.
+- v1 scope: the basics first.
+
+## 4. Open questions
+
+1. **ink:** use ink for dialogue inside scenes (branching lines, conditions) and Libreto's own model for puzzles, world and timelines? ink is mature and has runtimes for Unity, Godot, JS and others; it does not model puzzle graphs, maps or inventories.
+2. **Graph model:** one graph with typed edges (requires, weak, happens-before, reveals, flashback-to), or ALAIF's two levels (a decision graph whose nodes contain puzzle graphs)? Proposal: one typed graph, with indivisible sets as the nesting level.
+3. **Skeleton runtime home:** inside Libreto (as its play mode) or a separate package the game also uses? Proposal: a separate library inside the libreto repo, used by both.
+4. **Localization standard:** gettext PO, XLIFF or Fluent? Proposal: line ids in the source and PO files per language (widest tool support).
+
+## 5. Indexing, in short
+
+- **What it is:** a lookup built from the project so a tool or an AI finds the relevant pieces without reading everything.
+- **Structured index (what we start with):** every entity and paragraph has a stable id (R-3); Libreto keeps tables like "where is character X mentioned", "which scenes reveal fact Y", "what depends on puzzle Z". It is exact, cheap, explainable, and updates when files change. literary-critic works this way.
+- **Full-text search:** finds words and phrases (like grep, but ranked). Cheap and standard (e.g. SQLite FTS).
+- **Embeddings / vector search (RAG):** each passage becomes a list of numbers that captures its meaning; similar meanings land close together, so "scenes where Gómez feels guilty" can be found without those words. Useful for fuzzy questions; costs a model, a store, and gives approximate answers.
+- **Plan:** structured index + full-text search first; add embeddings only if real questions go unanswered.
 
 ## Sources
 
 - [articy:draft X — what's new](https://www.articy.com/help/adx/WhatsNew.html), [macOS launch](https://www.businesswire.com/news/home/20250403759310/de)
 - [Arcweave — AI assistant](https://arcweave.com/whats-new/articles/ai-credits-usage-tracking-and-assistant-improvements), [Godot plugin](https://godotengine.org/asset-library/asset/1601)
+- [Puzzle dependency graph primer (Game Developer)](https://www.gamedeveloper.com/design/puzzle-dependency-graph-primer); ALAIF design document (Ivan, private)
 - Ron Gilbert's puzzle dependency charts (Grumpy Gamer); public docs of Scrivener, Twine, ink, Yarn Spinner, Fountain, Plottr, Aeon Timeline.
