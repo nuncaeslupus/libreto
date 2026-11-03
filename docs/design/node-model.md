@@ -483,6 +483,69 @@ ALAIF's *Graf de decisions* draws Room 6 twelve times (3 × 2 × 2 choices: `Axa
 
 Only what really differs gets a variant; the rest is shared. Libreto can still draw the twelve combinations as a view.
 
+## 6b. Schema, field by field (v0)
+
+### Project layout
+
+![Diagram 4](diagrams/node-model-4.svg) <!-- drawspec-render -->
+
+<details><summary>Diagram source</summary>
+
+```drawspec
+{"version": 1, "kind": "files", "root": "my-game", "entries": [{"path": "libreto.yaml"}, {"path": "variables.yaml"}, {"path": "facts.yaml"}, {"path": "knowers.yaml"}, {"path": "scenes/bar_pelayo.yaml"}, {"path": "scenes/pelayo_before.yaml"}, {"path": "entities/items/badge.md"}, {"path": "entities/characters/rosa.md"}, {"path": "entities/locations/bar_pelayo.md"}, {"path": "script/bar_pelayo.ink"}, {"path": "tests/truth_route.yaml"}, {"path": "locale/es.po"}]}
+```
+
+</details>
+
+| File | Holds |
+|---|---|
+| `libreto.yaml` | Project name, languages, timelines (`id`, `title`, `past: fixed/open`), schema version |
+| `variables.yaml` | Story variables (§4) |
+| `facts.yaml` | Facts that can be known: `id`, `title`, optional `kind: mystery` + `explained_by` |
+| `knowers.yaml` | `player` (built in) and each character mind (`gomez_before`, `alter_ego`…); a body can hold several minds |
+| `scenes/*.yaml` | Scene header + its nodes (one graph file per scene) |
+| `entities/**.md` | YAML front matter (id, type, initial state) + free Markdown (description, notes) |
+| `script/*.ink` | Dialogue and player-facing lines, referenced by node and line id |
+| `tests/*.yaml` | Scripted playthroughs (§5.2) |
+| `locale/*.po` | Translations by line id |
+
+### Scene header
+
+| Field | Req. | Type | Notes |
+|---|---|---|---|
+| `scene` | yes | id | Unique |
+| `timeline` | yes | id | From `libreto.yaml` |
+| `story_time` | no | time / relative | When it happens in the world |
+| `at`, `actor` | no | id | Defaults for every node in the file |
+| `nodes` | yes | list | Below |
+
+### Node
+
+| Field | Req. | Type | Applies to | Notes |
+|---|---|---|---|---|
+| `id` | yes | id | all | Project-wide |
+| `type` | yes | enum | all | `puzzle action event dilemma ending set` |
+| `title` | yes | text | all | Designer's name |
+| `requires` | no | list or `{any: [...]}` | all | Node or `dilemma.option` ids |
+| `when` | no | condition | all | §4 syntax |
+| `effects` | no | list of statements | all | `x = v`, `x += n`, `give/take item`, `put item in place`, `learn [knower] fact [via technique]` |
+| `actor`, `at`, `timeline` | no | id | all | Override scene defaults |
+| `optional`, `until` | no | bool, condition | all but `ending` | Collectibles, side quests |
+| `evidence` | no | list of fact/item ids | puzzle | Fair-puzzle check |
+| `hints` | no | list (≤ 3 + comic) | puzzle, action | |
+| `reactions` | no | `{on_done, on_wrong}` | all | Ids of lines, sounds, animations |
+| `estimate`, `difficulty` | no | duration, 1–5 | puzzle, action | |
+| `characters` | no | list of ids | all | |
+| `variants` | no | list of `{when, script}` | all | §6.1 |
+| `must_match` | no | condition | nodes in a `past: fixed` timeline | §5d |
+| `timing` | event only | `at_once` / `{after}` / `{when}` | event | |
+| `mode`, `options`, `default` | dilemma only | | dilemma | Option: `{id, title, when, effects}` |
+| `members`, `exclusive` | set only | list, bool | set | |
+
+### Checks Libreto runs on this data
+
+Schema errors point at the field (R-7). On top: cycles, unreachable nodes and dead ends (R-20); allowed links (§3); facts used before being learned, per knower (R-37); evidence not in the ancestor set (R-92); mysteries without an explanation on every route; `must_match` conflicts; paradoxes across timelines; technique overuse per chapter; collectibles that are secretly required.
+
 ## 7. Decisions and open questions
 
 Decided (Ivan, 2026-11-03):
@@ -495,6 +558,8 @@ Decided (Ivan, 2026-11-03):
 6. Clue = Hint, confirmed: ALAIF's English *Clue* (events list) and *Hint* (class sheet) both translate *Pista*; in-world facts are `evidence` here.
 
 Open:
+
+9. **Schema v0 (§6b).** Anything missing before we close the doc?
 
 7. **Play order and time rules.** Open per chapter; see §5b.2. Default `past: fixed` proposed.
 8. **Player vs character knowledge.** Model in §5b.2; how often to use each trick is a story decision, not a data-model one.
