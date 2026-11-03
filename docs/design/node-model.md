@@ -9,7 +9,7 @@ Inputs: `docs/research/requirements.md` (§2 C, L, M, N, O), the ALAIF design do
 2. A node is an **event that happens at most once**: a puzzle solved, an action taken, something the world does.
 3. A node becomes **available** when everything in `requires` has happened **and** its `when` condition is true.
 4. When it happens, it applies its `effects` to the state.
-5. Branching is **state, not deletion**: a dilemma option sets a variable; nodes of one branch carry a `when` on it. Pruning (ALAIF §75–77) is *computed* from that, not stored.
+5. Branching is **state, not deletion**: a dilemma option sets a variable; nodes of one branch carry a `when` on it. Pruning (ALAIF p.75–77) is *computed* from that, not stored.
 
 ## 2. Node types
 
