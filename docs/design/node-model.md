@@ -347,6 +347,121 @@ Two ways to read the creating timeline; the model supports both, and a chapter s
 
 **Player knowledge vs character knowledge.** Facts are tracked per knower: `player`, `gomez_before`, `alter_ego`. A node can require `knows(alter_ego, x)` (the character must find it in-world) or just `knows(player, x)`. When the player knows something Alter Ego does not, the design either gates on the character's knowledge or makes the world change in between (the object fell under the sand, a bird took it): an `event` in the solving timeline that moves the item.
 
+## 5c. Example — "Blue Rain" (plan known first, Columbo route)
+
+Gómez learns where to hide things from someone who helps him; the player watches the plan being made. Later, the player knows the answer and Alter Ego does not, and the world has moved on.
+
+```yaml
+# creating timeline, actor: gomez_before
+- id: hide_key_in_record
+  type: puzzle
+  title: Hide your flat key in the "Blue Rain" sleeve at Nuria's shop
+  effects:
+    - put flat_key in record_blue_rain
+    - learn key_in_record via helper      # Nuria suggests it (twist: she helps Alter Ego later)
+- id: write_on_matchbook
+  type: action
+  title: Write "Blue Rain, side B" on a matchbook
+  effects: [put matchbook in bar_pelayo]
+
+# solving timeline, actor: alter_ego
+- id: record_sold
+  type: event
+  timing: {when: done(enter_office)}      # the world moves on
+  effects: [put record_blue_rain in buyer_flat]
+- id: read_matchbook
+  type: action
+  requires: [matchbook]                   # §5, optional collectible
+  effects: [learn alter_ego key_in_record via note_to_self]
+- id: ask_nuria_for_record
+  type: puzzle
+  when: knows(alter_ego, key_in_record)   # gated on the character, not the player
+- id: find_the_buyer
+  type: puzzle
+  requires: [ask_nuria_for_record, record_sold]
+```
+
+What it tests:
+
+- **The player knows, Alter Ego does not.** `ask_nuria_for_record` waits for `knows(alter_ego, …)`, so the player cannot skip ahead just by remembering the flashback.
+- **The route changes, not the answer.** `record_sold` sends the player after the buyer: Columbo, not a quiz.
+- **A collectible becomes a bridge.** The matchbook is optional in §5. If the player missed it, Libreto reports `ask_nuria_for_record` as unreachable, so either it becomes required or a second source is added. No loose end goes unnoticed.
+- **Techniques are data.** `via: helper` and `via: note_to_self` record how knowledge travels. Libreto counts them per chapter, so "don't overuse the helper" (I-33) is a check, not a memory.
+
+## 5d. Example — "Quarter past three" (effect first, cause later)
+
+Alter Ego wakes up to a smashed window and a clock stopped at 3:15. Much later, the player plays the night Gómez staged it. The past is fixed: Gómez must produce exactly what Alter Ego already saw.
+
+![The cause is played after its effect](diagrams/node-model-3.svg) <!-- drawspec-render -->
+
+<details><summary>Diagram source</summary>
+
+```drawspec
+{"version": 1, "kind": "lanes",
+ "title": "The cause is played after its effect",
+ "nodes": [
+  {"id": "see", "text": "event\nSmashed window, clock at 3:15", "actor": "Alter Ego (played first)"},
+  {"id": "ask", "text": "puzzle\nWho broke in?", "actor": "Alter Ego (played first)"},
+  {"id": "neighbour", "text": "action\nThe neighbour saw a man in a coat", "actor": "Alter Ego (played first)"},
+  {"id": "plan", "text": "action\nPlan a fake burglary", "actor": "Gómez (played later)"},
+  {"id": "clock", "text": "puzzle\nStop the clock at 3:15", "actor": "Gómez (played later)"},
+  {"id": "glass", "text": "puzzle\nBreak the window from outside", "actor": "Gómez (played later)"},
+  {"id": "curtain", "text": "event\nA curtain moves across the street", "actor": "Gómez (played later)", "role": "note"}
+ ],
+ "edges": [
+  {"from": "see", "to": "ask"},
+  {"from": "ask", "to": "neighbour"},
+  {"from": "plan", "to": "clock"},
+  {"from": "plan", "to": "glass"},
+  {"from": "clock", "to": "see", "label": "explains"},
+  {"from": "glass", "to": "see", "label": "explains"},
+  {"from": "glass", "to": "curtain"}
+ ]}
+```
+
+</details>
+
+```yaml
+# facts.yaml: a fact the player sees before knowing why
+clock_stopped_315: { kind: mystery, explained_by: [stop_clock, break_window] }
+
+- id: plan_burglary
+  type: action
+  actor: gomez_before
+  title: Plan a fake burglary
+  effects: [learn player goal_fake_burglary via goal_statement]   # Gómez says it out loud
+
+- id: stop_clock
+  type: puzzle
+  actor: gomez_before
+  title: Stop the clock at 3:15
+  must_match: clock_time == "3:15"   # fixed past: what Alter Ego saw
+  reactions: { on_wrong: gomez_not_that_time }   # a joke, not a dead end
+
+- id: curtain_moves
+  type: event
+  timing: at_once
+  requires: [break_window]
+  effects: [learn player neighbour_saw_gomez]    # only the player: Gómez never notices
+```
+
+What it tests:
+
+- **Payoff before setup.** `kind: mystery` plus `explained_by` ties the effect to its cause. Check: every mystery is explained on every route, and every explaining node is reachable (I-36, no loose ends).
+- **The plan reaches the player through the goal.** `plan_burglary` states what Gómez wants ("Alter Ego must believe someone broke in"), so the player is not "waiting to realize they must put an object here" (I-32).
+- **`must_match` keeps the fixed past consistent.** The player cannot stop the clock at 4:00; a wrong attempt gets a line, not a paradox.
+- **Dramatic irony is data.** `learn player …` without Gómez: Libreto can list every moment where the player knows more than the character on screen (I-37), and the reverse.
+
+## 5e. What the four examples add to the model
+
+| Addition | Where | Why |
+|---|---|---|
+| `learn <knower> <fact> via <technique>` | effects | Per-knower facts; techniques counted (I-33, I-34) |
+| `knows(<knower>, <fact>)` | conditions | Gate on the character, not the player |
+| `facts.yaml` with `kind: mystery`, `explained_by` | project file | Payoff before setup; no loose ends |
+| `must_match` | node | Fixed past reproduces what was already seen |
+| Knowledge diff view | Libreto view | Who knows more than whom at each play-order point |
+
 ## 6. One graph or two levels?
 
 ALAIF draws a decision graph whose nodes contain puzzle graphs. Proposal: **one graph**, with `set` and scene files as the collapsible levels (R-21). The decision-level view is then a *filter* (show only dilemmas, endings and sets), not a second structure to keep in sync. To be validated on a larger example with two timelines.
