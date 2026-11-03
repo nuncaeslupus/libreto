@@ -19,7 +19,7 @@ Six types, each a row of ALAIF's legend or a merge of several. Hints and reactio
 |---|---|---|---|
 | `puzzle` | Player; a real goal, named with a verb | Puzzle | Get into the back office |
 | `action` | Player; a step that is not a goal | Action | Talk to Rosa |
-| `event` | The world, by itself, as soon as available (optionally after `delay`) | Interrupt, Trigger | Rosa leaves the bar to dance |
+| `event` | The world, by itself. `timing: at_once` (ALAIF trigger) or a window such as `timing: {after: 2-5 min}` or `timing: {when: idle}` (ALAIF interrupt) | Interrupt, Trigger | The phone rings |
 | `dilemma` | Player picks an option now (`mode: immediate`), or a condition picks it later (`mode: deferred`) | Immediate/Delayed dilemma + Voluntary/Default/Involuntary decision | "Who are you?" — truth or lie |
 | `ending` | Reached; the game ends | (end node) | Case closed |
 | `set` | A container: its nodes act as one and, if `exclusive`, lock everything else until done | Indivisible set | The piano set |
@@ -52,6 +52,10 @@ Flags any node can carry instead of more types:
 | `variants` | Same node, different content by state (see §6.1). |
 
 A dilemma option is referenced as `<dilemma>.<option>`, e.g. `who_are_you.truth`.
+
+**Scope.** Ids are project-wide. A scene file is only where a node is written: any node may require a node in another scene or timeline, and `has(badge)` works anywhere. Items, characters and locations are entities with their own files (`items/badge.md`) and a state that changes (who holds it, where it is), so an object picked up in chapter 1 and used in chapter 9 needs nothing special (R-85).
+
+**Interrupt vs trigger (ALAIF re-check).** ALAIF defines both as non-player events; the only difference is timing. A trigger fires right after its dependencies (mostly to start music or sound); an interrupt is a plot twist ("the phone rings") that fires at a moment the player does not expect, chosen by the game master. ALAIF itself says they could be one type. In a video game there is no game master, so the moment becomes a rule: `timing`. Most decorative triggers become plain `reactions` on the node before them.
 
 **Allowed links.** Not every type may require every other (ALAIF's *Restricciones eventos* matrix): e.g. a dilemma is followed only by its own options, and nothing requires an `ending`. The schema enforces this table (R-7).
 
@@ -242,6 +246,95 @@ Later, a **deferred** dilemma uses the state the scene left behind:
 
 `rosa_dances` and `read_note` are events: the runtime fires them; the test does not list them.
 
+## 5b. Worked example — "One week earlier" (cross-timeline)
+
+Same bar, creating timeline. Gómez-before prepares his own mystery: he hides the badge and leaves himself a note, then erases his memory. The solving scene of §5 now depends on it.
+
+![Two timelines, one graph](diagrams/node-model-2.svg) <!-- drawspec-render -->
+
+<details><summary>Diagram source</summary>
+
+```drawspec
+{"version": 1, "kind": "lanes",
+ "title": "Two timelines, one graph",
+ "nodes": [
+  {"id": "favour", "text": "puzzle\nGet Rosa's tip jar back", "actor": "Gómez-before (creating)"},
+  {"id": "needle", "text": "action\nBorrow needle and thread", "actor": "Gómez-before (creating)"},
+  {"id": "hide", "text": "puzzle\nSew the badge into the coat", "actor": "Gómez-before (creating)"},
+  {"id": "leave", "text": "action\nLeave a note in the office", "actor": "Gómez-before (creating)"},
+  {"id": "wipe", "text": "event\nThe memory wipe", "actor": "Gómez-before (creating)", "role": "emphasis"},
+  {"id": "find", "text": "puzzle\nFind your badge", "actor": "Gómez-after (solving)"},
+  {"id": "office", "text": "puzzle\nEnter the office", "actor": "Gómez-after (solving)"},
+  {"id": "read", "text": "event\nRead your own note", "actor": "Gómez-after (solving)", "role": "terminal"}
+ ],
+ "edges": [
+  {"from": "favour", "to": "needle"},
+  {"from": "favour", "to": "leave"},
+  {"from": "needle", "to": "hide"},
+  {"from": "hide", "to": "wipe"},
+  {"from": "leave", "to": "wipe"},
+  {"from": "hide", "to": "find", "label": "badge in lining"},
+  {"from": "office", "to": "read"},
+  {"from": "leave", "to": "read", "label": "note in office"}
+ ]}
+```
+
+</details>
+
+```yaml
+scene: pelayo_before
+timeline: creating
+story_time: -7 days        # relative to the solving timeline's day 0
+at: bar_pelayo
+actor: gomez_before
+
+nodes:
+  - id: rosa_tip_jar
+    type: puzzle
+    title: Get Rosa's stolen tip jar back
+    effects: [rosa_trust += 1]          # still true a week later
+
+  - id: borrow_needle
+    type: action
+    title: Borrow needle and thread
+    requires: [rosa_tip_jar]
+    effects: [give needle_thread]
+
+  - id: hide_badge
+    type: puzzle
+    title: Sew the badge into the coat lining
+    requires: [borrow_needle]
+    when: has(badge)
+    effects: [take badge, put badge in coat_lining, learn badge_in_coat]
+
+  - id: leave_note
+    type: action
+    title: Leave a note in the back office
+    requires: [rosa_tip_jar]             # Rosa lets him in
+    effects: [put note in back_office]
+
+  - id: memory_wipe
+    type: event
+    timing: at_once
+    requires: [hide_badge, leave_note]
+```
+
+In §5, two nodes gain a cross-timeline requirement:
+
+```yaml
+  - id: find_badge
+    requires: [hide_badge]       # pelayo_before, other timeline
+  - id: read_note
+    requires: [enter_office, leave_note]
+```
+
+### 5b.1 What this example tests
+
+- **Two knowers, one body (R-39).** `learn badge_in_coat` runs with `actor: gomez_before`, so only Gómez-before knows it. Gómez-after starts empty; the player may know it if the flashback was played first, which is the fun of the design and also what the fair-puzzle check (R-92) must take into account.
+- **State crosses time through the world, not through the inventory.** The badge goes into `coat_lining`; Gómez-after does not "have" it until `find_badge`. `rosa_trust` set a week earlier still holds.
+- **Story time vs play order (R-29).** `story_time` orders events in the world; play order is whatever the graph allows. Libreto checks every cross-timeline edge: if the cause comes *later* in story time than its effect, it is a paradox and is flagged, unless marked `paradox: intended`.
+- **Play order is a design choice.** If the flashback is a chapter played *after* the bar scene, `find_badge` cannot be solved in the bar, and Libreto reports it as a dead end for that chapter order. If the player can switch timelines freely (DOTT style), it is solvable. The same data shows both.
+
 ## 6. One graph or two levels?
 
 ALAIF draws a decision graph whose nodes contain puzzle graphs. Proposal: **one graph**, with `set` and scene files as the collapsible levels (R-21). The decision-level view is then a *filter* (show only dilemmas, endings and sets), not a second structure to keep in sync. To be validated on a larger example with two timelines.
@@ -263,11 +356,18 @@ ALAIF's *Graf de decisions* draws Room 6 twelve times (3 × 2 × 2 choices: `Axa
 
 Only what really differs gets a variant; the rest is shared. Libreto can still draw the twelve combinations as a view.
 
-## 7. Open questions for Ivan
+## 7. Decisions and open questions
 
-1. **Branching by state (proposed) vs ALAIF pruning with weak edges.** Does the example cover the cases you had in mind for weak edges (p.75–77)?
-2. **`event` = interrupt + trigger.** ALAIF keeps them apart. Is there a difference the game needs, beyond "immediate" vs "after a delay"?
-3. **Decisions as dilemma options**, not separate nodes (Voluntary/Default/Involuntary become `options`, `default`, `mode: deferred`). OK?
-4. **File granularity.** One YAML file per scene graph (proposed) vs one file per node (R-2 literally). Per node is many small files; per scene keeps a graph readable in one place.
-5. **Next test scene.** A cross-timeline one: Gómez-before hides the badge in the coat (creating timeline), Gómez-after finds it (solving timeline).
-6. ~~Clue as a node?~~ Resolved: Clue = Hint (Ivan); in-world facts are `evidence`.
+Decided (Ivan, 2026-11-03):
+
+1. Branching by state; no weak edges.
+2. `event` merges interrupt and trigger, with `timing` (ALAIF re-checked, §3).
+3. Decisions are options inside the dilemma.
+4. One YAML file per scene; ids are project-wide, so objects and dependencies cross scenes freely (§3 Scope).
+5. Cross-timeline test scene added (§5b).
+6. Clue = Hint, confirmed: ALAIF's English *Clue* (events list) and *Hint* (class sheet) both translate *Pista*; in-world facts are `evidence` here.
+
+Open:
+
+7. **Play order.** Free switching between timelines (DOTT), fixed chapters, or both per chapter?
+8. **Knowledge of the player vs Gómez-after.** Should the game ever let the player use what only Gómez-before knows, or must Gómez-after rediscover it in-world?
