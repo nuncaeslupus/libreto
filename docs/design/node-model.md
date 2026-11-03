@@ -42,7 +42,7 @@ Flags any node can carry instead of more types:
 | `requires` | Nodes or dilemma options that must have happened. **AND** by default; `any: [...]` for OR. |
 | `when` | Condition over state; must be true to become available. |
 | `effects` | State changes when it happens. |
-| `actor` | Who can do it (`gomez_after`, `gomez_before`…), for DOTT-style protagonists (R-24). |
+| `actor` | Who can do it (`alter_ego`, `gomez_before`…), for DOTT-style protagonists (R-24). |
 | `at` | Location id (R-84). |
 | `timeline` | `solving` / `creating` … (R-28). |
 | `options` | `dilemma` only: list of `{id, title, effects, when}`; `default` names the option taken if the player never chooses. |
@@ -83,7 +83,7 @@ Syntax follows ink's expressions (`and`, `or`, `not`, `==`, `>=`), so dialogue c
 
 ## 5. Worked example — "Bar Pelayo, 1 a.m."
 
-Invented test scene, solving timeline. Gómez (memory erased) wants into the back office of a jazz bar, where his former self left something. Rosa, the bartender, asks who he is. Truth or lie gives two routes that **merge** at the office door.
+Invented test scene, solving timeline. Alter Ego (Gómez after the memory wipe) wants into the back office of a jazz bar, where his former self left something. Rosa, the bartender, asks who he is. Truth or lie gives two routes that **merge** at the office door.
 
 ![Bar Pelayo: split and merge](diagrams/node-model-1.svg) <!-- drawspec-render -->
 
@@ -131,7 +131,7 @@ The data (one YAML file for the scene graph; long text lives in Markdown/ink fil
 scene: bar_pelayo
 timeline: solving
 at: bar_pelayo
-actor: gomez_after        # default for every node below
+actor: alter_ego        # default for every node below
 
 nodes:
   - id: talk_rosa
@@ -263,9 +263,9 @@ Same bar, creating timeline. Gómez-before prepares his own mystery: he hides th
   {"id": "hide", "text": "puzzle\nSew the badge into the coat", "actor": "Gómez-before (creating)"},
   {"id": "leave", "text": "action\nLeave a note in the office", "actor": "Gómez-before (creating)"},
   {"id": "wipe", "text": "event\nThe memory wipe", "actor": "Gómez-before (creating)", "role": "emphasis"},
-  {"id": "find", "text": "puzzle\nFind your badge", "actor": "Gómez-after (solving)"},
-  {"id": "office", "text": "puzzle\nEnter the office", "actor": "Gómez-after (solving)"},
-  {"id": "read", "text": "event\nRead your own note", "actor": "Gómez-after (solving)", "role": "terminal"}
+  {"id": "find", "text": "puzzle\nFind your badge", "actor": "Alter Ego (solving)"},
+  {"id": "office", "text": "puzzle\nEnter the office", "actor": "Alter Ego (solving)"},
+  {"id": "read", "text": "event\nRead your own note", "actor": "Alter Ego (solving)", "role": "terminal"}
  ],
  "edges": [
   {"from": "favour", "to": "needle"},
@@ -330,10 +330,22 @@ In §5, two nodes gain a cross-timeline requirement:
 
 ### 5b.1 What this example tests
 
-- **Two knowers, one body (R-39).** `learn badge_in_coat` runs with `actor: gomez_before`, so only Gómez-before knows it. Gómez-after starts empty; the player may know it if the flashback was played first, which is the fun of the design and also what the fair-puzzle check (R-92) must take into account.
-- **State crosses time through the world, not through the inventory.** The badge goes into `coat_lining`; Gómez-after does not "have" it until `find_badge`. `rosa_trust` set a week earlier still holds.
+- **Two knowers, one body (R-39).** `learn badge_in_coat` runs with `actor: gomez_before`, so only Gómez-before knows it. Alter Ego starts empty; the player may know it if the flashback was played first, which is the fun of the design and also what the fair-puzzle check (R-92) must take into account.
+- **State crosses time through the world, not through the inventory.** The badge goes into `coat_lining`; Alter Ego does not "have" it until `find_badge`. `rosa_trust` set a week earlier still holds.
 - **Story time vs play order (R-29).** `story_time` orders events in the world; play order is whatever the graph allows. Libreto checks every cross-timeline edge: if the cause comes *later* in story time than its effect, it is a paradox and is flagged, unless marked `paradox: intended`.
 - **Play order is a design choice.** If the flashback is a chapter played *after* the bar scene, `find_badge` cannot be solved in the bar, and Libreto reports it as a dead end for that chapter order. If the player can switch timelines freely (DOTT style), it is solvable. The same data shows both.
+
+### 5b.2 Time rules (under discussion)
+
+Two ways to read the creating timeline; the model supports both, and a chapter states which one it uses (`past: fixed` or `past: open`).
+
+| | `past: fixed` (memories) | `past: open` (DOTT) |
+|---|---|---|
+| What playing the past does | Reveals what Gómez *did*; the outcome already exists in the present | Changes the present ("put the card in his pocket") |
+| Fits the premise | Yes: Gómez built the mystery before the wipe | Only with a reason in the fiction |
+| Check Libreto runs | Nothing the player already *saw* in the present may change when the past is played later | Every change must reach the present by a plausible path |
+
+**Player knowledge vs character knowledge.** Facts are tracked per knower: `player`, `gomez_before`, `alter_ego`. A node can require `knows(alter_ego, x)` (the character must find it in-world) or just `knows(player, x)`. When the player knows something Alter Ego does not, the design either gates on the character's knowledge or makes the world change in between (the object fell under the sand, a bird took it): an `event` in the solving timeline that moves the item.
 
 ## 6. One graph or two levels?
 
@@ -369,5 +381,5 @@ Decided (Ivan, 2026-11-03):
 
 Open:
 
-7. **Play order.** Free switching between timelines (DOTT), fixed chapters, or both per chapter?
-8. **Knowledge of the player vs Gómez-after.** Should the game ever let the player use what only Gómez-before knows, or must Gómez-after rediscover it in-world?
+7. **Play order and time rules.** Open per chapter; see §5b.2. Default `past: fixed` proposed.
+8. **Player vs character knowledge.** Model in §5b.2; how often to use each trick is a story decision, not a data-model one.
