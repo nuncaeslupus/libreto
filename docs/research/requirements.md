@@ -34,7 +34,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 
 ### A. Project and files
 - R-1 M — A project is a folder of plain-text files that git can diff and merge; no opaque database is the source of truth.
-- R-2 M — One file per entity (scene, puzzle, character, item, location, timeline event), with structured metadata plus free text.
+- R-2 M — One file per entity (character, item, location), with structured metadata plus free text. Story graphs are one file per scene holding its nodes (puzzles, actions, events…), with dialogue in separate script files (Ivan, 2026-11-03; see `docs/design/node-model.md` §6b).
 - R-3 M — Stable ids for every entity and for paragraphs/lines inside text, surviving edits and reorders (literary-critic anchors).
 - R-4 M — Runs on Linux; Windows and macOS later with the same files.
 - R-5 M — Continue work on another computer by syncing the folder (git first; any file sync must also work).
