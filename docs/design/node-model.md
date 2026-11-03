@@ -1,7 +1,7 @@
 # Libreto — node and data model (draft 0)
 
 Topic 1 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet.
-Inputs: `docs/research/requirements.md` (§2 C, L, M, N, O) and the ALAIF design document.
+Inputs: `docs/research/requirements.md` (§2 C, L, M, N, O), the ALAIF design document, and ALAIF's software notes (event class attributes, link restrictions, decision graph).
 
 ## 1. The idea in five lines
 
@@ -29,7 +29,7 @@ Flags any node can carry instead of more types:
 - `optional: true` — not needed to finish (side quest, optional interrupt).
 - `until: <condition>` — availability window; with `optional` this is ALAIF's **collectible**.
 - `hints:` — up to 3 levels (+ comic 4th) on `puzzle`/`action` only (R-78).
-- `reactions:` — line, sound, music cue, animation id, filled in later by the game (R-79).
+- `reactions:` — line, sound, music cue, animation id, filled in later by the game (R-79). Split into `on_done` and `on_wrong` (a wrong attempt), as ALAIF's right/wrong audio triggers.
 - `clues:` — the facts/items that make the solution fair; checked against the ancestor set (R-92).
 
 ## 3. Fields
@@ -46,8 +46,16 @@ Flags any node can carry instead of more types:
 | `at` | Location id (R-84). |
 | `timeline` | `solving` / `creating` … (R-28). |
 | `options` | `dilemma` only: list of `{id, title, effects, when}`; `default` names the option taken if the player never chooses. |
+| `estimate` | Expected play time (ALAIF `expectedLength`), for pacing and play-time estimates (R-32). |
+| `difficulty` | 1–5 (ALAIF `level`), for tuning and the stuck-point checks (R-94). |
+| `characters` | Characters present or involved; feeds the character × location × time grid (R-33). |
+| `variants` | Same node, different content by state (see §6.1). |
 
 A dilemma option is referenced as `<dilemma>.<option>`, e.g. `who_are_you.truth`.
+
+**Allowed links.** Not every type may require every other (ALAIF's *Restricciones eventos* matrix): e.g. a dilemma is followed only by its own options, and nothing requires an `ending`. The schema enforces this table (R-7).
+
+**Runtime status** of a node, derived, never stored: `locked` → `available` → `done`, or `unreachable` (its `when` can no longer hold; ALAIF's *anulado*). Optional nodes show as `available` until their `until` closes them.
 
 ## 4. State and conditions
 
@@ -238,6 +246,23 @@ Later, a **deferred** dilemma uses the state the scene left behind:
 
 ALAIF draws a decision graph whose nodes contain puzzle graphs. Proposal: **one graph**, with `set` and scene files as the collapsible levels (R-21). The decision-level view is then a *filter* (show only dilemmas, endings and sets), not a second structure to keep in sync. To be validated on a larger example with two timelines.
 
+### 6.1 Variants instead of copies
+
+ALAIF's *Graf de decisions* draws Room 6 twelve times (3 × 2 × 2 choices: `Axa`, `Axb`…). Copying rooms per branch explodes and drifts apart. Here a room or node exists **once** and carries variants:
+
+```yaml
+- id: room_6
+  type: event
+  title: Final room
+  variants:
+    - when: saved_gm and route == A
+      script: room_6_a_saved
+    - when: not saved_gm
+      script: room_6_infected      # covers A, B and C
+```
+
+Only what really differs gets a variant; the rest is shared. Libreto can still draw the twelve combinations as a view.
+
 ## 7. Open questions for Ivan
 
 1. **Branching by state (proposed) vs ALAIF pruning with weak edges.** Does the example cover the cases you had in mind for weak edges (p.75–77)?
@@ -245,3 +270,4 @@ ALAIF draws a decision graph whose nodes contain puzzle graphs. Proposal: **one 
 3. **Decisions as dilemma options**, not separate nodes (Voluntary/Default/Involuntary become `options`, `default`, `mode: deferred`). OK?
 4. **File granularity.** One YAML file per scene graph (proposed) vs one file per node (R-2 literally). Per node is many small files; per scene keeps a graph readable in one place.
 5. **Next test scene.** A cross-timeline one: Gómez-before hides the badge in the coat (creating timeline), Gómez-after finds it (solving timeline).
+6. **Clue as a node?** ALAIF's later files list *Clue* as an event type, apart from *Hint*. Here a clue is a fact or item the player gets through an effect (`learn`, `give`) and that a puzzle lists in `clues:`. Is that enough, or did *Clue* mean something more?
