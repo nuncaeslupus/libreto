@@ -45,7 +45,7 @@ Flags any node can carry instead of more types:
 | `actor` | Who can do it (`alter_ego`, `gomez_before`…), for DOTT-style protagonists (R-24). |
 | `at` | Location id (R-84). |
 | `timeline` | `solving` / `creating` … (R-28). |
-| `options` | `dilemma` only: list of `{id, title, effects, when}`; `default` names the option taken if the player never chooses. |
+| `options` | `dilemma` only: list of `{id, title, line, effects, when}`; `default` names the option taken if the player never chooses. |
 | `estimate` | Expected play time (ALAIF `expectedLength`), for pacing and play-time estimates (R-32). |
 | `difficulty` | 1–5 (ALAIF `level`), for tuning and the stuck-point checks (R-94). |
 | `characters` | Characters present or involved; feeds the character × location × time grid (R-33). |
@@ -146,10 +146,12 @@ nodes:
     default: lie            # walking away counts as lying
     options:
       - id: truth
-        title: "I'm a detective"
+        title: Tell the truth
+        line: rosa_who_truth      # player-facing text lives in script/ (ink), by line id
         effects: [approach = truth, rosa_trust += 1]
       - id: lie
-        title: "I'm the new pianist"
+        title: Lie
+        line: rosa_who_lie
         effects: [approach = lie]
 
   # --- truth branch ---
@@ -159,9 +161,9 @@ nodes:
     evidence: [coat_heavy_on_one_side]
     effects: [give badge]
     hints:
-      - Your coat hangs oddly.
-      - Something is sewn into the lining.
-      - Tear the lining open.
+      - hint_badge_1    # "Your coat hangs oddly."
+      - hint_badge_2    # "Something is sewn into the lining."
+      - hint_badge_3    # "Tear the lining open."
 
   - id: show_badge
     type: puzzle
@@ -184,7 +186,7 @@ nodes:
     type: event
     title: Rosa leaves the bar to dance
     requires: [play_piano]
-    delay: 1 turn
+    timing: {after: 1 turn}
 
   - id: sneak_in
     type: action
@@ -201,6 +203,7 @@ nodes:
   - id: read_note
     type: event
     title: A note in your own handwriting
+    timing: at_once
     requires: [enter_office]
     effects: [learn note_from_myself]
 
@@ -217,6 +220,7 @@ Later, a **deferred** dilemma uses the state the scene left behind:
 ```yaml
   - id: police_at_the_bar
     type: dilemma
+    title: The police come to the bar
     mode: deferred
     requires: [read_note]
     options:
@@ -236,6 +240,7 @@ Later, a **deferred** dilemma uses the state the scene left behind:
 
 ```yaml
 - name: truth route
+  start: fresh             # solving timeline alone; with §5b played first, rosa_trust starts at 1
   steps: [talk_rosa, who_are_you.truth, find_badge, show_badge, enter_office]
   expect: { rosa_trust: 1, knows: [note_from_myself], has: [badge] }
 
@@ -315,11 +320,12 @@ nodes:
 
   - id: memory_wipe
     type: event
+    title: The memory wipe
     timing: at_once
     requires: [hide_badge, leave_note]
 ```
 
-In §5, two nodes gain a cross-timeline requirement:
+In §5, two nodes gain a cross-timeline requirement (only the changed field shown):
 
 ```yaml
   - id: find_badge
@@ -367,17 +373,21 @@ Gómez learns where to hide things from someone who helps him; the player watche
 # solving timeline, actor: alter_ego
 - id: record_sold
   type: event
+  title: Nuria sells the record
   timing: {when: done(enter_office)}      # the world moves on
   effects: [put record_blue_rain in buyer_flat]
 - id: read_matchbook
   type: action
+  title: Read the matchbook
   requires: [matchbook]                   # §5, optional collectible
   effects: [learn alter_ego key_in_record via note_to_self]
 - id: ask_nuria_for_record
   type: puzzle
+  title: Ask Nuria for "Blue Rain"
   when: knows(alter_ego, key_in_record)   # gated on the character, not the player
 - id: find_the_buyer
   type: puzzle
+  title: Find who bought the record
   requires: [ask_nuria_for_record, record_sold]
 ```
 
@@ -438,8 +448,16 @@ clock_stopped_315: { kind: mystery, explained_by: [stop_clock, break_window] }
   must_match: clock_time == "3:15"   # fixed past: what Alter Ego saw
   reactions: { on_wrong: gomez_not_that_time }   # a joke, not a dead end
 
+- id: break_window
+  type: puzzle
+  actor: gomez_before
+  title: Break the window from outside
+  requires: [plan_burglary]
+  must_match: glass_side == inside
+
 - id: curtain_moves
   type: event
+  title: A curtain moves across the street
   timing: at_once
   requires: [break_window]
   effects: [learn player neighbour_saw_gomez]    # only the player: Gómez never notices
@@ -525,21 +543,22 @@ Only what really differs gets a variant; the rest is shared. Libreto can still d
 |---|---|---|---|---|
 | `id` | yes | id | all | Project-wide |
 | `type` | yes | enum | all | `puzzle action event dilemma ending set` |
-| `title` | yes | text | all | Designer's name |
+| `title` | yes | text | all | Designer's name, never shown to the player |
+| `line` | no | line id | all | Player-facing text in `script/*.ink`, translated through `locale/*.po` (R-59) |
 | `requires` | no | list or `{any: [...]}` | all | Node or `dilemma.option` ids |
 | `when` | no | condition | all | §4 syntax |
 | `effects` | no | list of statements | all | `x = v`, `x += n`, `give/take item`, `put item in place`, `learn [knower] fact [via technique]` |
 | `actor`, `at`, `timeline` | no | id | all | Override scene defaults |
 | `optional`, `until` | no | bool, condition | all but `ending` | Collectibles, side quests |
 | `evidence` | no | list of fact/item ids | puzzle | Fair-puzzle check |
-| `hints` | no | list (≤ 3 + comic) | puzzle, action | |
+| `hints` | no | list of line ids (≤ 3 + comic) | puzzle, action | Text in `script/` |
 | `reactions` | no | `{on_done, on_wrong}` | all | Ids of lines, sounds, animations |
 | `estimate`, `difficulty` | no | duration, 1–5 | puzzle, action | |
 | `characters` | no | list of ids | all | |
 | `variants` | no | list of `{when, script}` | all | §6.1 |
 | `must_match` | no | condition | nodes in a `past: fixed` timeline | §5d |
 | `timing` | event only | `at_once` / `{after}` / `{when}` | event | |
-| `mode`, `options`, `default` | dilemma only | | dilemma | Option: `{id, title, when, effects}` |
+| `mode`, `options`, `default` | dilemma only | | dilemma | Option: `{id, title, line, when, effects}` |
 | `members`, `exclusive` | set only | list, bool | set | |
 
 ### Checks Libreto runs on this data
