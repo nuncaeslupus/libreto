@@ -1,6 +1,6 @@
 # Libreto — node and data model (draft 0)
 
-Topic 1 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet.
+Topic 1 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet. ALAIF ideas are hypotheses, not settled rules: each one is kept only if the test scenes show it works.
 Inputs: `docs/research/requirements.md` (§2 C, L, M, N, O), the ALAIF design document, and ALAIF's software notes (event class attributes, link restrictions, decision graph).
 
 ## 1. The idea in five lines
@@ -30,7 +30,7 @@ Flags any node can carry instead of more types:
 - `until: <condition>` — availability window; with `optional` this is ALAIF's **collectible**.
 - `hints:` — up to 3 levels (+ comic 4th) on `puzzle`/`action` only (R-78).
 - `reactions:` — line, sound, music cue, animation id, filled in later by the game (R-79). Split into `on_done` and `on_wrong` (a wrong attempt), as ALAIF's right/wrong audio triggers.
-- `clues:` — the facts/items that make the solution fair; checked against the ancestor set (R-92).
+- `evidence:` — the in-world facts/items that make the solution fair; checked against the ancestor set (R-92). Not to be confused with hints: ALAIF's *Clue* and *Hint* are the same thing, a `hints:` entry here.
 
 ## 3. Fields
 
@@ -152,7 +152,7 @@ nodes:
   - id: find_badge
     type: puzzle
     title: Find your badge
-    clues: [coat_heavy_on_one_side]
+    evidence: [coat_heavy_on_one_side]
     effects: [give badge]
     hints:
       - Your coat hangs oddly.
@@ -270,4 +270,4 @@ Only what really differs gets a variant; the rest is shared. Libreto can still d
 3. **Decisions as dilemma options**, not separate nodes (Voluntary/Default/Involuntary become `options`, `default`, `mode: deferred`). OK?
 4. **File granularity.** One YAML file per scene graph (proposed) vs one file per node (R-2 literally). Per node is many small files; per scene keeps a graph readable in one place.
 5. **Next test scene.** A cross-timeline one: Gómez-before hides the badge in the coat (creating timeline), Gómez-after finds it (solving timeline).
-6. **Clue as a node?** ALAIF's later files list *Clue* as an event type, apart from *Hint*. Here a clue is a fact or item the player gets through an effect (`learn`, `give`) and that a puzzle lists in `clues:`. Is that enough, or did *Clue* mean something more?
+6. ~~Clue as a node?~~ Resolved: Clue = Hint (Ivan); in-world facts are `evidence`.
