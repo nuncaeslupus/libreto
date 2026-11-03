@@ -137,6 +137,8 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-80 S — Guided design pipeline from ALAIF: three-act plot → variables → puzzle graph → dilemmas → interruptions → side quests → indivisible sets → actions → hints → triggers → collectibles; Libreto shows which steps each chapter has completed.
 - R-81 S — Checks from ALAIF: dialogue must not mention a puzzle that may not be solved yet (ancestor set); overlapping reactions on events that can fire together; branches of very different length; objects useless in a branch (red herrings); "key before the lock".
 - R-82 W — ~~Post-play decision flowchart~~ (dropped: it was only a way to show the data; Ivan, 2026-11-03).
+- R-97 S — A fixed visual vocabulary per node type (fill, border style, shade), as in ALAIF's legend, so a graph reads at a glance; weak edges dashed.
+- R-98 S — Branch preview: pick an option of a dilemma and see the pruned graph (ALAIF p.76–77); dilemma nodes show the possible range of each variable at that point (p.87).
 - R-83 C — Graph shape metrics: the "balloon" (narrow start and end, wide middle), maximum open puzzles, linearity per chapter.
 
 ### M. World over time
