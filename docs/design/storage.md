@@ -58,13 +58,13 @@ All text files: UTF-8 without BOM, LF line endings, trailing newline. Libreto wr
 
 **Line ids.** Every player-facing line has one (R-3, R-59). Lines a node points at get readable ids written by the author (`rosa_who_truth`); every other line gets an automatic id the first time Libreto saves the file: `<scene>_<4 random base-32 chars>` (`bar_pelayo_k7q2`). Random, not numbered, so two machines adding lines at the same time never collide, and reordering never renumbers.
 
-**Paragraph anchors in Markdown** (R-3). Only added when something links to a paragraph (a fact's evidence, a consistency finding). Proposed form, the Obsidian block-id convention, at the end of the paragraph:
+**Paragraph anchors in Markdown** (R-3). Only added when something links to a paragraph (a fact's evidence, a consistency finding). Form: an HTML comment at the end of the paragraph, invisible in every Markdown viewer (GitHub, Obsidian, editors):
 
 ```markdown
-Rosa has run the bar since her father died in 1979. ^rosa_father
+Rosa has run the bar since her father died in 1979. <!-- ^rosa_father -->
 ```
 
-Alternative: an invisible HTML comment, `<!-- ^rosa_father -->`. See question 1.
+Chosen over Obsidian's visible `^rosa_father` because it never shows up as stray text; Libreto can still read both.
 
 **Renames.** `libreto rename <old> <new>` (and the app) rewrites every reference, including ink tags and PO contexts, in one change, using the index. Ids are never reused for something else; the check warns when a deleted id reappears with another kind.
 
@@ -110,6 +110,12 @@ msgstr "¿Quién lo pregunta?"
 
 ## 9. Decisions and open questions
 
+Decided (Ivan, 2026-11-03):
+
+1. Alter Ego's script is written in **Spanish** (`source_language: es`); English is a translation.
+2. `views/*.json` are committed, so every machine shows the same layout.
+3. Paragraph anchors are HTML comments (Ivan had no preference; §4).
+
 Proposed (to confirm):
 
 1. Layout in §2, project folder may sit inside a bigger repo.
@@ -118,8 +124,3 @@ Proposed (to confirm):
 4. PO with `msgctxt` = line id, `msgid` = source text.
 5. Derived data outside the project folder.
 
-Open:
-
-1. **Paragraph anchors**: Obsidian-style `^id` (visible, works in Obsidian) or HTML comment (invisible everywhere)?
-2. **Source language for Alter Ego**: write the script in English and translate to Spanish, or write in Spanish and translate to English? Libreto supports both; this only sets the project default.
-3. **Views**: commit `views/*.json` (same graph layout on every machine) or keep them local (less noise in history)? Proposal: commit.

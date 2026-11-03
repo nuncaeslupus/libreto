@@ -64,6 +64,11 @@ Agents (Claude in a cloud session, or locally through the CLI/MCP, R-48) work on
 
 ## 8. Decisions and open questions
 
+Decided (Ivan, 2026-11-03):
+
+1. Ivan's machines sync through GitHub; synced folders are tested later.
+2. Snapshots are manual, plus automatic ones before risky operations (migrate, bulk rename, merge).
+
 Proposed (to confirm):
 
 1. Git first, behind Snapshot / Get latest / Send; synced folders supported with conflict-copy detection.
@@ -71,7 +76,3 @@ Proposed (to confirm):
 3. Conflicts resolved per node/field/line; structural merge driver later.
 4. Libreto checks run in CI for every PR.
 
-Open:
-
-1. **Your setup today**: how do you move work between your machines (GitHub only, or also Syncthing/Dropbox/…)? It decides which conflict-copy patterns we test first.
-2. **Snapshot frequency**: only when you press it, or also automatic (e.g. on close, or every N minutes into a local branch)? Proposal: manual plus automatic before risky operations (migrate, bulk rename, merge).
