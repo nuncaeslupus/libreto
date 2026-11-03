@@ -136,7 +136,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-79 S — Reactions: every node can carry side effects (line of dialogue, sound, music cue, animation id) to be filled in later by the game.
 - R-80 S — Guided design pipeline from ALAIF: three-act plot → variables → puzzle graph → dilemmas → interruptions → side quests → indivisible sets → actions → hints → triggers → collectibles; Libreto shows which steps each chapter has completed.
 - R-81 S — Checks from ALAIF: dialogue must not mention a puzzle that may not be solved yet (ancestor set); overlapping reactions on events that can fire together; branches of very different length; objects useless in a branch (red herrings); "key before the lock".
-- R-82 S — Post-play decision flowchart (Detroit: Become Human style): the path taken, the options missed, and how variables evolved.
+- R-82 W — ~~Post-play decision flowchart~~ (dropped: it was only a way to show the data; Ivan, 2026-11-03).
 - R-83 C — Graph shape metrics: the "balloon" (narrow start and end, wide middle), maximum open puzzles, linearity per chapter.
 
 ### M. World over time
@@ -151,19 +151,27 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-90 S — Solvers on the same data: find every reachable ending, detect dead ends and soft-locks, estimate play time.
 - R-91 S — The real game engine later reads the same data and the same rules; the skeleton is its reference implementation, not a throwaway.
 
+### O. Fair puzzles and playtesting
+- R-92 M — No moon logic: every puzzle lists the clues that make its solution reasonable, and a check fails when a clue is not in the puzzle's ancestor set (the player may not have seen it).
+- R-93 M — Difficulty comes from harder thinking, never from obscurity or padding: flag puzzles with no clue, a single obscure clue, or many plausible-but-wrong actions in reach.
+- R-94 S — Stuck-point prediction: for each state, count the open puzzles and the plausible actions available; many actions with no progress = likely stuck point.
+- R-95 S — Play telemetry (skeleton runtime first, real game later): time per puzzle, wrong attempts, hints used, where players quit; aggregated into a report.
+- R-96 S — AI review of telemetry and graph together: name the clues that are not obvious and suggest fixes, as reviewable proposals (R-49).
+
 ## 3. Decisions so far (Ivan, 2026-11-03)
 
 - Format (D-4): Markdown + YAML front matter to start.
 - App type (D-5): data model + CLI + MCP first; UI after.
 - Indexing (D-6): stable anchors and a structured index first; explanation in §5 before building.
 - v1 scope: the basics first.
+- ink for dialogue, if it fits our needs once tried.
+- Skeleton runtime: a separate library in the libreto repo, used by both Libreto and the game.
+- Translations: gettext PO files with line ids.
+- No embeddings; structured index + full-text search.
 
 ## 4. Open questions
 
-1. **ink:** use ink for dialogue inside scenes (branching lines, conditions) and Libreto's own model for puzzles, world and timelines? ink is mature and has runtimes for Unity, Godot, JS and others; it does not model puzzle graphs, maps or inventories.
-2. **Graph model:** one graph with typed edges (requires, weak, happens-before, reveals, flashback-to), or ALAIF's two levels (a decision graph whose nodes contain puzzle graphs)? Proposal: one typed graph, with indivisible sets as the nesting level.
-3. **Skeleton runtime home:** inside Libreto (as its play mode) or a separate package the game also uses? Proposal: a separate library inside the libreto repo, used by both.
-4. **Localization standard:** gettext PO, XLIFF or Fluent? Proposal: line ids in the source and PO files per language (widest tool support).
+1. **Graph model for branching plots** (needs a long talk): one graph with typed edges, or ALAIF's two levels (a decision graph whose nodes hold puzzle graphs)? ALAIF never tested its branching part, so this needs prototyping with real Alter Ego examples.
 
 ## 5. Indexing, in short
 
