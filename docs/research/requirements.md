@@ -9,7 +9,9 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - P-1 — A professional, standalone application: anyone can install it and start writing. No copy-pasting into AI chats, no uploading or emailing files.
 - P-2 — Standards first. Where an accepted format or practice exists (Markdown, YAML front matter, JSON Schema, gettext/XLIFF, Graphviz DOT/GraphML, ink), use it; invent only what nothing covers.
 - P-3 — Graphics are a view layer. Story, puzzles and world state are data that can be run and tested without any graphics.
-- P-4 — Every step aims at the finished game: what Libreto stores must be what the game runs.
+- P-4 — Every step aims at the finished game: what Libreto stores must be what the game runs (game projects).
+- P-5 — Writer first (Ivan, 2026-11-04). For a novel, story or screenplay Libreto feels like a word processor, in the line of Scrivener. Pro tools (timelines, maps, dependency graphs, dialogue scripting, translations, game export) are modules a project switches on; the core never requires them.
+- P-6 — Non-technical users. Nothing needs configuring, and no file format, id or git knowledge is ever required; formats and ids are for agents and pro users.
 
 ## 1. Benchmark
 
@@ -37,7 +39,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-2 M — One file per entity (character, item, location), with structured metadata plus free text. Story graphs are one file per scene holding its nodes (puzzles, actions, events…), with dialogue in separate script files (Ivan, 2026-11-03; see `docs/design/node-model.md` §6b).
 - R-3 M — Stable ids for every entity and for paragraphs/lines inside text, surviving edits and reorders (literary-critic anchors).
 - R-4 M — Runs on Linux; Windows and macOS later with the same files.
-- R-5 M — Continue work on another computer by syncing the folder (git first; any file sync must also work).
+- R-5 C — Continue work on another computer by syncing the folder. Deferred (Ivan, 2026-11-04): v1 only has to be safe inside a backup folder (R-105); the storage must allow sync later.
 - R-6 S — Snapshots before big edits, with diff and restore (git underneath, friendly UI on top).
 - R-7 S — Schema for all files, validated on save, errors pointing at the exact field.
 - R-8 C — Entity templates, editable per project.
@@ -99,7 +101,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-52 S — AI checks on demand: coherence, pacing, knowledge leaks, puzzle fairness, humor density.
 - R-53 S — AI can render and read the graphs (drawspec) to reason about structure.
 - R-54 C — AI playtest: an agent walks the puzzle graph and reports where it got stuck.
-- R-55 W — Bundled model or paid AI service inside the app.
+- R-55 W — Bundled model inside the app. (The in-app AI chat uses a provider the user connects, Claude first: R-102.)
 
 ### H. Simulation and play
 - R-56 M — Play mode: walk the story/puzzle graph as a player, with inventory and known facts (see §2 N).
@@ -159,6 +161,19 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-94 S — Stuck-point prediction: for each state, count the open puzzles and the plausible actions available; many actions with no progress = likely stuck point.
 - R-95 S — Play telemetry (skeleton runtime first, real game later): time per puzzle, wrong attempts, hints used, where players quit; aggregated into a report.
 - R-96 S — AI review of telemetry and graph together: name the clues that are not obvious and suggest fixes, as reviewable proposals (R-49).
+
+### P. Writer's tool (Ivan, 2026-11-04)
+- R-97 M — Project types (novel, short story, screenplay, game…) choose which modules are on; any module can be switched on or off later.
+- R-98 M — Manuscript in a binder: chapters and scenes are separate documents, reordered by drag and drop; a full view reads and edits the whole manuscript as one text.
+- R-99 M — Comments and notes on any paragraph or selection, kept across edits and reorders, with threads and resolve; better than Word revisions.
+- R-100 M — Everything is linkable (paragraph, entity, note, image, research) with backlinks shown; links to the first appearance or definition of a term (as in Opos).
+- R-101 M — Export to DOCX and PDF (EPUB, Markdown later), with or without extras (comments, notes, metadata).
+- R-102 M — In-app AI chat that acts through the same command API as the CLI and MCP (rename a character, move a chapter, check consistency); every change reviewable (R-49).
+- R-103 S — AI-assisted planning before writing: describe characters, places and plot in plain words and Libreto creates the entities and links.
+- R-104 S — Moving a chapter or scene triggers the consistency checks it may break (facts used before they are introduced, timeline order).
+- R-105 M — Safe inside any backup or cloud folder (Google Drive, OneDrive, Dropbox, Syncplicity…): nothing is lost or corrupted by the backup client.
+- R-106 C — Pro users can view the underlying data (YAML/JSON) in the app; editing it is normally left to the AI.
+- R-107 M — The core assumes no kind of text: a project type (novel, short story, paper, article, newspaper, screenplay…) is a template over the same files, and kind-specific tools arrive as modules. v1 builds the writer core first (Ivan, 2026-11-04).
 
 ## 3. Decisions so far (Ivan, 2026-11-03)
 
