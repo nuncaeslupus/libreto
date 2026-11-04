@@ -1,6 +1,6 @@
 # Libreto — sync between machines (draft 1, deferred)
 
-Topic 3 of the Libreto design agenda. Status: **deferred** (Ivan, 2026-11-04): the tool must work first. v1 only needs to be safe inside a backup folder (`storage.md` §10). This page keeps what we already know so sync can be added later without changing the storage.
+Topic 3 of the Libreto design agenda. Status: **deferred** (decided 2026-11-04): the tool must work first. v1 only needs to be safe inside a backup folder (`storage.md` §10). This page keeps what we already know so sync can be added later without changing the storage.
 
 ## 1. Constraints for later
 
@@ -28,4 +28,4 @@ Likely answer: the cloud folder for most writers, hidden git as an option for pr
 
 ## 4. Decisions
 
-Ivan, 2026-11-04: sync deferred; non-technical users; v1 = backup-safe storage. AI inside the app moves to topic 4 (app type).
+Decided 2026-11-04: sync deferred; non-technical users; v1 = backup-safe storage. AI inside the app moves to topic 4 (app type).

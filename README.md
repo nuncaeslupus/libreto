@@ -6,7 +6,7 @@
 
 A writing tool for interactive stories: scripts, puzzles, timelines and branching narratives, designed to work hand in hand with an AI assistant.
 
-Born to write [Alter Ego](https://github.com/nuncaeslupus), a pixel-art graphic adventure, but meant to be useful for any writer of games, novels or screenplays.
+Born while writing a graphic adventure, but meant to be useful for any writer of games, novels or screenplays.
 
 **Status:** requirements gathering. No code yet.
 

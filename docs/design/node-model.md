@@ -18,7 +18,7 @@ Six types, each a row of ALAIF's legend or a merge of several. Hints and reactio
 | Type | Who makes it happen | ALAIF equivalent | Example |
 |---|---|---|---|
 | `puzzle` | Player; a real goal, named with a verb | Puzzle | Get into the back office |
-| `action` | Player; a step that is not a goal | Action | Talk to Rosa |
+| `action` | Player; a step that is not a goal | Action | Talk to Lena |
 | `event` | The world, by itself. `timing: at_once` (ALAIF trigger) or a window such as `timing: {after: 2-5 min}` or `timing: {when: idle}` (ALAIF interrupt) | Interrupt, Trigger | The phone rings |
 | `dilemma` | Player picks an option now (`mode: immediate`), or a condition picks it later (`mode: deferred`) | Immediate/Delayed dilemma + Voluntary/Default/Involuntary decision | "Who are you?" — truth or lie |
 | `ending` | Reached; the game ends | (end node) | Case closed |
@@ -42,7 +42,7 @@ Flags any node can carry instead of more types:
 | `requires` | Nodes or dilemma options that must have happened. **AND** by default; `any: [...]` for OR. |
 | `when` | Condition over state; must be true to become available. |
 | `effects` | State changes when it happens. |
-| `actor` | Who can do it (`alter_ego`, `gomez_before`…), for DOTT-style protagonists (R-24). |
+| `actor` | Who can do it (`kit`, `vega`…), for DOTT-style protagonists (R-24). |
 | `at` | Location id (R-84). |
 | `timeline` | `solving` / `creating` … (R-28). |
 | `options` | `dilemma` only: list of `{id, title, line, effects, when}`; `default` names the option taken if the player never chooses. |
@@ -67,42 +67,42 @@ Declared once per project (`variables.yaml`):
 
 ```yaml
 approach:   { type: enum, values: [unknown, truth, lie], initial: unknown }
-rosa_trust: { type: int, initial: 0, range: [-3, 3] }
+lena_trust: { type: int, initial: 0, range: [-3, 3] }
 ```
 
 Built in, no declaration needed: inventory, knowledge, history.
 
 | In a condition | In an effect |
 |---|---|
-| `rosa_trust >= 1`, `approach == truth` | `rosa_trust += 1`, `approach = truth` |
+| `lena_trust >= 1`, `approach == truth` | `lena_trust += 1`, `approach = truth` |
 | `has(badge)` | `give badge`, `take badge` |
-| `knows(note_from_myself)` (the player) / `knows(rosa, ...)` | `learn note_from_myself` |
+| `knows(note_from_vega)` (the player) / `knows(lena, ...)` | `learn note_from_vega` |
 | `done(play_piano)`, `chose(who_are_you.lie)` | — |
 
 Syntax follows ink's expressions (`and`, `or`, `not`, `==`, `>=`), so dialogue conditions and graph conditions read the same.
 
-## 5. Worked example — "Bar Pelayo, 1 a.m."
+## 5. Worked example — "Blue Lamp, 1 a.m."
 
-Invented test scene, solving timeline. Alter Ego (Gómez after the memory wipe) wants into the back office of a jazz bar, where his former self left something. Rosa, the bartender, asks who he is. Truth or lie gives two routes that **merge** at the office door.
+Invented test scene, solving timeline. Kit, Vega's apprentice, wants into the back office of a jazz bar, where Vega left something. Lena, the bartender, asks who he is. Truth or lie gives two routes that **merge** at the office door.
 
-![Bar Pelayo: split and merge](diagrams/node-model-1.svg) <!-- drawspec-render -->
+![Blue Lamp: split and merge](diagrams/node-model-1.svg) <!-- drawspec-render -->
 
 <details><summary>Diagram source</summary>
 
 ```drawspec
 {"version": 1, "kind": "flow",
- "title": "Bar Pelayo: split and merge",
+ "title": "Blue Lamp: split and merge",
  "nodes": [
-  {"id": "talk", "text": "action\nTalk to Rosa"},
+  {"id": "talk", "text": "action\nTalk to Lena"},
   {"id": "dil", "text": "dilemma\nWho are you?", "role": "decision"},
   {"id": "badge", "text": "puzzle\nFind your badge"},
   {"id": "show", "text": "puzzle\nShow the badge"},
   {"id": "music", "text": "puzzle\nGet sheet music"},
   {"id": "piano", "text": "puzzle\nPlay the piano set"},
-  {"id": "dance", "text": "event\nRosa goes dancing"},
+  {"id": "dance", "text": "event\nLena goes dancing"},
   {"id": "sneak", "text": "action\nSneak behind the bar"},
   {"id": "office", "text": "puzzle\nEnter the office", "role": "emphasis"},
-  {"id": "note", "text": "event\nRead your own note", "role": "terminal"},
+  {"id": "note", "text": "event\nRead Vega's note", "role": "terminal"},
   {"id": "match", "text": "optional\nMatchbook", "role": "note"}
  ],
  "edges": [
@@ -128,30 +128,30 @@ Invented test scene, solving timeline. Alter Ego (Gómez after the memory wipe) 
 The data (one YAML file for the scene graph; long text lives in Markdown/ink files by id):
 
 ```yaml
-scene: bar_pelayo
+scene: blue_lamp
 timeline: solving
-at: bar_pelayo
-actor: alter_ego        # default for every node below
+at: blue_lamp
+actor: kit        # default for every node below
 
 nodes:
-  - id: talk_rosa
+  - id: talk_lena
     type: action
-    title: Talk to Rosa
+    title: Talk to Lena
 
   - id: who_are_you
     type: dilemma
     mode: immediate
-    title: Rosa asks who you are
-    requires: [talk_rosa]
+    title: Lena asks who you are
+    requires: [talk_lena]
     default: lie            # walking away counts as lying
     options:
       - id: truth
         title: Tell the truth
-        line: rosa_who_truth      # player-facing text lives in script/ (ink), by line id
-        effects: [approach = truth, rosa_trust += 1]
+        line: lena_who_truth      # player-facing text lives in script/ (ink), by line id
+        effects: [approach = truth, lena_trust += 1]
       - id: lie
         title: Lie
-        line: rosa_who_lie
+        line: lena_who_lie
         effects: [approach = lie]
 
   # --- truth branch ---
@@ -167,7 +167,7 @@ nodes:
 
   - id: show_badge
     type: puzzle
-    title: Convince Rosa you're a cop
+    title: Convince Lena you're a cop
     requires: [who_are_you.truth]
     when: has(badge)
 
@@ -182,16 +182,16 @@ nodes:
     title: Play the piano set
     requires: [who_are_you.lie, get_sheet_music]
 
-  - id: rosa_dances
+  - id: lena_dances
     type: event
-    title: Rosa leaves the bar to dance
+    title: Lena leaves the bar to dance
     requires: [play_piano]
     timing: {after: 1 turn}
 
   - id: sneak_in
     type: action
     title: Sneak behind the bar
-    requires: [rosa_dances]
+    requires: [lena_dances]
 
   # --- merge ---
   - id: enter_office
@@ -205,7 +205,7 @@ nodes:
     title: A note in your own handwriting
     timing: at_once
     requires: [enter_office]
-    effects: [learn note_from_myself]
+    effects: [learn note_from_vega]
 
   - id: matchbook
     type: action
@@ -224,8 +224,8 @@ Later, a **deferred** dilemma uses the state the scene left behind:
     mode: deferred
     requires: [read_note]
     options:
-      - { id: rosa_covers, when: rosa_trust >= 1 }
-      - { id: rosa_tells,  when: rosa_trust < 1 }
+      - { id: lena_covers, when: lena_trust >= 1 }
+      - { id: lena_tells,  when: lena_trust < 1 }
 ```
 
 ### 5.1 How the branch works here
@@ -240,20 +240,20 @@ Later, a **deferred** dilemma uses the state the scene left behind:
 
 ```yaml
 - name: truth route
-  start: fresh             # solving timeline alone; with §5b played first, rosa_trust starts at 1
-  steps: [talk_rosa, who_are_you.truth, find_badge, show_badge, enter_office]
-  expect: { rosa_trust: 1, knows: [note_from_myself], has: [badge] }
+  start: fresh             # solving timeline alone; with §5b played first, lena_trust starts at 1
+  steps: [talk_lena, who_are_you.truth, find_badge, show_badge, enter_office]
+  expect: { lena_trust: 1, knows: [note_from_vega], has: [badge] }
 
 - name: lie route
-  steps: [talk_rosa, who_are_you.lie, get_sheet_music, play_piano, sneak_in, enter_office]
-  expect: { rosa_trust: 0, unreachable: [show_badge] }
+  steps: [talk_lena, who_are_you.lie, get_sheet_music, play_piano, sneak_in, enter_office]
+  expect: { lena_trust: 0, unreachable: [show_badge] }
 ```
 
-`rosa_dances` and `read_note` are events: the runtime fires them; the test does not list them.
+`lena_dances` and `read_note` are events: the runtime fires them; the test does not list them.
 
 ## 5b. Worked example — "One week earlier" (cross-timeline)
 
-Same bar, creating timeline. Gómez-before prepares his own mystery: he hides the badge and leaves himself a note, then erases his memory. The solving scene of §5 now depends on it.
+Same bar, creating timeline. Vega prepares a test for her apprentice: she hides the badge and leaves Kit a note, then leaves town. The solving scene of §5 now depends on it.
 
 ![Two timelines, one graph](diagrams/node-model-2.svg) <!-- drawspec-render -->
 
@@ -263,21 +263,21 @@ Same bar, creating timeline. Gómez-before prepares his own mystery: he hides th
 {"version": 1, "kind": "lanes",
  "title": "Two timelines, one graph",
  "nodes": [
-  {"id": "favour", "text": "puzzle\nGet Rosa's tip jar back", "actor": "Gómez-before (creating)"},
-  {"id": "needle", "text": "action\nBorrow needle and thread", "actor": "Gómez-before (creating)"},
-  {"id": "hide", "text": "puzzle\nSew the badge into the coat", "actor": "Gómez-before (creating)"},
-  {"id": "leave", "text": "action\nLeave a note in the office", "actor": "Gómez-before (creating)"},
-  {"id": "wipe", "text": "event\nThe memory wipe", "actor": "Gómez-before (creating)", "role": "emphasis"},
-  {"id": "find", "text": "puzzle\nFind your badge", "actor": "Alter Ego (solving)"},
-  {"id": "office", "text": "puzzle\nEnter the office", "actor": "Alter Ego (solving)"},
-  {"id": "read", "text": "event\nRead your own note", "actor": "Alter Ego (solving)", "role": "terminal"}
+  {"id": "favour", "text": "puzzle\nGet Lena's tip jar back", "actor": "Vega (past)"},
+  {"id": "needle", "text": "action\nBorrow needle and thread", "actor": "Vega (past)"},
+  {"id": "hide", "text": "puzzle\nSew the badge into the coat", "actor": "Vega (past)"},
+  {"id": "leave", "text": "action\nLeave a note in the office", "actor": "Vega (past)"},
+  {"id": "leaves", "text": "event\nVega leaves town", "actor": "Vega (past)", "role": "emphasis"},
+  {"id": "find", "text": "puzzle\nFind your badge", "actor": "Kit"},
+  {"id": "office", "text": "puzzle\nEnter the office", "actor": "Kit"},
+  {"id": "read", "text": "event\nRead Vega's note", "actor": "Kit", "role": "terminal"}
  ],
  "edges": [
   {"from": "favour", "to": "needle"},
   {"from": "favour", "to": "leave"},
   {"from": "needle", "to": "hide"},
-  {"from": "hide", "to": "wipe"},
-  {"from": "leave", "to": "wipe"},
+  {"from": "hide", "to": "leaves"},
+  {"from": "leave", "to": "leaves"},
   {"from": "hide", "to": "find", "label": "badge in lining"},
   {"from": "office", "to": "read"},
   {"from": "leave", "to": "read", "label": "note in office"}
@@ -287,22 +287,22 @@ Same bar, creating timeline. Gómez-before prepares his own mystery: he hides th
 </details>
 
 ```yaml
-scene: pelayo_before
+scene: blue_lamp_before
 timeline: creating
 story_time: -7 days        # relative to the solving timeline's day 0
-at: bar_pelayo
-actor: gomez_before
+at: blue_lamp
+actor: vega
 
 nodes:
-  - id: rosa_tip_jar
+  - id: lena_tip_jar
     type: puzzle
-    title: Get Rosa's stolen tip jar back
-    effects: [rosa_trust += 1]          # still true a week later
+    title: Get Lena's stolen tip jar back
+    effects: [lena_trust += 1]          # still true a week later
 
   - id: borrow_needle
     type: action
     title: Borrow needle and thread
-    requires: [rosa_tip_jar]
+    requires: [lena_tip_jar]
     effects: [give needle_thread]
 
   - id: hide_badge
@@ -315,12 +315,12 @@ nodes:
   - id: leave_note
     type: action
     title: Leave a note in the back office
-    requires: [rosa_tip_jar]             # Rosa lets him in
+    requires: [lena_tip_jar]             # Lena lets her in
     effects: [put note in back_office]
 
-  - id: memory_wipe
+  - id: vega_leaves
     type: event
-    title: The memory wipe
+    title: Vega leaves town
     timing: at_once
     requires: [hide_badge, leave_note]
 ```
@@ -329,15 +329,15 @@ In §5, two nodes gain a cross-timeline requirement (only the changed field show
 
 ```yaml
   - id: find_badge
-    requires: [hide_badge]       # pelayo_before, other timeline
+    requires: [hide_badge]       # blue_lamp_before, other timeline
   - id: read_note
     requires: [enter_office, leave_note]
 ```
 
 ### 5b.1 What this example tests
 
-- **Two knowers, one body (R-39).** `learn badge_in_coat` runs with `actor: gomez_before`, so only Gómez-before knows it. Alter Ego starts empty; the player may know it if the flashback was played first, which is the fun of the design and also what the fair-puzzle check (R-92) must take into account.
-- **State crosses time through the world, not through the inventory.** The badge goes into `coat_lining`; Alter Ego does not "have" it until `find_badge`. `rosa_trust` set a week earlier still holds.
+- **Two knowers (R-39).** `learn badge_in_coat` runs with `actor: vega`, so only Vega knows it. Kit starts empty; the player may know it if the flashback was played first, which is the fun of the design and also what the fair-puzzle check (R-92) must take into account.
+- **State crosses time through the world, not through the inventory.** The badge goes into `coat_lining`; Kit does not "have" it until `find_badge`. `lena_trust` set a week earlier still holds.
 - **Story time vs play order (R-29).** `story_time` orders events in the world; play order is whatever the graph allows. Libreto checks every cross-timeline edge: if the cause comes *later* in story time than its effect, it is a paradox and is flagged, unless marked `paradox: intended`.
 - **Play order is a design choice.** If the flashback is a chapter played *after* the bar scene, `find_badge` cannot be solved in the bar, and Libreto reports it as a dead end for that chapter order. If the player can switch timelines freely (DOTT style), it is solvable. The same data shows both.
 
@@ -347,60 +347,60 @@ Two ways to read the creating timeline; the model supports both, and a chapter s
 
 | | `past: fixed` (memories) | `past: open` (DOTT) |
 |---|---|---|
-| What playing the past does | Reveals what Gómez *did*; the outcome already exists in the present | Changes the present ("put the card in his pocket") |
-| Fits the premise | Yes: Gómez built the mystery before the wipe | Only with a reason in the fiction |
+| What playing the past does | Reveals what Vega *did*; the outcome already exists in the present | Changes the present ("put the card in his pocket") |
+| Fits the premise | Yes: Vega set up the case before leaving | Only with a reason in the fiction |
 | Check Libreto runs | Nothing the player already *saw* in the present may change when the past is played later | Every change must reach the present by a plausible path |
 
-**Player knowledge vs character knowledge.** Facts are tracked per knower: `player`, `gomez_before`, `alter_ego`. A node can require `knows(alter_ego, x)` (the character must find it in-world) or just `knows(player, x)`. When the player knows something Alter Ego does not, the design either gates on the character's knowledge or makes the world change in between (the object fell under the sand, a bird took it): an `event` in the solving timeline that moves the item.
+**Player knowledge vs character knowledge.** Facts are tracked per knower: `player`, `vega`, `kit`. A node can require `knows(kit, x)` (the character must find it in-world) or just `knows(player, x)`. When the player knows something Kit does not, the design either gates on the character's knowledge or makes the world change in between (the object fell under the sand, a bird took it): an `event` in the solving timeline that moves the item.
 
 ## 5c. Example — "Blue Rain" (plan known first, Columbo route)
 
-Gómez learns where to hide things from someone who helps him; the player watches the plan being made. Later, the player knows the answer and Alter Ego does not, and the world has moved on.
+Vega learns where to hide things from someone who helps her; the player watches the plan being made. Later, the player knows the answer and Kit does not, and the world has moved on.
 
 ```yaml
-# creating timeline, actor: gomez_before
+# creating timeline, actor: vega
 - id: hide_key_in_record
   type: puzzle
-  title: Hide your flat key in the "Blue Rain" sleeve at Nuria's shop
+  title: Hide your flat key in the "Blue Rain" sleeve at Mara's shop
   effects:
     - put flat_key in record_blue_rain
-    - learn key_in_record via helper      # Nuria suggests it (twist: she helps Alter Ego later)
+    - learn key_in_record via helper      # Mara suggests it (twist: she helps Kit later)
 - id: write_on_matchbook
   type: action
   title: Write "Blue Rain, side B" on a matchbook
-  effects: [put matchbook in bar_pelayo]
+  effects: [put matchbook in blue_lamp]
 
-# solving timeline, actor: alter_ego
+# solving timeline, actor: kit
 - id: record_sold
   type: event
-  title: Nuria sells the record
+  title: Mara sells the record
   timing: {when: done(enter_office)}      # the world moves on
   effects: [put record_blue_rain in buyer_flat]
 - id: read_matchbook
   type: action
   title: Read the matchbook
   requires: [matchbook]                   # §5, optional collectible
-  effects: [learn alter_ego key_in_record via note_to_self]
-- id: ask_nuria_for_record
+  effects: [learn kit key_in_record via note_left]
+- id: ask_mara_for_record
   type: puzzle
-  title: Ask Nuria for "Blue Rain"
-  when: knows(alter_ego, key_in_record)   # gated on the character, not the player
+  title: Ask Mara for "Blue Rain"
+  when: knows(kit, key_in_record)   # gated on the character, not the player
 - id: find_the_buyer
   type: puzzle
   title: Find who bought the record
-  requires: [ask_nuria_for_record, record_sold]
+  requires: [ask_mara_for_record, record_sold]
 ```
 
 What it tests:
 
-- **The player knows, Alter Ego does not.** `ask_nuria_for_record` waits for `knows(alter_ego, …)`, so the player cannot skip ahead just by remembering the flashback.
+- **The player knows, Kit does not.** `ask_mara_for_record` waits for `knows(kit, …)`, so the player cannot skip ahead just by remembering the flashback.
 - **The route changes, not the answer.** `record_sold` sends the player after the buyer: Columbo, not a quiz.
-- **A collectible becomes a bridge.** The matchbook is optional in §5. If the player missed it, Libreto reports `ask_nuria_for_record` as unreachable, so either it becomes required or a second source is added. No loose end goes unnoticed.
-- **Techniques are data.** `via: helper` and `via: note_to_self` record how knowledge travels. Libreto counts them per chapter, so "don't overuse the helper" (I-33) is a check, not a memory.
+- **A collectible becomes a bridge.** The matchbook is optional in §5. If the player missed it, Libreto reports `ask_mara_for_record` as unreachable, so either it becomes required or a second source is added. No loose end goes unnoticed.
+- **Techniques are data.** `via: helper` and `via: note_left` record how knowledge travels. Libreto counts them per chapter, so "don't overuse the helper" (I-33) is a check, not a memory.
 
 ## 5d. Example — "Quarter past three" (effect first, cause later)
 
-Alter Ego wakes up to a smashed window and a clock stopped at 3:15. Much later, the player plays the night Gómez staged it. The past is fixed: Gómez must produce exactly what Alter Ego already saw.
+Kit wakes up to a smashed window and a clock stopped at 3:15. Much later, the player plays the night Vega staged it. The past is fixed: Vega must produce exactly what Kit already saw.
 
 ![The cause is played after its effect](diagrams/node-model-3.svg) <!-- drawspec-render -->
 
@@ -410,13 +410,13 @@ Alter Ego wakes up to a smashed window and a clock stopped at 3:15. Much later, 
 {"version": 1, "kind": "lanes",
  "title": "The cause is played after its effect",
  "nodes": [
-  {"id": "see", "text": "event\nSmashed window, clock at 3:15", "actor": "Alter Ego (played first)"},
-  {"id": "ask", "text": "puzzle\nWho broke in?", "actor": "Alter Ego (played first)"},
-  {"id": "neighbour", "text": "action\nThe neighbour saw a man in a coat", "actor": "Alter Ego (played first)"},
-  {"id": "plan", "text": "action\nPlan a fake burglary", "actor": "Gómez (played later)"},
-  {"id": "clock", "text": "puzzle\nStop the clock at 3:15", "actor": "Gómez (played later)"},
-  {"id": "glass", "text": "puzzle\nBreak the window from outside", "actor": "Gómez (played later)"},
-  {"id": "curtain", "text": "event\nA curtain moves across the street", "actor": "Gómez (played later)", "role": "note"}
+  {"id": "see", "text": "event\nSmashed window, clock at 3:15", "actor": "Kit"},
+  {"id": "ask", "text": "puzzle\nWho broke in?", "actor": "Kit"},
+  {"id": "neighbour", "text": "action\nThe neighbour saw a man in a coat", "actor": "Kit"},
+  {"id": "plan", "text": "action\nPlan a fake burglary", "actor": "Vega"},
+  {"id": "clock", "text": "puzzle\nStop the clock at 3:15", "actor": "Vega"},
+  {"id": "glass", "text": "puzzle\nBreak the window from outside", "actor": "Vega"},
+  {"id": "curtain", "text": "event\nA curtain moves across the street", "actor": "Vega", "role": "note"}
  ],
  "edges": [
   {"from": "see", "to": "ask"},
@@ -437,20 +437,20 @@ clock_stopped_315: { kind: mystery, explained_by: [stop_clock, break_window] }
 
 - id: plan_burglary
   type: action
-  actor: gomez_before
+  actor: vega
   title: Plan a fake burglary
-  effects: [learn player goal_fake_burglary via goal_statement]   # Gómez says it out loud
+  effects: [learn player goal_fake_burglary via goal_statement]   # Vega says it out loud
 
 - id: stop_clock
   type: puzzle
-  actor: gomez_before
+  actor: vega
   title: Stop the clock at 3:15
-  must_match: clock_time == "3:15"   # fixed past: what Alter Ego saw
-  reactions: { on_wrong: gomez_not_that_time }   # a joke, not a dead end
+  must_match: clock_time == "3:15"   # fixed past: what Kit saw
+  reactions: { on_wrong: vega_not_that_time }   # a joke, not a dead end
 
 - id: break_window
   type: puzzle
-  actor: gomez_before
+  actor: vega
   title: Break the window from outside
   requires: [plan_burglary]
   must_match: glass_side == inside
@@ -460,15 +460,15 @@ clock_stopped_315: { kind: mystery, explained_by: [stop_clock, break_window] }
   title: A curtain moves across the street
   timing: at_once
   requires: [break_window]
-  effects: [learn player neighbour_saw_gomez]    # only the player: Gómez never notices
+  effects: [learn player neighbour_saw_vega]    # only the player: Vega never notices
 ```
 
 What it tests:
 
 - **Payoff before setup.** `kind: mystery` plus `explained_by` ties the effect to its cause. Check: every mystery is explained on every route, and every explaining node is reachable (I-36, no loose ends).
-- **The plan reaches the player through the goal.** `plan_burglary` states what Gómez wants ("Alter Ego must believe someone broke in"), so the player is not "waiting to realize they must put an object here" (I-32).
+- **The plan reaches the player through the goal.** `plan_burglary` states what Vega wants ("Kit must believe someone broke in"), so the player is not "waiting to realize they must put an object here" (I-32).
 - **`must_match` keeps the fixed past consistent.** The player cannot stop the clock at 4:00; a wrong attempt gets a line, not a paradox.
-- **Dramatic irony is data.** `learn player …` without Gómez: Libreto can list every moment where the player knows more than the character on screen (I-37), and the reverse.
+- **Dramatic irony is data.** `learn player …` without Vega: Libreto can list every moment where the player knows more than the character on screen (I-37), and the reverse.
 
 ## 5e. What the four examples add to the model
 
@@ -510,7 +510,7 @@ Only what really differs gets a variant; the rest is shared. Libreto can still d
 <details><summary>Diagram source</summary>
 
 ```drawspec
-{"version": 1, "kind": "files", "root": "my-game", "entries": [{"path": "libreto.yaml"}, {"path": "variables.yaml"}, {"path": "facts.yaml"}, {"path": "knowers.yaml"}, {"path": "scenes/bar_pelayo.yaml"}, {"path": "scenes/pelayo_before.yaml"}, {"path": "entities/items/badge.md"}, {"path": "entities/characters/rosa.md"}, {"path": "entities/locations/bar_pelayo.md"}, {"path": "script/bar_pelayo.ink"}, {"path": "tests/truth_route.yaml"}, {"path": "locale/es.po"}]}
+{"version": 1, "kind": "files", "root": "my-game", "entries": [{"path": "libreto.yaml"}, {"path": "variables.yaml"}, {"path": "facts.yaml"}, {"path": "knowers.yaml"}, {"path": "scenes/blue_lamp.yaml"}, {"path": "scenes/blue_lamp_before.yaml"}, {"path": "entities/items/badge.md"}, {"path": "entities/characters/lena.md"}, {"path": "entities/locations/blue_lamp.md"}, {"path": "script/blue_lamp.ink"}, {"path": "tests/truth_route.yaml"}, {"path": "locale/es.po"}]}
 ```
 
 </details>
@@ -520,7 +520,7 @@ Only what really differs gets a variant; the rest is shared. Libreto can still d
 | `libreto.yaml` | Project name, languages, timelines (`id`, `title`, `past: fixed/open`), schema version |
 | `variables.yaml` | Story variables (§4) |
 | `facts.yaml` | Facts that can be known: `id`, `title`, optional `kind: mystery` + `explained_by` |
-| `knowers.yaml` | `player` (built in) and each character mind (`gomez_before`, `alter_ego`…); a body can hold several minds |
+| `knowers.yaml` | `player` (built in) and each character mind (`vega`, `kit`…); a body can hold several minds |
 | `scenes/*.yaml` | Scene header + its nodes (one graph file per scene) |
 | `entities/**.md` | YAML front matter (id, type, initial state) + free Markdown (description, notes) |
 | `script/*.ink` | Dialogue and player-facing lines, referenced by node and line id |
@@ -567,7 +567,7 @@ Schema errors point at the field (R-7). On top: cycles, unreachable nodes and de
 
 ## 7. Decisions and open questions
 
-Decided (Ivan, 2026-11-03):
+Decided (decided 2026-11-03):
 
 1. Branching by state; no weak edges.
 2. `event` merges interrupt and trigger, with `timing` (ALAIF re-checked, §3).

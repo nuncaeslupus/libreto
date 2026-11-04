@@ -1,6 +1,6 @@
 # Libreto — requirements research (draft 2)
 
-Input for `specify`. Covers decision D-8 of the Alter Ego backlog and feeds D-4 (file format), D-5 (app type) and D-6 (indexing).
+Input for `specify`. Covers decision D-8 of the first game project's backlog and feeds D-4 (file format), D-5 (app type) and D-6 (indexing).
 Priorities use MoSCoW for the **first usable version** (M = must, S = should, C = could, W = won't for now).
 Every requirement has a stable id `R-N`; ids are never renumbered.
 
@@ -10,7 +10,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - P-2 — Standards first. Where an accepted format or practice exists (Markdown, YAML front matter, JSON Schema, gettext/XLIFF, Graphviz DOT/GraphML, ink), use it; invent only what nothing covers.
 - P-3 — Graphics are a view layer. Story, puzzles and world state are data that can be run and tested without any graphics.
 - P-4 — Every step aims at the finished game: what Libreto stores must be what the game runs (game projects).
-- P-5 — Writer first (Ivan, 2026-11-04). For a novel, story or screenplay Libreto feels like a word processor, in the line of Scrivener. Pro tools (timelines, maps, dependency graphs, dialogue scripting, translations, game export) are modules a project switches on; the core never requires them.
+- P-5 — Writer first (decided 2026-11-04). For a novel, story or screenplay Libreto feels like a word processor, in the line of Scrivener. Pro tools (timelines, maps, dependency graphs, dialogue scripting, translations, game export) are modules a project switches on; the core never requires them.
 - P-6 — Non-technical users. Nothing needs configuring, and no file format, id or git knowledge is ever required; formats and ids are for agents and pro users.
 
 ## 1. Benchmark
@@ -27,7 +27,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 | Plottr | Visual plot timelines | Grid of plotlines × chapters, series bible | No logic, no graphs |
 | Aeon Timeline | Timeline for writers | Story time vs narrative order, character participation, dependencies | No script writing; proprietary |
 | Puzzle dependency charts (Ron Gilbert; Game Developer primer) | Design method | Goals as a DAG read backwards from the ending; layered layout; in/out-degree; layer width = parallelism; ancestor set = what the story may safely mention; Monte Carlo play-time estimates | A method, not a tool |
-| ALAIF design doc (Ivan's own) | Event graph for a software-driven escape room | Typed events, AND dependencies, weak edges, immediate/deferred dilemmas, indivisible sets, hint chains, reactions, 12-step design pipeline (see §2 L) | Live-action parts (GM, actors, panic button) do not transfer |
+| ALAIF design doc (the author's earlier project) | Event graph for a software-driven escape room | Typed events, AND dependencies, weak edges, immediate/deferred dilemmas, indivisible sets, hint chains, reactions, 12-step design pipeline (see §2 L) | Live-action parts (GM, actors, panic button) do not transfer |
 | Detroit: Become Human | Game | Post-scene flowchart of the choices made and the ones missed | A game feature, not a tool |
 | literary-critic (own) | LLM manuscript analysis | Stable anchors, Codex knowledge base, evidence-backed checks | Analysis, not authoring |
 | drawspec (own) | JSON → diagrams | LLM-writable graphs without coordinates | Render only, not interactive |
@@ -36,10 +36,10 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 
 ### A. Project and files
 - R-1 M — A project is a folder of plain-text files that git can diff and merge; no opaque database is the source of truth.
-- R-2 M — One file per entity (character, item, location), with structured metadata plus free text. Story graphs are one file per scene holding its nodes (puzzles, actions, events…), with dialogue in separate script files (Ivan, 2026-11-03; see `docs/design/node-model.md` §6b).
+- R-2 M — One file per entity (character, item, location), with structured metadata plus free text. Story graphs are one file per scene holding its nodes (puzzles, actions, events…), with dialogue in separate script files (2026-11-03; see `docs/design/node-model.md` §6b).
 - R-3 M — Stable ids for every entity and for paragraphs/lines inside text, surviving edits and reorders (literary-critic anchors).
 - R-4 M — Runs on Linux; Windows and macOS later with the same files.
-- R-5 C — Continue work on another computer by syncing the folder. Deferred (Ivan, 2026-11-04): v1 only has to be safe inside a backup folder (R-105); the storage must allow sync later.
+- R-5 C — Continue work on another computer by syncing the folder. Deferred (decided 2026-11-04): v1 only has to be safe inside a backup folder (R-105); the storage must allow sync later.
 - R-6 S — Snapshots before big edits, with diff and restore (git underneath, friendly UI on top).
 - R-7 S — Schema for all files, validated on save, errors pointing at the exact field.
 - R-8 C — Entity templates, editable per project.
@@ -81,7 +81,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-36 M — Knowledge tracking: for each fact, who knows it and since when (each character and the player), derived from scenes and puzzles.
 - R-37 M — Warn when a character or the player uses a fact before learning it.
 - R-38 M — Codex / story bible: characters, places, items, facts, with references back to the text.
-- R-39 S — Gómez-before and Gómez-after (memory erased) as separate knowledge holders.
+- R-39 S — A character's minds before and after a change (amnesia, possession…) as separate knowledge holders.
 - R-40 S — Consistency checks (names, descriptions, facts) across the project, with evidence links.
 - R-41 S — Clue chains: every revelation lists the clues that lead to it and where the player finds them.
 - R-42 C — Spoiler map: which scenes reveal what, to order reveals.
@@ -101,7 +101,7 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-52 S — AI checks on demand: coherence, pacing, knowledge leaks, puzzle fairness, humor density.
 - R-53 S — AI can render and read the graphs (drawspec) to reason about structure.
 - R-54 C — AI playtest: an agent walks the puzzle graph and reports where it got stuck.
-- R-55 W — Bundled model inside the app. (The in-app AI chat uses a provider the user connects, Claude first: R-102.)
+- R-55 W — Bundled model inside the app. (The in-app AI chat uses a provider the user connects, Claude first: R-104.)
 
 ### H. Simulation and play
 - R-56 M — Play mode: walk the story/puzzle graph as a player, with inventory and known facts (see §2 N).
@@ -134,11 +134,11 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-75 M — Immediate dilemmas (the player chooses now, with a default) and deferred dilemmas (a condition over variables picks the branch later, e.g. `trust > 3 and lied_to_police`).
 - R-76 M — Branch pruning: choosing one option removes the unchosen branch up to the first node with a strong dependency outside it; weak (dashed) edges exist only for this.
 - R-77 M — Indivisible sets: a nestable subgraph that behaves as one node and locks out everything else until finished; this is also the collapse unit of R-21.
-- R-78 S — Hint chains: up to 3 levels (plus an optional comic level 4) attached to puzzles and actions, never to decisions; delivered in-world (an NPC line, Gómez's memory voice); usage recorded.
+- R-78 S — Hint chains: up to 3 levels (plus an optional comic level 4) attached to puzzles and actions, never to decisions; delivered in-world (an NPC line, Vega's memory voice); usage recorded.
 - R-79 S — Reactions: every node can carry side effects (line of dialogue, sound, music cue, animation id) to be filled in later by the game.
 - R-80 S — Guided design pipeline from ALAIF: three-act plot → variables → puzzle graph → dilemmas → interruptions → side quests → indivisible sets → actions → hints → triggers → collectibles; Libreto shows which steps each chapter has completed.
 - R-81 S — Checks from ALAIF: dialogue must not mention a puzzle that may not be solved yet (ancestor set); overlapping reactions on events that can fire together; branches of very different length; objects useless in a branch (red herrings); "key before the lock".
-- R-82 W — ~~Post-play decision flowchart~~ (dropped: it was only a way to show the data; Ivan, 2026-11-03).
+- R-82 W — ~~Post-play decision flowchart~~ (dropped: it was only a way to show the data; 2026-11-03).
 - R-97 S — A fixed visual vocabulary per node type (fill, border style, shade), as in ALAIF's legend, so a graph reads at a glance; weak edges dashed.
 - R-98 S — Branch preview: pick an option of a dilemma and see the pruned graph (ALAIF p.76–77); dilemma nodes show the possible range of each variable at that point (p.87).
 - R-83 C — Graph shape metrics: the "balloon" (narrow start and end, wide middle), maximum open puzzles, linearity per chapter.
@@ -162,20 +162,20 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-95 S — Play telemetry (skeleton runtime first, real game later): time per puzzle, wrong attempts, hints used, where players quit; aggregated into a report.
 - R-96 S — AI review of telemetry and graph together: name the clues that are not obvious and suggest fixes, as reviewable proposals (R-49).
 
-### P. Writer's tool (Ivan, 2026-11-04)
-- R-97 M — Project types (novel, short story, screenplay, game…) choose which modules are on; any module can be switched on or off later.
-- R-98 M — Manuscript in a binder: chapters and scenes are separate documents, reordered by drag and drop; a full view reads and edits the whole manuscript as one text.
-- R-99 M — Comments and notes on any paragraph or selection, kept across edits and reorders, with threads and resolve; better than Word revisions.
-- R-100 M — Everything is linkable (paragraph, entity, note, image, research) with backlinks shown; links to the first appearance or definition of a term (as in Opos).
-- R-101 M — Export to DOCX and PDF (EPUB, Markdown later), with or without extras (comments, notes, metadata).
-- R-102 M — In-app AI chat that acts through the same command API as the CLI and MCP (rename a character, move a chapter, check consistency); every change reviewable (R-49).
-- R-103 S — AI-assisted planning before writing: describe characters, places and plot in plain words and Libreto creates the entities and links.
-- R-104 S — Moving a chapter or scene triggers the consistency checks it may break (facts used before they are introduced, timeline order).
-- R-105 M — Safe inside any backup or cloud folder (Google Drive, OneDrive, Dropbox, Syncplicity…): nothing is lost or corrupted by the backup client.
-- R-106 C — Pro users can view the underlying data (YAML/JSON) in the app; editing it is normally left to the AI.
-- R-107 M — The core assumes no kind of text: a project type (novel, short story, paper, article, newspaper, screenplay…) is a template over the same files, and kind-specific tools arrive as modules. v1 builds the writer core first (Ivan, 2026-11-04).
+### P. Writer's tool (decided 2026-11-04)
+- R-99 M — Project types (novel, short story, screenplay, game…) choose which modules are on; any module can be switched on or off later.
+- R-100 M — Manuscript in a binder: chapters and scenes are separate documents, reordered by drag and drop; a full view reads and edits the whole manuscript as one text.
+- R-101 M — Comments and notes on any paragraph or selection, kept across edits and reorders, with threads and resolve; better than Word revisions.
+- R-102 M — Everything is linkable (paragraph, entity, note, image, research) with backlinks shown; links to the first appearance or definition of a term (as in a glossary).
+- R-103 M — Export to DOCX and PDF (EPUB, Markdown later), with or without extras (comments, notes, metadata).
+- R-104 M — In-app AI chat that acts through the same command API as the CLI and MCP (rename a character, move a chapter, check consistency); every change reviewable (R-49).
+- R-105 S — AI-assisted planning before writing: describe characters, places and plot in plain words and Libreto creates the entities and links.
+- R-106 S — Moving a chapter or scene triggers the consistency checks it may break (facts used before they are introduced, timeline order).
+- R-107 M — Safe inside any backup or cloud folder (Google Drive, OneDrive, Dropbox, Syncplicity…): nothing is lost or corrupted by the backup client.
+- R-108 C — Pro users can view the underlying data (YAML/JSON) in the app; editing it is normally left to the AI.
+- R-109 M — The core assumes no kind of text: a project type (novel, short story, paper, article, newspaper, screenplay…) is a template over the same files, and kind-specific tools arrive as modules. v1 builds the writer core first (decided 2026-11-04).
 
-## 3. Decisions so far (Ivan, 2026-11-03)
+## 3. Decisions so far (decided 2026-11-03)
 
 - Format (D-4): Markdown + YAML front matter to start.
 - App type (D-5): data model + CLI + MCP first; UI after.
@@ -188,19 +188,19 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 
 ## 4. Open questions
 
-1. **Graph model for branching plots** (needs a long talk): one graph with typed edges, or ALAIF's two levels (a decision graph whose nodes hold puzzle graphs)? ALAIF never tested its branching part, so this needs prototyping with real Alter Ego examples.
+1. **Graph model for branching plots** (needs a long talk): one graph with typed edges, or ALAIF's two levels (a decision graph whose nodes hold puzzle graphs)? ALAIF never tested its branching part, so this needs prototyping with real Kit examples.
 
 ## 5. Indexing, in short
 
 - **What it is:** a lookup built from the project so a tool or an AI finds the relevant pieces without reading everything.
 - **Structured index (what we start with):** every entity and paragraph has a stable id (R-3); Libreto keeps tables like "where is character X mentioned", "which scenes reveal fact Y", "what depends on puzzle Z". It is exact, cheap, explainable, and updates when files change. literary-critic works this way.
 - **Full-text search:** finds words and phrases (like grep, but ranked). Cheap and standard (e.g. SQLite FTS).
-- **Embeddings / vector search (RAG):** each passage becomes a list of numbers that captures its meaning; similar meanings land close together, so "scenes where Gómez feels guilty" can be found without those words. Useful for fuzzy questions; costs a model, a store, and gives approximate answers.
+- **Embeddings / vector search (RAG):** each passage becomes a list of numbers that captures its meaning; similar meanings land close together, so "scenes where Vega feels guilty" can be found without those words. Useful for fuzzy questions; costs a model, a store, and gives approximate answers.
 - **Plan:** structured index + full-text search first; add embeddings only if real questions go unanswered.
 
 ## Sources
 
 - [articy:draft X — what's new](https://www.articy.com/help/adx/WhatsNew.html), [macOS launch](https://www.businesswire.com/news/home/20250403759310/de)
 - [Arcweave — AI assistant](https://arcweave.com/whats-new/articles/ai-credits-usage-tracking-and-assistant-improvements), [Godot plugin](https://godotengine.org/asset-library/asset/1601)
-- [Puzzle dependency graph primer (Game Developer)](https://www.gamedeveloper.com/design/puzzle-dependency-graph-primer); ALAIF design document (Ivan, private)
+- [Puzzle dependency graph primer (Game Developer)](https://www.gamedeveloper.com/design/puzzle-dependency-graph-primer); ALAIF design document (private)
 - Ron Gilbert's puzzle dependency charts (Grumpy Gamer); public docs of Scrivener, Twine, ink, Yarn Spinner, Fountain, Plottr, Aeon Timeline.
