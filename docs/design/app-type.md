@@ -7,7 +7,7 @@ Builds on `storage.md` (writer core first, modules, non-technical users) and req
 
 - A desktop app installed like any other, on Linux first, then Windows and macOS with the same project folders (R-4, P-1). Works offline, no account (R-66).
 - Feels like a word processor (P-5): binder, editor, full view, comments panel, export.
-- One **command layer** that does every change (rename, move chapter, add comment, create character…). The UI, the CLI, the MCP server and the in-app AI chat all call it, so anything a person can do, the AI can do, and the other way round (R-48, R-102).
+- One **command layer** that does every change (rename, move chapter, add comment, create character…). The UI, the CLI, the MCP server and the in-app AI chat all call it, so anything a person can do, the AI can do, and the other way round (R-48, R-104).
 
 ## 2. Shape
 
@@ -52,7 +52,7 @@ The core is a library with no UI. The CLI and MCP server are thin wrappers aroun
 
 **An adaptive workspace.** Like Adobe's workspaces, the screen arranges itself for the task: *Write* (binder + text), *Plan* (cards, timeline, characters), *Review* (text + comments + AI proposals), and the Game module adds *Puzzles* (graph + scene). Each is only a preset: any view can open in the left or right panel at any time, and a new module just registers new views, so nothing closes doors later. Design rule (Ivan): usefulness first, clear and simple views, everything where you expect it, minimal noise, good readability.
 
-## 5. AI inside the app (R-102)
+## 5. AI inside the app (R-104)
 
 **How the AI changes things.** The AI acts only through the command layer, never by writing files. Every change arrives as a **proposal**, shown much more clearly than Word's revisions:
 
