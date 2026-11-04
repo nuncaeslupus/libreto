@@ -1,78 +1,31 @@
-# Libreto — sync between machines (draft 0)
+# Libreto — sync between machines (draft 1, deferred)
 
-Topic 3 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet.
-Builds on `docs/design/storage.md`. Inputs: requirements R-1, R-5, R-6, R-9 (real-time multi-user: won't), R-48, R-66.
+Topic 3 of the Libreto design agenda. Status: **deferred** (Ivan, 2026-11-04): the tool must work first. v1 only needs to be safe inside a backup folder (`storage.md` §10). This page keeps what we already know so sync can be added later without changing the storage.
 
-## 1. The question
+## 1. Constraints for later
 
-The same project is edited on several computers (Ivan's Linux machines first, Windows and macOS later) and by agents in the cloud. How do changes travel, and what happens when two places changed the same thing?
+- Users are non-technical (P-6): whatever is chosen is configured by Libreto, never by the user. No git commands, no remotes, no keys to set up by hand.
+- Works offline, no Libreto account (R-66); no real-time co-editing (R-9).
 
-## 2. Options
+## 2. What v1 already does that sync will need
 
-| | Git (GitHub or any remote) | Synced folder (Syncthing, Dropbox, Drive, OneDrive, iCloud, Nextcloud) |
+- Small files and atomic writes: a sync client never sees half a file, and two machines rarely touch the same file.
+- No database in the project; the index is per machine.
+- Ids made from names, with a uniqueness check after any external change, so duplicates created on two machines are caught.
+- Snapshots as new, never-modified files: they never conflict.
+- Libreto reloads files changed from outside and detects cloud "conflicted copy" files, showing both versions per chapter, entity or node so the writer picks one.
+
+## 3. Options to choose from later
+
+| | Cloud folder the user already has | Git hidden behind the app |
 |---|---|---|
-| Setup | Remote + credentials | Install client, pick folder |
-| History, diff, restore (R-6) | Built in | Service-specific, coarse, per file |
-| Concurrent edits | Three-way merge; conflicts are explicit | Last writer wins, or a "conflicted copy" file appears |
-| Cloud agents (Claude) | Clone, branch, PR: already how we work | Usually no access |
-| Offline (R-66) | Full | Full |
-| Learning curve | High without help | None |
+| Setup | None beyond the cloud client | Libreto creates and configures everything; user signs in once |
+| Two machines editing at once | Conflict copies, resolved in Libreto | Real merge; conflicts only on the same paragraph or node |
+| History | Libreto snapshots | Snapshots + full history |
+| AI agents in the cloud | No access | Clone, change, review (how this project works today) |
 
-## 3. Proposal: git first, synced folders supported
+Likely answer: the cloud folder for most writers, hidden git as an option for pro and game projects. Decided when sync becomes a topic again.
 
-**Git is the supported way** (R-5) and Libreto hides it behind three actions, so nobody needs to know git:
+## 4. Decisions
 
-- **Snapshot** = commit of all changed project files, with a message Libreto proposes from what changed ("Bar Pelayo: 2 nodes, 5 lines").
-- **Get latest** = fetch + merge from the remote.
-- **Send** = push (Get latest first if needed).
-
-Libreto uses the system's git and its credentials (SSH keys, credential helper), so whatever already works on the machine works in Libreto. A project with no remote still gets local history.
-
-**Synced folders also work** (R-5 "any file sync must also work") because of how storage is laid out: small files, atomic writes, no lock files, derived data outside the project (`storage.md` §1, §7). What Libreto adds:
-
-- Watches the folder and reloads files changed by the sync client.
-- Detects conflict copies by their known name patterns (`(conflicted copy …)`, `.sync-conflict-…`, `(1)` …) and shows them as conflicts to resolve (§4), instead of leaving duplicates around.
-- Warns once if it finds a `.git` folder inside a synced folder: syncing a live git repository is a known way to corrupt it. Use one or the other per project.
-
-## 4. Conflicts
-
-Small files make conflicts rare and local, but they happen. Handling, from simplest to richest:
-
-1. **Detect.** After a merge or a sync, Libreto finds conflict markers or conflict copies and blocks only the affected files (the rest of the project keeps working).
-2. **Resolve by unit.** Libreto parses both versions and shows the difference per node, per entity field, per line id, not per text line: "Mine: `rosa_trust += 1`. Theirs: `rosa_trust += 2`." Choose one, or edit.
-3. **Merge driver** (later, S). A `libreto merge` git driver registered in `.gitattributes` merges YAML by id, so two people editing different nodes of the same scene never see a conflict at all.
-
-After any merge, the full check (node-model §6b) runs, catching what no text merge can: duplicate ids created on two machines, a reference to a node deleted elsewhere, a broken dependency.
-
-## 5. What travels and what does not
-
-| Travels (in the project) | Stays on each machine |
-|---|---|
-| All files in `storage.md` §2, including `views/` | Index, search tables, compiled ink, undo history, window layout (OS cache folder) |
-| `.gitattributes` (LF endings, merge driver later) | Credentials |
-| A `.gitignore` Libreto creates (OS junk, `*.pot`) | |
-
-## 6. Agents and the cloud
-
-Agents (Claude in a cloud session, or locally through the CLI/MCP, R-48) work on a git clone like any machine: branch, change files, open a PR, merge. Libreto's checks run in CI on every PR, so an agent's change is validated before it reaches `main`. A Libreto project is therefore also a normal reviewable repository.
-
-## 7. Not in scope
-
-- Real-time co-editing (R-9 is *won't*).
-- A Libreto server or account (R-66).
-- Libreto implementing its own sync protocol.
-
-## 8. Decisions and open questions
-
-Decided (Ivan, 2026-11-03):
-
-1. Ivan's machines sync through GitHub; synced folders are tested later.
-2. Snapshots are manual, plus automatic ones before risky operations (migrate, bulk rename, merge).
-
-Proposed (to confirm):
-
-1. Git first, behind Snapshot / Get latest / Send; synced folders supported with conflict-copy detection.
-2. Never git inside a synced folder; Libreto warns.
-3. Conflicts resolved per node/field/line; structural merge driver later.
-4. Libreto checks run in CI for every PR.
-
+Ivan, 2026-11-04: sync deferred; non-technical users; v1 = backup-safe storage. AI inside the app moves to topic 4 (app type).

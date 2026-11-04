@@ -1,126 +1,122 @@
-# Libreto — storage on disk (draft 0)
+# Libreto — storage on disk (draft 1)
 
 Topic 2 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet.
-Builds on `docs/design/node-model.md` (layout and schema v0 in §6b); does not repeat it.
-Inputs: `docs/research/requirements.md` R-1…R-7, R-11, R-43, R-48, R-50, R-59, R-66; principles P-1, P-2.
+Draft 1 follows Ivan's review notes (2026-11-04): Libreto is a **writer's tool first** (P-5), for non-technical users (P-6); game tools are modules.
+Builds on `docs/design/node-model.md` (game module) and `docs/research/requirements.md` §2 A, B, P.
 
-## 1. Rules
+## 1. What the writer sees, and what is on disk
 
-1. **The folder is the truth** (R-1). Every fact lives in a plain-text file a person can open, diff and merge. Anything else Libreto keeps (index, search tables, window layout) is derived and lives outside the project (§7).
-2. **Standards first** (P-2): YAML, Markdown with YAML front matter, ink, gettext PO, JSON, JSON Schema. Libreto invents only the conventions on top (ids, file kinds).
-3. **Hand edits are first class.** A file written by a text editor, by Claude, or by the app is the same file. Libreto reloads on external change and never needs its own "import".
-4. **Stable diffs.** Libreto writes deterministically (key order, quoting, indentation, line endings) and keeps comments and the author's order when it rewrites a file. Saving without changes changes nothing.
-5. **One thing per file** (R-2): one entity, one scene graph, one dialogue script per scene. Small files make sync conflicts rare and local (see `sync.md`).
+The writer never sees files. Libreto looks and feels like a word processor: a binder of chapters on the left, the text in the middle, notes and comments on the right, a full view that reads the whole book as one text, and export to Word or PDF at any time (R-98, R-101).
 
-## 2. Project layout (extends §6b)
+Underneath, a project is **one folder of plain-text files** (Markdown with a small header, plus a few YAML lists). Why not a Word-like single file:
+
+- **The work outlives the app.** Any editor opens Markdown; nothing is locked in a format only Libreto reads.
+- **The AI can read and change it** precisely (R-48, R-102). A `.docx` is a zip of XML that AI and tools handle badly.
+- **Backups stay small and safe**: changing one chapter rewrites one small file, not the whole book (R-105).
+- **Word is still one click away**: export to DOCX/PDF, with or without comments and notes.
+
+On macOS the folder can show as a single document icon (a package, like Scrivener's `.scriv`); on Linux and Windows it is a folder named `My novel.libreto`.
+
+## 2. Rules
+
+1. **The folder is the truth** (R-1). Everything the writer made lives in it; everything Libreto can rebuild lives outside it (§9).
+2. **Standards first** (P-2): Markdown, YAML, and only in game projects ink and PO.
+3. **Hand and AI edits are first class.** A file changed by the AI, by a text editor or by the app is the same file; Libreto reloads on change.
+4. **Stable files.** Libreto writes deterministically and atomically (temporary file, then rename), keeps comments and the author's order, and saving without changes changes nothing.
+5. **Small files.** One chapter, one entity, one scene graph per file.
+
+## 3. Modules decide what exists
+
+A project type (novel, short story, screenplay, game) switches modules on; any module can be switched on or off later (R-97). A module that is off has no files and no menus.
+
+| Module | On for | Adds |
+|---|---|---|
+| **Core** | everything | Manuscript, binder, comments, notes, research, links, snapshots, export |
+| **World** | novel (optional), game | Characters, places, items as entity cards; timeline; maps |
+| **Game** | game | Puzzle/event graphs (node model), variables, facts and knowers, dialogue scripting (ink), translations (PO), playthrough tests |
+
+## 4. Layout
 
 ```text
-my-game/
-  libreto.yaml            project: name, schema version, languages, timelines
-  variables.yaml          story variables
-  facts.yaml              facts and mysteries
-  knowers.yaml            minds that can know facts
-  scenes/<scene>.yaml     scene header + nodes
-  entities/<kind>/<id>.md items, characters, locations… (front matter + notes)
-  script/<scene>.ink      dialogue and every sequenced player-facing line
-  script/_variables.ink   generated from variables.yaml (do not edit)
-  locale/<lang>.po        translations
-  tests/<name>.yaml       scripted playthroughs
-  views/<view>.json       graph/timeline positions and view settings
-  research/               notes, images, PDFs, audio, links (R-43)
-  context/                AI context: style guide, tone, rules (R-50)
-  AGENTS.md               points agents at context/ and the CLI/MCP (R-48)
+My novel.libreto/
+  libreto.yaml                 project: title, type, modules on, language, schema version
+  binder.yaml                  order and nesting of manuscript documents
+  manuscript/<id>.md           chapters and scenes: header + text
+  notes/<id>.md                free notes, linkable from anywhere
+  comments/<doc id>.yaml       comment threads anchored to paragraphs (§6)
+  research/                    images, PDFs, audio, web clips (R-43)
+  context/                     AI context: style guide, tone, rules (R-50)
+  history/                     snapshots (§10)
+  # World module
+  entities/<kind>/<id>.md      characters, places, items…
+  timeline.yaml                story events and when they happen
+  # Game module (node-model.md §6b)
+  variables.yaml  facts.yaml  knowers.yaml
+  scenes/<id>.yaml  script/<id>.ink  locale/<lang>.po  tests/<name>.yaml
+  views/<view>.json            graph and map positions (committed: same layout everywhere)
 ```
 
-- A project is any folder with a `libreto.yaml`. It does **not** have to be the root of a git repository: Alter Ego can keep its project in `alter-ego/story/`.
-- Folder names under `entities/` are the entity kinds (`items`, `characters`, `locations`, more can be added in `libreto.yaml`). File name = id, so the id is visible in any file browser.
-- Scenes may be grouped in subfolders (`scenes/ch1/bar_pelayo.yaml`); folders are for people, ids stay global.
+- **Moving chapter 3 after chapter 4** changes only `binder.yaml`; file names never carry numbers, so nothing is renamed (R-98). The move then runs the checks it may break: facts used before they are introduced, timeline order (R-104).
+- A manuscript document's header holds title, status (idea / draft / revised / final), synopsis, and optional point of view and story time.
+- A project can sit inside a bigger folder or repository (Alter Ego: `alter-ego/story/`).
 
-## 3. Formats
+## 5. References and ids
 
-| Kind | Format | Notes |
-|---|---|---|
-| Project, variables, facts, knowers, scenes, tests | YAML 1.2 | Restricted subset: no anchors, aliases or tags; one document per file. Strings that YAML 1.1 would misread (`no`, `on`, `1:30`) are written quoted. |
-| Entities, research notes, context | Markdown (CommonMark + GFM tables) with YAML front matter between `---` lines | Front matter = structured fields; body = free text. Readable on GitHub as is. |
-| Dialogue | ink | §5 |
-| Translations | gettext PO | §6 |
-| Views | JSON | Machine-written, never hand-edited; pretty-printed, sorted keys, one node per line so diffs stay small. |
+Writers never type ids (P-6). They type names: `@Rosa` or `[[Bar Pelayo]]` autocompletes to the entity, and Libreto stores the id. The AI can create characters, places and links from a plain description before a word of the book is written (R-103).
 
-All text files: UTF-8 without BOM, LF line endings, trailing newline. Libreto writes them atomically (temporary file in the same folder, then rename), so a crash or a sync client never sees half a file.
+Under the hood, for the AI and pro users:
 
-**Why views are separate.** Node positions change every time a graph is tidied; keeping them out of `scenes/*.yaml` keeps story diffs about the story. A missing or stale view file is harmless: Libreto lays the graph out again.
+- **Ids** are made from the name (`rosa`, `bar_pelayo`): `[a-z][a-z0-9_]*`, ≤ 48 chars, one project-wide namespace so no reference is ambiguous.
+- **Paragraph anchors** are added only when something points at a paragraph (a comment, a link, a definition), as an invisible HTML comment at its end: `… died in 1979. <!-- ^rosa_father -->`.
+- **Everything is linkable**: document, paragraph, entity, note, research file, comment; every target shows its backlinks. A term can link to its first appearance or definition, as in Opos (R-100).
+- **Renames are one command.** "Rename Rosa to Rosario" is `libreto rename rosa rosario --name Rosario`: it changes the name in the text, the id, and every reference. The app, the CLI, the MCP server and the in-app AI chat all call the same command (R-102).
 
-## 4. Ids
+## 6. Comments and notes (R-99)
 
-**Grammar.** `[a-z][a-z0-9_]*`, at most 48 characters, English, readable: `talk_rosa`, `badge`, `bar_pelayo`. A dilemma option is addressed as `dilemma.option`.
+- Comments live **beside** the text, not inside it (`comments/<doc id>.yaml`), anchored to a paragraph plus the quoted words. The text file stays clean; a comment survives edits around it and moves with its paragraph when chapters are reordered.
+- A comment has author (person or AI), date, thread replies and a resolved flag. AI suggestions are comments with a proposed change, accepted one by one (R-49).
+- Notes are full documents (`notes/`) for longer thinking; any comment can link to a note and vice versa.
+- Revision history is snapshots (§10), not tracked changes: compare any two versions of a chapter side by side.
 
-**One namespace.** Nodes, entities, scenes, facts, knowers, variables and line ids share one project-wide namespace, so a reference like `requires: [badge]` or `learn alter_ego badge_owner` can never be ambiguous. The schema check reports duplicates with both file locations.
+## 7. Dialogue (Game module only)
 
-**Line ids.** Every player-facing line has one (R-3, R-59). Lines a node points at get readable ids written by the author (`rosa_who_truth`); every other line gets an automatic id the first time Libreto saves the file: `<scene>_<4 random base-32 chars>` (`bar_pelayo_k7q2`). Random, not numbered, so two machines adding lines at the same time never collide, and reordering never renumbers.
+Novels write dialogue as prose; nothing changes for them. In a game project the writer writes dialogue **screenplay style**, the way a script reads:
 
-**Paragraph anchors in Markdown** (R-3). Only added when something links to a paragraph (a fact's evidence, a consistency finding). Form: an HTML comment at the end of the paragraph, invisible in every Markdown viewer (GitHub, Obsidian, editors):
+```text
+ROSA
+Who's asking?
 
-```markdown
-Rosa has run the bar since her father died in 1979. <!-- ^rosa_father -->
+ALTER EGO
+* A friend of Gómez.
+* Nobody you know.
 ```
 
-Chosen over Obsidian's visible `^rosa_father` because it never shows up as stray text; Libreto can still read both.
+Libreto stores it as ink underneath (`script/<scene>.ink`, each line tagged with an id), so it runs in the skeleton runtime and in the game. Choices, conditions and variables are added from the editor; the ink is visible only in the data view. ink stays if the Bar Pelayo scene works this way (fit test before the v1 spec).
 
-**Renames.** `libreto rename <old> <new>` (and the app) rewrites every reference, including ink tags and PO contexts, in one change, using the index. Ids are never reused for something else; the check warns when a deleted id reappears with another kind.
+## 8. Translations (Game module only)
 
-## 5. ink for dialogue
+- Script written in the project language (Alter Ego: Spanish); other languages are translations in gettext PO, one entry per line id (`msgctxt` = id, `msgid` = source text), so changed lines are flagged for review and standard tools (Poedit, Weblate) work.
+- Novels are translated as whole texts, outside Libreto's scope for now.
 
-ink is kept if the Bar Pelayo scene can be written in it without workarounds (fit test before the v1 spec). Conventions:
+## 9. Checks and derived data
 
-- One `script/<scene>.ink` per scene. A knot per node that talks, named after the node: `=== talk_rosa ===`.
-- Every line ends with its id tag: `Who's asking? #id:rosa_who`. Libreto adds missing ones (§4).
-- Speaker = character id before a colon: `rosa: Who's asking?`. Lines with no speaker are narration or player-facing text (look-at descriptions, hints).
-- Variables are declared once in `variables.yaml`; Libreto generates `script/_variables.ink` (`VAR rosa_trust = 0`) and each scene file `INCLUDE`s it, so the ink compiles in Inky and in any ink runtime unchanged.
-- Conditions in ink and in node `when:` use the same expression syntax (node-model §4), so one parser checks both.
-- Labels that are not sequenced lines (an item's name in the inventory) live in entity front matter and are marked translatable in the schema; their id is `<entity>.<field>` (`badge.name`).
+- Every file kind has a JSON Schema; errors point at the field (R-7). `libreto.yaml` carries a schema version; a newer Libreto migrates older projects after taking a snapshot.
+- **The index lives outside the project**, in the computer's cache folder (`~/.cache/libreto/` on Linux, the equivalents on Windows and macOS). It is a database (search, backlinks, "where is Rosa mentioned"), and a backup client copying a database while it changes can corrupt it. Since the index is rebuilt from the files in seconds, keeping it out of the backed-up folder costs nothing and removes that risk.
+- Pro users can open a read-only data view of any element (R-106); changing data by hand is normally left to the AI.
 
-## 6. Translations: PO
+## 10. Backup and history
 
-- `libreto.yaml` declares `source_language` and `languages`. The script is written in the source language; every other language is a translation.
-- Libreto extracts all player-facing strings into `locale/<lang>.po`, one entry per line:
+- **Backup** (R-105): put the project in any cloud folder (Google Drive, OneDrive, Dropbox, Syncplicity). Atomic writes, small files and no database inside make this safe.
+- **Snapshots**: automatic before risky operations (migration, bulk rename, reorders, accepting AI changes) and on demand. Each is a new, never-modified file in `history/`, so backup clients only ever add files; restore or compare from the app. No git and no configuration (P-6).
+- **Sync between computers** is deferred (see `sync.md`); nothing here blocks adding it.
 
-```po
-#. speaker: rosa · node: talk_rosa · scene: bar_pelayo
-#: script/bar_pelayo.ink:12
-msgctxt "rosa_who"
-msgid "Who's asking?"
-msgstr "¿Quién lo pregunta?"
-```
+## 11. Decisions and open questions
 
-- `msgctxt` = line id (identity), `msgid` = source text (what translators see). When the source line changes, the entry turns *fuzzy*, the standard gettext signal that it needs review. Works with Poedit, Weblate, Lokalise and `msgmerge` without anything Libreto-specific.
-- The `.pot` template is generated on demand and not committed: it is fully derived from `script/` and entities.
+Decided (Ivan, 2026-11-03 / 04):
 
-## 7. Schemas and derived data
+1. Writer's tool first; game tools are modules (P-5). Non-technical users (P-6).
+2. Alter Ego's script is written in Spanish.
+3. Graph and map layouts (`views/`) are part of the project.
+4. Sync deferred; v1 only has to be backup-safe.
 
-- **JSON Schema (2020-12)** for every file kind (YAML and front matter are validated as JSON data), shipped inside Libreto and published so editors (VS Code YAML extension) validate as you type. Errors point at file, line and field (R-7).
-- `libreto.yaml` has `schema: 1`. A newer Libreto opening an older project offers `libreto migrate`, which first takes a snapshot (R-6) and changes files in one reviewable step. An older Libreto refuses to write a newer project.
-- Unknown fields are errors (typos get caught), except fields starting with `x_`, kept untouched for game-specific data.
-- **Derived data lives outside the project**, in the OS cache folder (`~/.cache/libreto/<project id>/` on Linux): the index (R-48 "where is X mentioned"), search tables, compiled ink, undo history, window layout. It can be a database because it is not the truth; deleting it only costs a rebuild. Keeping it outside means sync never carries it (see `sync.md`).
-
-## 8. Research and binary files (R-43)
-
-- `research/` holds anything: Markdown notes (with front matter, linkable like entities), images, PDFs, audio.
-- Any file links to research by relative path; Libreto tracks those links in the index and fixes them on move.
-- Large binaries stay in git by default; Git LFS is optional and only changes how they are stored, not how Libreto sees them.
-
-## 9. Decisions and open questions
-
-Decided (Ivan, 2026-11-03):
-
-1. Alter Ego's script is written in **Spanish** (`source_language: es`); English is a translation.
-2. `views/*.json` are committed, so every machine shows the same layout.
-3. Paragraph anchors are HTML comments (Ivan had no preference; §4).
-
-Proposed (to confirm):
-
-1. Layout in §2, project folder may sit inside a bigger repo.
-2. One id namespace; readable author ids, random suffix for automatic line ids.
-3. ink conventions in §5; generated `_variables.ink`.
-4. PO with `msgctxt` = line id, `msgid` = source text.
-5. Derived data outside the project folder.
-
+Proposed (to confirm): folder-of-files under a word-processor UI (§1), layout (§4), names not ids for writers (§5), comments beside the text (§6), screenplay-style dialogue stored as ink (§7), index in the cache folder (§9), snapshots as files (§10).
