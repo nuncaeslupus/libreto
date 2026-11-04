@@ -118,5 +118,6 @@ Decided (Ivan, 2026-11-03 / 04):
 2. Alter Ego's script is written in Spanish.
 3. Graph and map layouts (`views/`) are part of the project.
 4. Sync deferred; v1 only has to be backup-safe.
+5. **Build order: the writer core first** (plus the World module's characters and chapters tooling), then the Game module for Alter Ego. Other kinds of text (paper, article, newspaper, screenplay) are added as project types when needed, so the core must not assume a novel: a project type is a template (binder skeleton, header fields, export style) over the same files, and kind-specific needs (citations for a paper, columns for a newspaper) come as modules.
 
 Proposed (to confirm): folder-of-files under a word-processor UI (§1), layout (§4), names not ids for writers (§5), comments beside the text (§6), screenplay-style dialogue stored as ink (§7), index in the cache folder (§9), snapshots as files (§10).
