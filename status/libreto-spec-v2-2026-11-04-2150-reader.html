@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="arsenal-source-sha256" content="89232679cea1cbed8745e0b5948d8a91d6df7e23b89051fbbee595f9ad365e77">
+<meta name="arsenal-source-sha256" content="901f908b29e6ca987768951a7f6f2e6b1c585e7a0e5d0b4854b87a0d8b7f43b9">
 <title>Libreto — Specification (annotatable)</title>
 <style>
 :root{
@@ -233,9 +233,9 @@ li>.note.bnote{margin:6px 0}
 <h3 class="sec-h"><span class="chip">overview</span><span class="sec-title">Preamble &amp; scope</span></h3>
 <div class="sec-body"><p><strong>Date</strong>: 2026-11-04<br />
 <strong>Ticket / PR</strong>: design agenda topic 5<br />
-<strong>Author</strong>: Claude, with Ivan<br />
+<strong>Author</strong>: Libreto maintainers<br />
 <strong>Revision</strong>: 2<br />
-<strong>Status</strong>: draft<br />
+<strong>Status</strong>: approved (2026-11-04, revision 2) — without annotations<br />
 <strong>Revision log</strong>:
 - r1 — first draft, from design topics 1–4 (<code>docs/design/</code>) and <code>docs/research/requirements.md</code>
 - r2 — applied <code>libreto-spec-v1-2026-11-04-2234-notes.md</code>: styles by function, Word compatibility, module API, plain-name mentions, command list, parts to specify</p></div>
@@ -243,12 +243,12 @@ li>.note.bnote{margin:6px 0}
 </article>
 <article class="sec l2" id="s-spec-1" data-ref="SPEC §1" data-label="§1 Problem statement" data-part="Specification">
 <h3 class="sec-h"><span class="chip">§1</span><span class="sec-title">Problem statement</span></h3>
-<div class="sec-body"><p>Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop <strong>writer's tool</strong> that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (<code>docs/design/storage.md</code>). Two principles from review (Ivan, 2026-11-04):</p>
+<div class="sec-body"><p>Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop <strong>writer's tool</strong> that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (<code>docs/design/storage.md</code>). Two principles from review (decided 2026-11-04):</p>
 <ul>
 <li><strong>Styles say what a text is, not how it looks.</strong> A writer creates a style by its function, in seconds: "Sign", centred and in capitals, is enough to see it differs. Its look can be redefined later, or per export ("Sign" drawn in a box in the final book), without touching the text. Built-in styles (heading, quote, letter, note…) work the same way.</li>
 <li><strong>Word compatible.</strong> DOCX goes both ways: import a Word manuscript (headings, styles, comments) and export one, where Libreto styles become Word named styles and comments become Word comments, so a writer can exchange files with editors who only use Word.</li>
 </ul>
-<p>Game tools (puzzle graphs, ink, translations: <code>docs/design/node-model.md</code>) come after v1, as a module on the same core; Alter Ego is their first user.</p>
+<p>Game tools (puzzle graphs, ink, translations: <code>docs/design/node-model.md</code>) come after v1, as a module on the same core; a graphic adventure in development is their first user.</p>
 <p><strong>Success criteria (measurable)</strong>:</p>
 <ul>
 <li>[ ] <code>open_project_s &lt;= 3</code> for a 150,000-word novel in 40 chapters on a 2020-era laptop; <code>keystroke_to_paint_p95_ms &lt;= 50</code> in the full view of that project.</li>
@@ -260,7 +260,7 @@ li>.note.bnote{margin:6px 0}
 <li>[ ] <code>docx_import_roundtrip</code>: a Word manuscript imported and exported again keeps its text, headings, named styles and comments, judged on a corpus of 10 real manuscripts.</li>
 <li>[ ] Creating a new style takes <code>&lt;= 3</code> steps (name it, pick how it looks, apply it) and changing its look updates every use at once.</li>
 <li>[ ] <code>core_line_coverage &gt;= 0.80</code>; every command has a CLI and an MCP test.</li>
-<li>[ ] Three writers who never saw Libreto create a project, write and reorder chapters, comment, link a character, take and restore a snapshot, and export to DOCX without help or reading a manual. Judged by Ivan watching the sessions.</li>
+<li>[ ] Three writers who never saw Libreto create a project, write and reorder chapters, comment, link a character, take and restore a snapshot, and export to DOCX without help or reading a manual. Judged by the maintainers watching the sessions.</li>
 <li>[ ] Linux package (AppImage and .deb) installs and runs on Ubuntu 24.04 and Fedora 41; download <code>&lt;= 150 MB</code>.</li>
 </ul></div>
 <div class="note" data-for="s-spec-1"><label class="note-head" for="n-s-spec-1"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC §1</span></label><textarea class="note-ta" data-key="s-spec-1" id="n-s-spec-1" data-label="§1 Problem statement" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
@@ -362,12 +362,12 @@ li>.note.bnote{margin:6px 0}
 <tr>
 <td>UI design</td>
 <td>Workspaces, panels, menus, the proposal review screen; wireframes first</td>
-<td>Ivan reviews wireframes</td>
+<td>owner reviews wireframes</td>
 </tr>
 <tr>
 <td>Commands</td>
 <td>The exact list, arguments and results (first draft in Appendix A)</td>
-<td>Claude drafts, Ivan reviews</td>
+<td>Claude drafts, owner reviews</td>
 </tr>
 <tr>
 <td>CLI and MCP</td>
@@ -377,7 +377,7 @@ li>.note.bnote{margin:6px 0}
 <tr>
 <td>Styles</td>
 <td>Built-in set, how a style is stored in Markdown (Pandoc-style <code>::: {.sign}</code> blocks and <code>[text]{.sign}</code> spans proposed), how looks map to DOCX/PDF</td>
-<td>Claude drafts, Ivan reviews</td>
+<td>Claude drafts, owner reviews</td>
 </tr>
 <tr>
 <td>Module API</td>
@@ -424,7 +424,7 @@ li>.note.bnote{margin:6px 0}
 </li>
 <li><strong>Scope</strong>: core, CLI, MCP, app, packaging.</li>
 <li><strong>Effort</strong>: Large</li>
-<li><strong>Tradeoffs</strong>: the full promise of P-5 in v1; more to build before the first release, mitigated by milestones 1–2 being usable early (Ivan can write in Libreto from milestone 2).</li>
+<li><strong>Tradeoffs</strong>: the full promise of P-5 in v1; more to build before the first release, mitigated by milestones 1–2 being usable early (the maintainers can write in Libreto from milestone 2).</li>
 <li><strong>Compatibility</strong>: game module, timeline and maps plug in later as modules (<code>app-type.md</code> §4).</li>
 </ul></div>
 <div class="note" data-for="s-spec-option-b-the-writer-core-in-four"><label class="note-head" for="n-s-spec-option-b-the-writer-core-in-four"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Option B: The writer core, in four milestones (Recommended)</span></label><textarea class="note-ta" data-key="s-spec-option-b-the-writer-core-in-four" id="n-s-spec-option-b-the-writer-core-in-four" data-label="Option B: The writer core, in four milestones (Recommended)" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
@@ -435,7 +435,7 @@ li>.note.bnote{margin:6px 0}
 <li><strong>Description</strong>: Option B plus timeline, maps and the optional in-app chat with an API key.</li>
 <li><strong>Scope</strong>: B + World module + API-key chat.</li>
 <li><strong>Effort</strong>: Large+</li>
-<li><strong>Tradeoffs</strong>: closer to Alter Ego's needs, but delays v1 and adds features a first-time writer does not need.</li>
+<li><strong>Tradeoffs</strong>: closer to a game's needs, but delays v1 and adds features a first-time writer does not need.</li>
 <li><strong>Compatibility</strong>: same as B.</li>
 </ul></div>
 <div class="note" data-for="s-spec-option-c-writer-core-plus-world"><label class="note-head" for="n-s-spec-option-c-writer-core-plus-world"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Option C: Writer core plus World tools</span></label><textarea class="note-ta" data-key="s-spec-option-c-writer-core-plus-world" id="n-s-spec-option-c-writer-core-plus-world" data-label="Option C: Writer core plus World tools" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
@@ -488,7 +488,7 @@ li>.note.bnote{margin:6px 0}
 </article>
 <article class="sec l2" id="s-spec-4" data-ref="SPEC §4" data-label="§4 Recommendation" data-part="Specification">
 <h3 class="sec-h"><span class="chip">§4</span><span class="sec-title">Recommendation</span></h3>
-<div class="sec-body"><p><strong>Recommended option</strong>: Option B — it delivers the writer's tool Ivan described, in milestones that are each usable, without pulling World or Game tools into v1.</p>
+<div class="sec-body"><p><strong>Recommended option</strong>: Option B — it delivers the writer's tool described above, in milestones that are each usable, without pulling World or Game tools into v1.</p>
 <p><strong>Immediate next action</strong>: once this spec is approved, run <code>design</code> to write <code>status/plan.md</code>: tasks per milestone, each with its gate from §1, starting with project format v1 and the command API.</p>
 <p><strong>Out of v1</strong> (planned as modules or later versions): timeline, maps, puzzle graphs and the whole Game module (node model, ink, PO, playthrough tests), sync between computers, in-app chat with an API key, in-app Claude sign-in (pending Anthropic approval), EPUB, Windows and macOS builds, project types other than novel and short story.</p>
 <p><strong>Open questions</strong>:
@@ -566,9 +566,9 @@ li>.note.bnote{margin:6px 0}
 </tr>
 <tr>
 <td>D-11</td>
-<td>Alter Ego's script is written in Spanish</td>
-<td>agreed</td>
-<td>2026-11-03</td>
+<td>(moved: a game-project decision, not Libreto's)</td>
+<td>superseded</td>
+<td>2026-11-04</td>
 </tr>
 <tr>
 <td>D-12</td>

@@ -10,9 +10,9 @@
 
 **Date**: 2026-11-04
 **Ticket / PR**: design agenda topic 5
-**Author**: Claude, with Ivan
+**Author**: Libreto maintainers
 **Revision**: 2
-**Status**: draft
+**Status**: approved (2026-11-04, revision 2) — without annotations
 **Revision log**:
 - r1 — first draft, from design topics 1–4 (`docs/design/`) and `docs/research/requirements.md`
 - r2 — applied `libreto-spec-v1-2026-11-04-2234-notes.md`: styles by function, Word compatibility, module API, plain-name mentions, command list, parts to specify
@@ -24,12 +24,12 @@
 
 ## §1 Problem statement
 
-Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop **writer's tool** that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (`docs/design/storage.md`). Two principles from review (Ivan, 2026-11-04):
+Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop **writer's tool** that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (`docs/design/storage.md`). Two principles from review (decided 2026-11-04):
 
 - **Styles say what a text is, not how it looks.** A writer creates a style by its function, in seconds: "Sign", centred and in capitals, is enough to see it differs. Its look can be redefined later, or per export ("Sign" drawn in a box in the final book), without touching the text. Built-in styles (heading, quote, letter, note…) work the same way.
 - **Word compatible.** DOCX goes both ways: import a Word manuscript (headings, styles, comments) and export one, where Libreto styles become Word named styles and comments become Word comments, so a writer can exchange files with editors who only use Word.
 
-Game tools (puzzle graphs, ink, translations: `docs/design/node-model.md`) come after v1, as a module on the same core; Alter Ego is their first user.
+Game tools (puzzle graphs, ink, translations: `docs/design/node-model.md`) come after v1, as a module on the same core; a graphic adventure in development is their first user.
 
 **Success criteria (measurable)**:
 
@@ -42,7 +42,7 @@ Game tools (puzzle graphs, ink, translations: `docs/design/node-model.md`) come 
 - [ ] `docx_import_roundtrip`: a Word manuscript imported and exported again keeps its text, headings, named styles and comments, judged on a corpus of 10 real manuscripts.
 - [ ] Creating a new style takes `<= 3` steps (name it, pick how it looks, apply it) and changing its look updates every use at once.
 - [ ] `core_line_coverage >= 0.80`; every command has a CLI and an MCP test.
-- [ ] Three writers who never saw Libreto create a project, write and reorder chapters, comment, link a character, take and restore a snapshot, and export to DOCX without help or reading a manual. Judged by Ivan watching the sessions.
+- [ ] Three writers who never saw Libreto create a project, write and reorder chapters, comment, link a character, take and restore a snapshot, and export to DOCX without help or reading a manual. Judged by the maintainers watching the sessions.
 - [ ] Linux package (AppImage and .deb) installs and runs on Ubuntu 24.04 and Fedora 41; download `<= 150 MB`.
 
 <!-- -->
@@ -74,10 +74,10 @@ These depend on taste or need their own work; each becomes a short design doc re
 
 | Part | What must be decided | Who |
 |---|---|---|
-| UI design | Workspaces, panels, menus, the proposal review screen; wireframes first | Ivan reviews wireframes |
-| Commands | The exact list, arguments and results (first draft in Appendix A) | Claude drafts, Ivan reviews |
+| UI design | Workspaces, panels, menus, the proposal review screen; wireframes first | owner reviews wireframes |
+| Commands | The exact list, arguments and results (first draft in Appendix A) | Claude drafts, owner reviews |
 | CLI and MCP | How the commands appear as `libreto <verb>` and as MCP tools | Claude, from the command list |
-| Styles | Built-in set, how a style is stored in Markdown (Pandoc-style `::: {.sign}` blocks and `[text]{.sign}` spans proposed), how looks map to DOCX/PDF | Claude drafts, Ivan reviews |
+| Styles | Built-in set, how a style is stored in Markdown (Pandoc-style `::: {.sign}` blocks and `[text]{.sign}` spans proposed), how looks map to DOCX/PDF | Claude drafts, owner reviews |
 | Module API | What a module can add: views, workspaces, commands, file kinds, checks, export parts | Claude |
 | DOCX import/export | Mapping of every element both ways | Claude |
 | Translation of the app | String catalogs from day one; English first, Spanish next | Claude |
@@ -111,7 +111,7 @@ These depend on taste or need their own work; each becomes a short design doc re
   4. **AI + export + release**: "Connect Claude", proposal review UI, DOCX and PDF export, Linux packages.
 - **Scope**: core, CLI, MCP, app, packaging.
 - **Effort**: Large
-- **Tradeoffs**: the full promise of P-5 in v1; more to build before the first release, mitigated by milestones 1–2 being usable early (Ivan can write in Libreto from milestone 2).
+- **Tradeoffs**: the full promise of P-5 in v1; more to build before the first release, mitigated by milestones 1–2 being usable early (the maintainers can write in Libreto from milestone 2).
 - **Compatibility**: game module, timeline and maps plug in later as modules (`app-type.md` §4).
 
 <!-- -->
@@ -124,7 +124,7 @@ These depend on taste or need their own work; each becomes a short design doc re
 - **Description**: Option B plus timeline, maps and the optional in-app chat with an API key.
 - **Scope**: B + World module + API-key chat.
 - **Effort**: Large+
-- **Tradeoffs**: closer to Alter Ego's needs, but delays v1 and adds features a first-time writer does not need.
+- **Tradeoffs**: closer to a game's needs, but delays v1 and adds features a first-time writer does not need.
 - **Compatibility**: same as B.
 
 <!-- -->
@@ -149,7 +149,7 @@ These depend on taste or need their own work; each becomes a short design doc re
 
 ## §4 Recommendation
 
-**Recommended option**: Option B — it delivers the writer's tool Ivan described, in milestones that are each usable, without pulling World or Game tools into v1.
+**Recommended option**: Option B — it delivers the writer's tool described above, in milestones that are each usable, without pulling World or Game tools into v1.
 
 **Immediate next action**: once this spec is approved, run `design` to write `status/plan.md`: tasks per milestone, each with its gate from §1, starting with project format v1 and the command API.
 
@@ -172,7 +172,7 @@ These depend on taste or need their own work; each becomes a short design doc re
 | D-8 | Electron + TypeScript; ProseMirror editor; adaptive workspaces | agreed | 2026-11-04 |
 | D-9 | AI changes as plain summary + side-by-side before/after, accepted one by one | agreed | 2026-11-04 |
 | D-10 | AI in v1 through "Connect Claude" (MCP in Claude Desktop, the writer's subscription); ask Anthropic for in-app sign-in | agreed | 2026-11-04 |
-| D-11 | Alter Ego's script is written in Spanish | agreed | 2026-11-03 |
+| D-11 | (moved: a game-project decision, not Libreto's) | superseded | 2026-11-04 |
 | D-12 | Export and import need nothing extra installed (TypeScript DOCX library, Electron PDF) | agreed | 2026-11-04 |
 | D-13 | App UI in English, translatable from day one (string catalogs); Spanish as soon as possible | agreed | 2026-11-04 |
 | D-14 | Character and place cards in v1: name, picture, description, notes, mentions; no relationship maps | agreed | 2026-11-04 |

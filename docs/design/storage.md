@@ -1,7 +1,7 @@
 # Libreto — storage on disk (draft 1)
 
 Topic 2 of the Libreto design agenda. Status: **for discussion**; nothing here is built yet.
-Draft 1 follows Ivan's review notes (2026-11-04): Libreto is a **writer's tool first** (P-5), for non-technical users (P-6); game tools are modules.
+Draft 1 follows review notes (2026-11-04): Libreto is a **writer's tool first** (P-5), for non-technical users (P-6); game tools are modules.
 Builds on `docs/design/node-model.md` (game module) and `docs/research/requirements.md` §2 A, B, P.
 
 ## 1. What the writer sees, and what is on disk
@@ -58,18 +58,18 @@ My novel.libreto/
 
 - **Moving chapter 3 after chapter 4** changes only `binder.yaml`; file names never carry numbers, so nothing is renamed (R-100). The move then runs the checks it may break: facts used before they are introduced, timeline order (R-106).
 - A manuscript document's header holds title, status (idea / draft / revised / final), synopsis, and optional point of view and story time.
-- A project can sit inside a bigger folder or repository (Alter Ego: `alter-ego/story/`).
+- A project can sit inside a bigger folder or repository (for example a game repository's `story/` folder).
 
 ## 5. References and ids
 
-Writers never type ids (P-6). They type names: `@Rosa` or `[[Bar Pelayo]]` autocompletes to the entity, and Libreto stores the id. The AI can create characters, places and links from a plain description before a word of the book is written (R-105).
+Writers never type ids (P-6). They type names: `@Lena` or `[[Blue Lamp]]` autocompletes to the entity, and Libreto stores the id. The AI can create characters, places and links from a plain description before a word of the book is written (R-105).
 
 Under the hood, for the AI and pro users:
 
-- **Ids** are made from the name (`rosa`, `bar_pelayo`): `[a-z][a-z0-9_]*`, ≤ 48 chars, one project-wide namespace so no reference is ambiguous.
-- **Paragraph anchors** are added only when something points at a paragraph (a comment, a link, a definition), as an invisible HTML comment at its end: `… died in 1979. <!-- ^rosa_father -->`.
-- **Everything is linkable**: document, paragraph, entity, note, research file, comment; every target shows its backlinks. A term can link to its first appearance or definition, as in Opos (R-102).
-- **Renames are one command.** "Rename Rosa to Rosario" is `libreto rename rosa rosario --name Rosario`: it changes the name in the text, the id, and every reference. The app, the CLI, the MCP server and the in-app AI chat all call the same command (R-104).
+- **Ids** are made from the name (`lena`, `blue_lamp`): `[a-z][a-z0-9_]*`, ≤ 48 chars, one project-wide namespace so no reference is ambiguous.
+- **Paragraph anchors** are added only when something points at a paragraph (a comment, a link, a definition), as an invisible HTML comment at its end: `… died in 1979. <!-- ^lena_father -->`.
+- **Everything is linkable**: document, paragraph, entity, note, research file, comment; every target shows its backlinks. A term can link to its first appearance or definition, as in a glossary (R-102).
+- **Renames are one command.** "Rename Lena to Lenore" is `libreto rename lena lenario --name Lenore`: it changes the name in the text, the id, and every reference. The app, the CLI, the MCP server and the in-app AI chat all call the same command (R-104).
 
 ## 6. Comments and notes (R-101)
 
@@ -83,25 +83,25 @@ Under the hood, for the AI and pro users:
 Novels write dialogue as prose; nothing changes for them. In a game project the writer writes dialogue **screenplay style**, the way a script reads:
 
 ```text
-ROSA
+LENA
 Who's asking?
 
-ALTER EGO
-* A friend of Gómez.
+KIT
+* A friend of Vega.
 * Nobody you know.
 ```
 
-Libreto stores it as ink underneath (`script/<scene>.ink`, each line tagged with an id), so it runs in the skeleton runtime and in the game. Choices, conditions and variables are added from the editor; the ink is visible only in the data view. ink stays if the Bar Pelayo scene works this way (fit test before the v1 spec).
+Libreto stores it as ink underneath (`script/<scene>.ink`, each line tagged with an id), so it runs in the skeleton runtime and in the game. Choices, conditions and variables are added from the editor; the ink is visible only in the data view. ink stays if the Blue Lamp scene works this way (fit test before the v1 spec).
 
 ## 8. Translations (Game module only)
 
-- Script written in the project language (Alter Ego: Spanish); other languages are translations in gettext PO, one entry per line id (`msgctxt` = id, `msgid` = source text), so changed lines are flagged for review and standard tools (Poedit, Weblate) work.
+- Script written in the project language; other languages are translations in gettext PO, one entry per line id (`msgctxt` = id, `msgid` = source text), so changed lines are flagged for review and standard tools (Poedit, Weblate) work.
 - Novels are translated as whole texts, outside Libreto's scope for now.
 
 ## 9. Checks and derived data
 
 - Every file kind has a JSON Schema; errors point at the field (R-7). `libreto.yaml` carries a schema version; a newer Libreto migrates older projects after taking a snapshot.
-- **The index lives outside the project**, in the computer's cache folder (`~/.cache/libreto/` on Linux, the equivalents on Windows and macOS). It is a database (search, backlinks, "where is Rosa mentioned"), and a backup client copying a database while it changes can corrupt it. Since the index is rebuilt from the files in seconds, keeping it out of the backed-up folder costs nothing and removes that risk.
+- **The index lives outside the project**, in the computer's cache folder (`~/.cache/libreto/` on Linux, the equivalents on Windows and macOS). It is a database (search, backlinks, "where is Lena mentioned"), and a backup client copying a database while it changes can corrupt it. Since the index is rebuilt from the files in seconds, keeping it out of the backed-up folder costs nothing and removes that risk.
 - Pro users can open a read-only data view of any element (R-108); changing data by hand is normally left to the AI.
 
 ## 10. Backup and history
@@ -112,12 +112,11 @@ Libreto stores it as ink underneath (`script/<scene>.ink`, each line tagged with
 
 ## 11. Decisions and open questions
 
-Decided (Ivan, 2026-11-03 / 04):
+Decided (decided 2026-11-03 / 04):
 
 1. Writer's tool first; game tools are modules (P-5). Non-technical users (P-6).
-2. Alter Ego's script is written in Spanish.
-3. Graph and map layouts (`views/`) are part of the project.
-4. Sync deferred; v1 only has to be backup-safe.
-5. **Build order: the writer core first** (plus the World module's characters and chapters tooling), then the Game module for Alter Ego. Other kinds of text (paper, article, newspaper, screenplay) are added as project types when needed, so the core must not assume a novel: a project type is a template (binder skeleton, header fields, export style) over the same files, and kind-specific needs (citations for a paper, columns for a newspaper) come as modules.
+2. Graph and map layouts (`views/`) are part of the project.
+3. Sync deferred; v1 only has to be backup-safe.
+4. **Build order: the writer core first** (plus the World module's characters and chapters tooling), then the Game module. Other kinds of text (paper, article, newspaper, screenplay) are added as project types when needed, so the core must not assume a novel: a project type is a template (binder skeleton, header fields, export style) over the same files, and kind-specific needs (citations for a paper, columns for a newspaper) come as modules.
 
 Proposed (to confirm): folder-of-files under a word-processor UI (§1), layout (§4), names not ids for writers (§5), comments beside the text (§6), screenplay-style dialogue stored as ink (§7), index in the cache folder (§9), snapshots as files (§10).
