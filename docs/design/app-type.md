@@ -78,7 +78,4 @@ Decided (Ivan, 2026-11-04):
 2. Adaptive workspace with presets and free panels (§4).
 3. AI changes shown as plain summary + side-by-side before/after, accepted one by one (§5).
 4. The writer's subscription is preferred over API keys; nacho-viewer is not a model, only the clean visual result is.
-
-Open:
-
-1. **AI path for v1** (§5): start with "Connect Claude" (Claude Desktop beside Libreto, subscription, allowed now), while asking Anthropic for in-app sign-in? Proposal: yes.
+5. AI path for v1 (§5): "Connect Claude" (Claude Desktop beside Libreto, the writer's subscription), optional API-key chat, and a request to Anthropic for in-app sign-in.
