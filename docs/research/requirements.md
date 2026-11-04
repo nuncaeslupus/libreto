@@ -172,8 +172,8 @@ Every requirement has a stable id `R-N`; ids are never renumbered.
 - R-103 S — AI-assisted planning before writing: describe characters, places and plot in plain words and Libreto creates the entities and links.
 - R-104 S — Moving a chapter or scene triggers the consistency checks it may break (facts used before they are introduced, timeline order).
 - R-105 M — Safe inside any backup or cloud folder (Google Drive, OneDrive, Dropbox, Syncplicity…): nothing is lost or corrupted by the backup client.
-- R-107 M — The core assumes no kind of text: a project type (novel, short story, paper, article, newspaper, screenplay…) is a template over the same files, and kind-specific tools arrive as modules. v1 builds the writer core first (Ivan, 2026-11-04).
 - R-106 C — Pro users can view the underlying data (YAML/JSON) in the app; editing it is normally left to the AI.
+- R-107 M — The core assumes no kind of text: a project type (novel, short story, paper, article, newspaper, screenplay…) is a template over the same files, and kind-specific tools arrive as modules. v1 builds the writer core first (Ivan, 2026-11-04).
 
 ## 3. Decisions so far (Ivan, 2026-11-03)
 
