@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="arsenal-source-sha256" content="b0f5457afeb881a27a5e05b6425970bbea2ffa424acd9651f51875f1d99d9484">
+<meta name="arsenal-source-sha256" content="89232679cea1cbed8745e0b5948d8a91d6df7e23b89051fbbee595f9ad365e77">
 <title>Libreto — Specification (annotatable)</title>
 <style>
 :root{
@@ -194,7 +194,7 @@ li>.note.bnote{margin:6px 0}
     <button class="btn primary" id="btn-export">Save / Export</button>
   </div>
 </div>
-<div class="statusbar"><div class="wrap"><span class="count" id="count">0 / 8 notes</span><span class="hint"> · notes save automatically; <strong>Save / Export</strong> keeps a file you can send back</span></div></div>
+<div class="statusbar"><div class="wrap"><span class="count" id="count">0 / 10 notes</span><span class="hint"> · notes save automatically; <strong>Save / Export</strong> keeps a file you can send back</span></div></div>
 <div id="warnbar"><div class="wrap"><strong>Heads up —</strong> this browser isn't storing your notes automatically (private/incognito mode or restricted file view). Tap <strong>Save / Export</strong> regularly.</div></div>
 
 <div class="wrap">
@@ -218,12 +218,14 @@ li>.note.bnote{margin:6px 0}
 <li><a href="#s-spec-intro">Preamble &amp; scope</a></li>
 <li><a href="#s-spec-1">§1 Problem statement</a></li>
 <li><a href="#s-spec-2">§2 Systems &amp; Impact</a></li>
+<li class="sub"><a href="#s-spec-parts-to-specify-before-the-plan">Parts to specify before the plan</a></li>
 <li><a href="#s-spec-3">§3 Options</a></li>
 <li class="sub"><a href="#s-spec-option-a-core-first-thin-app-con">Option A: Core first, thin app (Conservative)</a></li>
 <li class="sub"><a href="#s-spec-option-b-the-writer-core-in-four">Option B: The writer core, in four milestones (Recommended)</a></li>
 <li class="sub"><a href="#s-spec-option-c-writer-core-plus-world">Option C: Writer core plus World tools</a></li>
 <li class="sub"><a href="#s-spec-comparison">Comparison</a></li>
 <li><a href="#s-spec-4">§4 Recommendation</a></li>
+<li><a href="#s-spec-appendix-a-commands-first-draft">Appendix A. Commands, first draft</a></li>
 </ul>
 </details>
   <section class="part">
@@ -232,15 +234,21 @@ li>.note.bnote{margin:6px 0}
 <div class="sec-body"><p><strong>Date</strong>: 2026-11-04<br />
 <strong>Ticket / PR</strong>: design agenda topic 5<br />
 <strong>Author</strong>: Claude, with Ivan<br />
-<strong>Revision</strong>: 1<br />
+<strong>Revision</strong>: 2<br />
 <strong>Status</strong>: draft<br />
 <strong>Revision log</strong>:
-- r1 — first draft, from design topics 1–4 (<code>docs/design/</code>) and <code>docs/research/requirements.md</code></p></div>
+- r1 — first draft, from design topics 1–4 (<code>docs/design/</code>) and <code>docs/research/requirements.md</code>
+- r2 — applied <code>libreto-spec-v1-2026-11-04-2234-notes.md</code>: styles by function, Word compatibility, module API, plain-name mentions, command list, parts to specify</p></div>
 <div class="note" data-for="s-spec-intro"><label class="note-head" for="n-s-spec-intro"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC · intro</span></label><textarea class="note-ta" data-key="s-spec-intro" id="n-s-spec-intro" data-label="Preamble &amp; scope" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
 </article>
 <article class="sec l2" id="s-spec-1" data-ref="SPEC §1" data-label="§1 Problem statement" data-part="Specification">
 <h3 class="sec-h"><span class="chip">§1</span><span class="sec-title">Problem statement</span></h3>
-<div class="sec-body"><p>Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop <strong>writer's tool</strong> that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (<code>docs/design/storage.md</code>). Game tools (puzzle graphs, ink, translations: <code>docs/design/node-model.md</code>) come after v1, as a module on the same core; Alter Ego is their first user.</p>
+<div class="sec-body"><p>Writers who plan as much as they write (novelists, short-story writers, and later screenwriters, journalists, game writers) split their work across a word processor, scattered notes and, at best, Scrivener, which has no Linux version, no AI and no structure beyond the binder. Word's revisions are hard to read, notes drift away from the text they are about, and an AI can only help through copy and paste. Libreto v1 is a desktop <strong>writer's tool</strong> that feels like a word processor (P-5) for non-technical users (P-6): a binder of chapters, a full view of the whole text, comments that stay attached to their paragraph, notes, research, links with backlinks, character and place cards, snapshots, export to DOCX and PDF, and Claude working through Libreto's own commands with every change shown clearly before it is accepted. The files stay plain Markdown in one folder, safe in any backup folder (<code>docs/design/storage.md</code>). Two principles from review (Ivan, 2026-11-04):</p>
+<ul>
+<li><strong>Styles say what a text is, not how it looks.</strong> A writer creates a style by its function, in seconds: "Sign", centred and in capitals, is enough to see it differs. Its look can be redefined later, or per export ("Sign" drawn in a box in the final book), without touching the text. Built-in styles (heading, quote, letter, note…) work the same way.</li>
+<li><strong>Word compatible.</strong> DOCX goes both ways: import a Word manuscript (headings, styles, comments) and export one, where Libreto styles become Word named styles and comments become Word comments, so a writer can exchange files with editors who only use Word.</li>
+</ul>
+<p>Game tools (puzzle graphs, ink, translations: <code>docs/design/node-model.md</code>) come after v1, as a module on the same core; Alter Ego is their first user.</p>
 <p><strong>Success criteria (measurable)</strong>:</p>
 <ul>
 <li>[ ] <code>open_project_s &lt;= 3</code> for a 150,000-word novel in 40 chapters on a 2020-era laptop; <code>keystroke_to_paint_p95_ms &lt;= 50</code> in the full view of that project.</li>
@@ -248,7 +256,9 @@ li>.note.bnote{margin:6px 0}
 <li>[ ] <code>corrupted_files == 0</code> after 1,000 forced kills during save, and after syncing the project through a cloud-folder client while editing (R-107).</li>
 <li>[ ] <code>comment_anchor_survival == 100%</code> on the anchor test suite: comments stay on their paragraph through edits around it, chapter reorders and full-view edits (R-101).</li>
 <li>[ ] A rename asked of Claude Desktop through "Connect Claude" updates every mention, link and card, is shown as one proposal with a plain summary and side-by-side before/after, and is undone by one snapshot restore (R-104, app-type §5). Judged by an end-to-end test.</li>
-<li>[ ] Exported DOCX opens in Word and LibreOffice with headings, emphasis and (when chosen) comments intact; PDF matches the full view's text. Judged on the test corpus.</li>
+<li>[ ] Exported DOCX opens in Word and LibreOffice with headings, emphasis, custom styles (as named Word styles) and, when chosen, comments intact; PDF matches the full view's text. Judged on the test corpus.</li>
+<li>[ ] <code>docx_import_roundtrip</code>: a Word manuscript imported and exported again keeps its text, headings, named styles and comments, judged on a corpus of 10 real manuscripts.</li>
+<li>[ ] Creating a new style takes <code>&lt;= 3</code> steps (name it, pick how it looks, apply it) and changing its look updates every use at once.</li>
 <li>[ ] <code>core_line_coverage &gt;= 0.80</code>; every command has a CLI and an MCP test.</li>
 <li>[ ] Three writers who never saw Libreto create a project, write and reorder chapters, comment, link a character, take and restore a snapshot, and export to DOCX without help or reading a manual. Judged by Ivan watching the sessions.</li>
 <li>[ ] Linux package (AppImage and .deb) installs and runs on Ubuntu 24.04 and Fedora 41; download <code>&lt;= 150 MB</code>.</li>
@@ -337,6 +347,57 @@ li>.note.bnote{margin:6px 0}
 </table></div>
 <div class="note" data-for="s-spec-2"><label class="note-head" for="n-s-spec-2"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC §2</span></label><textarea class="note-ta" data-key="s-spec-2" id="n-s-spec-2" data-label="§2 Systems &amp; Impact" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
 </article>
+<article class="sec l3" id="s-spec-parts-to-specify-before-the-plan" data-ref="SPEC › Parts to specify before the plan" data-label="Parts to specify before the plan" data-part="Specification">
+<h4 class="sec-h"><span class="chip">▸</span><span class="sec-title">Parts to specify before the plan</span></h4>
+<div class="sec-body"><p>These depend on taste or need their own work; each becomes a short design doc reviewed in the annotatable reader before <code>design</code> writes the plan:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What must be decided</th>
+<th>Who</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI design</td>
+<td>Workspaces, panels, menus, the proposal review screen; wireframes first</td>
+<td>Ivan reviews wireframes</td>
+</tr>
+<tr>
+<td>Commands</td>
+<td>The exact list, arguments and results (first draft in Appendix A)</td>
+<td>Claude drafts, Ivan reviews</td>
+</tr>
+<tr>
+<td>CLI and MCP</td>
+<td>How the commands appear as <code>libreto &lt;verb&gt;</code> and as MCP tools</td>
+<td>Claude, from the command list</td>
+</tr>
+<tr>
+<td>Styles</td>
+<td>Built-in set, how a style is stored in Markdown (Pandoc-style <code>::: {.sign}</code> blocks and <code>[text]{.sign}</code> spans proposed), how looks map to DOCX/PDF</td>
+<td>Claude drafts, Ivan reviews</td>
+</tr>
+<tr>
+<td>Module API</td>
+<td>What a module can add: views, workspaces, commands, file kinds, checks, export parts</td>
+<td>Claude</td>
+</tr>
+<tr>
+<td>DOCX import/export</td>
+<td>Mapping of every element both ways</td>
+<td>Claude</td>
+</tr>
+<tr>
+<td>Translation of the app</td>
+<td>String catalogs from day one; English first, Spanish next</td>
+<td>Claude</td>
+</tr>
+</tbody>
+</table></div>
+<div class="note" data-for="s-spec-parts-to-specify-before-the-plan"><label class="note-head" for="n-s-spec-parts-to-specify-before-the-plan"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Parts to specify before the plan</span></label><textarea class="note-ta" data-key="s-spec-parts-to-specify-before-the-plan" id="n-s-spec-parts-to-specify-before-the-plan" data-label="Parts to specify before the plan" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
 <article class="sec l2 bare" id="s-spec-3" data-ref="SPEC §3" data-label="§3 Options" data-part="Specification">
 <h3 class="sec-h"><span class="chip">§3</span><span class="sec-title">Options</span></h3>
 </article>
@@ -346,7 +407,7 @@ li>.note.bnote{margin:6px 0}
 <li><strong>Description</strong>: build the core, CLI and MCP server; the app is a single-document Markdown editor with a binder; comments, full view, cards and proposal review later.</li>
 <li><strong>Scope</strong>: core, CLI, MCP, minimal app.</li>
 <li><strong>Effort</strong>: Medium</li>
-<li><strong>Tradeoffs</strong>: lowest risk and early AI use through Claude Desktop, but writers get little that a Markdown editor does not already give; the word-processor feel, the real goal, is postponed.</li>
+<li><strong>Tradeoffs</strong>: lowest risk, early AI use through Claude Desktop, and nacho-viewer's Markdown rendering code could be reused or studied for the viewer, but writers get little that a Markdown editor does not already give; the word-processor feel, the real goal, is postponed.</li>
 <li><strong>Compatibility</strong>: same file format; nothing thrown away.</li>
 </ul></div>
 <div class="note" data-for="s-spec-option-a-core-first-thin-app-con"><label class="note-head" for="n-s-spec-option-a-core-first-thin-app-con"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Option A: Core first, thin app (Conservative)</span></label><textarea class="note-ta" data-key="s-spec-option-a-core-first-thin-app-con" id="n-s-spec-option-a-core-first-thin-app-con" data-label="Option A: Core first, thin app (Conservative)" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
@@ -356,8 +417,8 @@ li>.note.bnote{margin:6px 0}
 <div class="sec-body"><ul>
 <li><strong>Description</strong>: everything in §1, delivered in order, each milestone usable on its own:<ol>
 <li><strong>Core + CLI + MCP</strong>: project format v1, index, commands (create, rename, move, link, comment, snapshot, export), checks.</li>
-<li><strong>App shell + editor</strong>: binder with drag and drop, chapter editor, full view, word counts, Write workspace.</li>
-<li><strong>Writing tools</strong>: comments and notes, research, links and backlinks, character and place cards with <code>@mentions</code>, snapshots and compare, Plan and Review workspaces.</li>
+<li><strong>App shell + editor</strong>: the module API first (the core itself is a module, so later ones plug in the same way), then binder with drag and drop, chapter editor, full view, styles, word counts, Write workspace.</li>
+<li><strong>Writing tools</strong>: comments and notes, research, links and backlinks, character and place cards with <code>@mentions</code> (names typed without <code>@</code> are detected and offered as links, one click or all at once), snapshots and compare, Plan and Review workspaces.</li>
 <li><strong>AI + export + release</strong>: "Connect Claude", proposal review UI, DOCX and PDF export, Linux packages.</li>
 </ol>
 </li>
@@ -431,9 +492,7 @@ li>.note.bnote{margin:6px 0}
 <p><strong>Immediate next action</strong>: once this spec is approved, run <code>design</code> to write <code>status/plan.md</code>: tasks per milestone, each with its gate from §1, starting with project format v1 and the command API.</p>
 <p><strong>Out of v1</strong> (planned as modules or later versions): timeline, maps, puzzle graphs and the whole Game module (node model, ink, PO, playthrough tests), sync between computers, in-app chat with an API key, in-app Claude sign-in (pending Anthropic approval), EPUB, Windows and macOS builds, project types other than novel and short story.</p>
 <p><strong>Open questions</strong>:
-- [ ] Export without extra installs: DOCX from a TypeScript library and PDF from Electron's own renderer (proposed), rather than requiring Pandoc on the writer's computer?
-- [ ] App language in v1: English only (R-70), or English and Spanish from the start?
-- [ ] Character and place cards in v1: name, picture, description, notes and mentions only (proposed); no relationship maps yet?</p>
+- [ ] None left in this revision; the parts in §2 are reviewed as their own design docs.</p>
 <p><strong>Decisions log</strong>:</p>
 <table>
 <thead>
@@ -511,12 +570,110 @@ li>.note.bnote{margin:6px 0}
 <td>agreed</td>
 <td>2026-11-03</td>
 </tr>
+<tr>
+<td>D-12</td>
+<td>Export and import need nothing extra installed (TypeScript DOCX library, Electron PDF)</td>
+<td>agreed</td>
+<td>2026-11-04</td>
+</tr>
+<tr>
+<td>D-13</td>
+<td>App UI in English, translatable from day one (string catalogs); Spanish as soon as possible</td>
+<td>agreed</td>
+<td>2026-11-04</td>
+</tr>
+<tr>
+<td>D-14</td>
+<td>Character and place cards in v1: name, picture, description, notes, mentions; no relationship maps</td>
+<td>agreed</td>
+<td>2026-11-04</td>
+</tr>
+<tr>
+<td>D-15</td>
+<td>Styles by function, easy to create, look redefinable per export</td>
+<td>agreed</td>
+<td>2026-11-04</td>
+</tr>
+<tr>
+<td>D-16</td>
+<td>DOCX import and export with styles and comments (Word compatible)</td>
+<td>agreed</td>
+<td>2026-11-04</td>
+</tr>
+</tbody>
+</table></div>
+<div class="note" data-for="s-spec-4"><label class="note-head" for="n-s-spec-4"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC §4</span></label><textarea class="note-ta" data-key="s-spec-4" id="n-s-spec-4" data-label="§4 Recommendation" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-appendix-a-commands-first-draft" data-ref="SPEC › Appendix A. Commands, first draft" data-label="Appendix A. Commands, first draft" data-part="Specification">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">Appendix A. Commands, first draft</span></h3>
+<div class="sec-body"><p>Every command is one undoable step with a snapshot when it touches several files; the UI, CLI, MCP and AI call the same list.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project</td>
+<td><code>project.create</code> (type, title, language), <code>project.open</code>, <code>project.settings</code>, <code>module.enable</code> / <code>module.disable</code></td>
+</tr>
+<tr>
+<td>Binder</td>
+<td><code>doc.create</code> (chapter, scene, note, folder), <code>doc.move</code> (before / after / into), <code>doc.rename</code>, <code>doc.delete</code> (to trash), <code>doc.restore</code>, <code>doc.split</code>, <code>doc.merge</code>, <code>doc.status</code></td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>text.read</code> (doc or range), <code>text.edit</code> (replace a range or paragraph), <code>text.search</code>, <code>text.replace</code> (project-wide, as one proposal)</td>
+</tr>
+<tr>
+<td>Styles</td>
+<td><code>style.create</code>, <code>style.update</code> (look), <code>style.apply</code>, <code>style.delete</code> (falls back to normal text)</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td><code>comment.add</code>, <code>comment.reply</code>, <code>comment.resolve</code>, <code>comment.list</code></td>
+</tr>
+<tr>
+<td>Entities</td>
+<td><code>entity.create</code> (character, place, item), <code>entity.update</code>, <code>entity.rename</code> (name, id, every mention), <code>entity.merge</code>, <code>entity.delete</code>, <code>entity.mentions</code></td>
+</tr>
+<tr>
+<td>Links</td>
+<td><code>link.add</code>, <code>link.remove</code>, <code>link.backlinks</code>, <code>mention.detect</code> (names typed without <code>@</code>), <code>mention.link</code></td>
+</tr>
+<tr>
+<td>Research</td>
+<td><code>research.add</code> (file or web clip), <code>research.link</code></td>
+</tr>
+<tr>
+<td>History</td>
+<td><code>snapshot.take</code>, <code>snapshot.list</code>, <code>snapshot.compare</code>, <code>snapshot.restore</code></td>
+</tr>
+<tr>
+<td>Checks</td>
+<td><code>check.run</code> (all or one: links, mentions, consistency after a move), <code>check.results</code></td>
+</tr>
+<tr>
+<td>Proposals</td>
+<td><code>proposal.create</code> (a group of changes with a plain summary), <code>proposal.show</code>, <code>proposal.accept</code> (all or one place), <code>proposal.reject</code></td>
+</tr>
+<tr>
+<td>Export / import</td>
+<td><code>export.docx</code>, <code>export.pdf</code>, <code>export.markdown</code>, <code>import.docx</code>, <code>import.markdown</code></td>
+</tr>
+<tr>
+<td>Stats</td>
+<td><code>stats.words</code> (doc, selection, project; targets)</td>
+</tr>
 </tbody>
 </table>
+<p>The AI never calls <code>text.edit</code> directly on the writer's text: its changes go through <code>proposal.create</code> and wait for acceptance.</p>
 <blockquote>
 <p>Sections 5–6 (contracts, risks) are appended by <code>design</code>.</p>
 </blockquote></div>
-<div class="note" data-for="s-spec-4"><label class="note-head" for="n-s-spec-4"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC §4</span></label><textarea class="note-ta" data-key="s-spec-4" id="n-s-spec-4" data-label="§4 Recommendation" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
+<div class="note" data-for="s-spec-appendix-a-commands-first-draft"><label class="note-head" for="n-s-spec-appendix-a-commands-first-draft"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Appendix A. Commands, first draft</span></label><textarea class="note-ta" data-key="s-spec-appendix-a-commands-first-draft" id="n-s-spec-appendix-a-commands-first-draft" data-label="Appendix A. Commands, first draft" data-part="Specification" rows="1" placeholder="Add a note on this section…"></textarea></div>
 </article>
 </section>
 </div>
@@ -545,7 +702,7 @@ li>.note.bnote{margin:6px 0}
 <script>var SPEC_SEED_NOTES={};</script>
 <script>
 (function(){
-  var NS = 'libreto-spec-v1:';
+  var NS = 'libreto-spec-v2:';
   var tas = Array.prototype.slice.call(document.querySelectorAll('.note-ta'));
 
   function autoGrow(t){t.style.height='auto';t.style.height=(t.scrollHeight)+'px';}
@@ -705,7 +862,7 @@ li>.note.bnote{margin:6px 0}
   function today(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
   function stamp(){var d=new Date();return today()+'-'+pad(d.getHours())+pad(d.getMinutes());}
   // Named like the reader, <repo>-<doc>-v<N>-<YYYY-MM-DD-HHMM>-notes.md, stamped at export.
-  function exportName(){return 'libreto-spec-v1-'+stamp()+'-notes.md';}
+  function exportName(){return 'libreto-spec-v2-'+stamp()+'-notes.md';}
 
   function buildExport(){
     var byPart={},order=[],data={},n=0;
