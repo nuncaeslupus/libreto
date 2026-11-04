@@ -41,7 +41,7 @@ The core is a library with no UI. The CLI and MCP server are thin wrappers aroun
 | Linux, Windows, macOS | Yes | Yes (webview differences per OS) | Yes |
 | AI SDKs (Claude Agent SDK, MCP) | First-class in TypeScript | Via a TypeScript sidecar | Python SDK, if Python |
 
-**Proposal: A.** The editor is the heart of a writer's tool and the web editors are far ahead; one language keeps the core, CLI and MCP server identical. Size is the price; Tauri stays possible later because the UI would be the same web code.
+**Decided (Ivan, 2026-11-04): A.** The editor is the heart of a writer's tool and the web editors are far ahead; one language keeps the core, CLI and MCP server identical. Size is the price; Tauri stays possible later because the UI would be the same web code.
 
 ## 4. The editor
 
@@ -50,16 +50,35 @@ The core is a library with no UI. The CLI and MCP server are thin wrappers aroun
 - Comments as side notes anchored to a paragraph and quote (storage §6); AI suggestions shown as suggested changes to accept or reject one by one.
 - Modules add their own views next to the text: timeline, map, graph (Game), screenplay-style dialogue editor (Game).
 
+**An adaptive workspace.** Like Adobe's workspaces, the screen arranges itself for the task: *Write* (binder + text), *Plan* (cards, timeline, characters), *Review* (text + comments + AI proposals), and the Game module adds *Puzzles* (graph + scene). Each is only a preset: any view can open in the left or right panel at any time, and a new module just registers new views, so nothing closes doors later. Design rule (Ivan): usefulness first, clear and simple views, everything where you expect it, minimal noise, good readability.
+
 ## 5. AI inside the app (R-102)
 
-- A **chat panel** next to the text. The writer asks in plain words ("rename the town to Vilaclara", "is chapter 4 consistent if it goes before 3?").
-- The AI acts only through the **command layer**, offered to it as tools; it never writes files directly. Every change arrives as a reviewable suggestion (R-49).
-- **Skills**: Libreto ships task guides (rename, reorder and check, plan characters, fair-puzzle review…) and the project's own `context/` files (style, tone, rules, R-50) are given to the AI each time.
-- **Provider**: the writer connects their own; Claude first (Claude Agent SDK). No model is bundled (R-55). Without a provider, the app works fully, just without the chat.
-- The same tools are exposed through the MCP server, so Claude Code or Claude Desktop can work on a project with the app closed.
+**How the AI changes things.** The AI acts only through the command layer, never by writing files. Every change arrives as a **proposal**, shown much more clearly than Word's revisions:
 
-## 6. Open questions
+- A one-line plain summary first: "Rename *Rosa* to *Rosario*: 14 mentions in 6 chapters, 2 notes, 1 character card".
+- Then each place as **before | after side by side**, whole paragraphs, the changed words highlighted; no strike-through soup mixed into the text.
+- A list of all affected places to jump through; accept or reject each one, or all at once. Nothing changes until accepted, and accepting takes a snapshot first, so it can always be undone.
 
-1. **Technology**: Electron + TypeScript (proposed), or do you prefer small downloads (Tauri) even at some extra complexity?
-2. **AI connection**: for v1, is "paste an Anthropic API key" acceptable, or must it sign in with a Claude subscription? (The second depends on what Anthropic allows third-party apps; to check before the spec.)
-3. **nacho-viewer**: what should Libreto take from it (look, packaging, something else)?
+**Skills**: Libreto ships task guides (rename, reorder and check, plan characters, fair-puzzle review…) and the project's own `context/` files (style, tone, rules, R-50) are given to the AI every time.
+
+**Using the writer's Claude subscription, not an API key.** Checked 2026-11-04 in the Claude Agent SDK documentation: *"Unless previously approved, Anthropic does not allow third party developers to offer claude.ai login or rate limits for their products, including agents built on the Claude Agent SDK."* So a "Sign in with Claude" button inside Libreto needs Anthropic's approval. Plan:
+
+1. **v1: connect Claude to Libreto.** A "Connect Claude" button registers Libreto's MCP server in the writer's Claude Desktop (or Claude Code) in one click. The writer chats in Claude Desktop with their own subscription; Claude works through Libreto's commands, and the proposals appear in Libreto's Review workspace as above. This is allowed today and uses no API key.
+2. **Optional in-app chat with an API key**, for those who want everything in one window and accept pay-per-use.
+3. **Ask Anthropic for approval** of in-app sign-in (through their sales/partners contact) once Libreto is usable; if granted, the in-app chat signs in through a browser window, as Ivan wants.
+
+Without any of these, the app works fully, just without the AI. The same MCP tools let Claude Code work on a project with the app closed (R-48).
+
+## 6. Decisions and open questions
+
+Decided (Ivan, 2026-11-04):
+
+1. Electron + TypeScript (§3).
+2. Adaptive workspace with presets and free panels (§4).
+3. AI changes shown as plain summary + side-by-side before/after, accepted one by one (§5).
+4. The writer's subscription is preferred over API keys; nacho-viewer is not a model, only the clean visual result is.
+
+Open:
+
+1. **AI path for v1** (§5): start with "Connect Claude" (Claude Desktop beside Libreto, subscription, allowed now), while asking Anthropic for in-app sign-in? Proposal: yes.
