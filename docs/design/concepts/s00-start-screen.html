@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S00: Start screen</title>
+<link rel="stylesheet" href="concepts.css">
+</head><body>
+<div class="win">
+
+<div class="titlebar"><span class="appic"></span><div class="wtitle">Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>
+<div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Project</span><span>Tools</span><span>Help</span><div class="msearch"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span>Search menus</span></div></div>
+<div class="content" style="background:var(--soft);justify-content:center">
+  <div style="width:1120px;padding-top:44px">
+    <div style="font:600 24px var(--ui);letter-spacing:-.01em;margin-bottom:4px">Libreto</div>
+    <div style="color:var(--ink2);font-size:14px;margin-bottom:26px">One project at a time. Start a new one, or open one you have.</div>
+    <div style="display:flex;gap:28px;align-items:flex-start">
+      <div style="width:560px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:22px 24px 20px">
+        <div style="font:600 16px var(--ui);margin-bottom:16px">New project</div>
+        <div class="field"><label>What are you writing?</label>
+          <div style="display:flex;gap:8px"><span class="opt on">Novel</span><span class="opt">Short story</span><span class="opt">Article</span><span class="opt">Something else</span></div>
+          <div style="color:var(--ink3);font-size:11.5px">Sets the basic parts (chapters or sections, front matter) and the default book layout.</div></div>
+        <div class="field"><label>Title</label><div class="inp foc">The Blue Lamp<span class="cursor" style="height:15px;vertical-align:-2px"></span></div></div>
+        <div style="display:flex;gap:12px">
+          <div class="field" style="flex:1"><label>Author</label><div class="inp">Ana Ferrer</div></div>
+          <div class="field" style="flex:1"><label>Subtitle <span style="color:var(--ink3);font-weight:400">(optional)</span></label><div class="inp ph">—</div></div>
+        </div>
+        <div class="field"><label>Language</label><div class="inp" style="width:240px">English (UK) <span style="float:right;color:var(--ink3)">▾</span></div>
+          <div style="color:var(--ink3);font-size:11.5px">Dictionary and AI follow it. Scenes or dialogues in another language can be marked later.</div></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line2)">
+          <span style="color:var(--ink3);font-size:12px">Saved in ~/Documents/Libreto · <span style="color:var(--accent)">Change</span></span>
+          <span style="flex:1"></span><span class="btn pri" style="padding:7px 18px;font-size:13px">Create project</span></div>
+      </div>
+      <div style="flex:1">
+        <div style="display:flex;gap:10px;margin-bottom:22px"><span class="btn" style="padding:8px 16px;font-size:13px">Open a project…</span><span class="btn q" style="padding:8px 6px;font-size:13px">Import a .docx, .odt or .md…</span></div>
+        <div class="nh" style="margin:0 2px 8px">Recent</div>
+        <div style="background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden">
+        <div style="display:flex;gap:14px;align-items:center;padding:12px 16px;background:var(--accent-tint)">
+          <div style="width:30px;height:38px;border:1px solid var(--line);border-radius:3px;background:var(--soft);flex:none"></div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">The Blue Lamp</div><div style="color:var(--ink2);font-size:12px">Novel · 61,204 words</div><div style="color:var(--ink3);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">~/Documents/Libreto/The Blue Lamp</div></div>
+          <div style="color:var(--ink3);font-size:12px;flex:none">yesterday, 18:40</div></div><div style="display:flex;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line2);">
+          <div style="width:30px;height:38px;border:1px solid var(--line);border-radius:3px;background:var(--soft);flex:none"></div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">Salt for the winter</div><div style="color:var(--ink2);font-size:12px">Short story · 6,830 words</div><div style="color:var(--ink3);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">~/Documents/Libreto/Salt for the winter</div></div>
+          <div style="color:var(--ink3);font-size:12px;flex:none">2 Nov</div></div><div style="display:flex;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line2);">
+          <div style="width:30px;height:38px;border:1px solid var(--line);border-radius:3px;background:var(--soft);flex:none"></div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">Notes on slow reading</div><div style="color:var(--ink2);font-size:12px">Article · 2,115 words</div><div style="color:var(--ink3);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">~/Writing/articles/slow-reading</div></div>
+          <div style="color:var(--ink3);font-size:12px;flex:none">28 Oct</div></div><div style="display:flex;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line2);">
+          <div style="width:30px;height:38px;border:1px solid var(--line);border-radius:3px;background:var(--soft);flex:none"></div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">The Blue Lamp (first draft)</div><div style="color:var(--ink2);font-size:12px">Novel · 48,900 words</div><div style="color:var(--ink3);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">~/Documents/Libreto/old/The Blue Lamp 1</div></div>
+          <div style="color:var(--ink3);font-size:12px;flex:none">12 Sep</div></div>
+        </div>
+        <div style="color:var(--ink3);font-size:12px;margin-top:12px">Opening a project closes the current one. There are no tabs.</div>
+      </div>
+    </div>
+    <div style="margin-top:26px;color:var(--ink3);font-size:12.5px">New projects start in the <b style="color:var(--ink2);font-weight:600">Just write</b> workspace: only the text. Change it any time from the status bar.</div>
+  </div>
+</div>
+<div class="ann wrap" style="left:8px;top:236px;--w:118px"><b>1</b><span>Type sets parts, front matter and layout</span></div>
+<div class="ann wrap" style="left:8px;top:350px;--w:118px"><b>2</b><span>Title, author, subtitle are project data (Project › Info), not typed text</span></div>
+<div class="ann wrap" style="left:8px;top:478px;--w:118px"><b>3</b><span>Language from the start: dictionary and AI work at once</span></div>
+<div class="ann wrap" style="left:1180px;top:206px;--w:200px"><b>4</b><span>Recent projects; one project open at a time, no tabs</span></div>
+
+</div>
+
+<div class="caption"><span class="id">S00</span><span class="scn">Start screen.</span> Opening Libreto with nothing open: one card to start a new project (type, title, author, language) and, on the right, Open and the recent projects. Opening another project replaces the current one; there are no tabs.
+<div class="vis"><b>On screen:</b> menu bar, the New project card, Open and Import, Recent &nbsp;·&nbsp; <b>Not on screen:</b> templates gallery, workspace chooser (it defaults to Just write), status bar, any tutorial</div></div>
+</body></html>

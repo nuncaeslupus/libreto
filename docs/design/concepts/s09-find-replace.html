@@ -1,55 +1,94 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=1440">
-<title>Libreto concept S9: Find & replace strip</title>
+<title>Libreto concept S09: Find, and Replace</title>
 <link rel="stylesheet" href="concepts.css">
 </head><body>
 <div class="win">
 
-<div class="titlebar"><div class="lights"><i></i><i></i><i></i></div><div class="wtitle">The Blue Lamp — Libreto</div></div>
-<div class="content" style="flex-direction:column">
-  <div style="background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px 10px;box-shadow:0 2px 8px rgba(0,0,0,.04);z-index:2">
-    <div style="display:flex;gap:10px;align-items:center">
-      <span style="color:var(--ink3);font-size:16px">⌕</span>
-      <div style="width:300px;border:1px solid var(--line);border-radius:7px;padding:7px 10px;font-size:14px">Blue Lamp</div>
-      <span style="color:var(--ink3)">→</span>
-      <div style="width:300px;border:1.5px solid var(--accent);border-radius:7px;padding:7px 10px;font-size:14px">Blue Lantern<span class="cursor" style="height:16px"></span></div>
-      <span style="color:var(--ink2);margin-left:6px"><b>3</b> of 41</span>
-      <span class="chip">Whole book ▾</span><span class="chip">Aa</span><span class="chip">Whole word</span>
-      <span style="flex:1"></span><span style="color:var(--ink3)"><kbd>Esc</kbd> to text</span>
-    </div>
-    <div style="display:flex;gap:22px;margin:9px 0 0 26px;color:var(--ink3);font-size:12px">
-      <span><kbd>Enter</kbd> next</span><span><kbd>Shift+Enter</kbd> previous</span><span><kbd>Ctrl+Enter</kbd> replace &amp; next</span><span><kbd>Ctrl+Shift+Enter</kbd> replace all → preview task</span></div>
+<div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>
+<div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Project</span><span>Tools</span><span>Help</span><div class="msearch"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span>Search menus</span></div></div>
+<div class="content">
+  <div class="main">
+    <div class="strip">
+    <span class="ib"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span>
+    <span class="ib"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3 2 6l3 3"/><path d="M2 6h7.5a4 4 0 0 1 0 8H7"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m11 3 3 3-3 3"/><path d="M14 6H6.5a4 4 0 0 0 0 8H9"/></svg></span><span class="gap"></span>
+    <span class="seg"><span class="on">Text</span><span>Cards</span><span>Book</span></span><span class="gap"></span>
+    <span class="crumbs"><span class="dd">Part One</span><span class="sep">›</span><span class="dd">Lena’s warning</span><span class="sep">›</span><span class="dd">Vega asks about Kit</span></span><span class="sp"></span>
+    <span class="sa"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="9" r="5.4" stroke="currentColor" stroke-width="1.8"/><path d="m12.2 13.2 4.3 4.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M15.6.9l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" fill="#3b6ea8"/></svg><span>Search &amp; ask</span><svg class="logo" width="13" height="13" viewBox="0 0 20 20"><g stroke="#c4673f" stroke-width="2.3" stroke-linecap="round"><path d="M10 2.2v15.6M2.2 10h15.6M4.5 4.5l11 11M15.5 4.5l-11 11"/></g></svg></span><span class="gap" style="width:6px"></span><span class="ib"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></span>
   </div>
-  <div style="display:flex;flex:1;min-height:0"><div class="handle"></div>
-  <div class="pagearea"><div class="col" style="padding-top:40px"><div class="chap"><div class="num">CHAPTER 7</div><h1>Lena’s warning</h1></div><p class="first">The <span style="background:var(--accent-tint);border-radius:2px">Blue Lamp</span> was half empty by ten, which was how Vega liked it. The jukebox had given up on the evening, and the only sound was Lena drying glasses that were already dry, one after another, as if the cloth could rub the night off them.</p>
+    <div class="page"><div class="hdl l"><i>›</i></div><div class="hdl r"><i>‹</i></div>
+      <div style="position:absolute;right:40px;top:6px;width:520px;z-index:5;background:#fff;border:1px solid var(--line);border-radius:10px;padding:5px 6px;box-shadow:0 6px 20px rgba(0,0,0,.1)">
+  <div style="display:flex;align-items:center;gap:4px">
+    <span style="color:var(--ink3);margin:0 4px 0 2px">▸</span>
+    <div class="inp foc" style="width:250px;padding:5px 8px;display:flex;align-items:center;gap:6px;font-size:13px"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span style="flex:1">blue lamp</span><span style="width:15px;height:15px;border-radius:50%;background:var(--ink4);color:#fff;font-size:9px;line-height:15px;text-align:center">✕</span></div>
+    <span style="color:var(--ink2);font-size:12px;width:62px;text-align:center">2 of 41</span>
+    <span class="ib"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 5-5 5 5"/></svg></span><span class="ib"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span>
+    <span class="ib"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h7M12 4h2M2 12h2M7 12h7"/><circle cx="10.5" cy="4" r="1.6"/><circle cx="5.5" cy="12" r="1.6"/></svg></span>
+    <span style="flex:1"></span><span class="ib" style="color:var(--ink3)">✕</span></div></div>
+      <div class="col"><div class="chap"><div class="num">CHAPTER 7</div><h1>Lena’s warning</h1></div><p class="first">The <span class="hit">Blue Lamp</span> was half empty by ten, which was how Vega liked it. The jukebox had given up on the evening, and the only sound was Lena drying glasses that were already dry, one after another, as if the cloth could rub the night off them.</p>
 <p>“You’re early,” Lena said without looking up. “Or late. I can never tell with you.”</p>
 <p>Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p>
 <p>“Kit who?” Lena set a glass down hard enough to make it ring. “Half the city’s called Kit.”</p>
 <p>“Mine. Thin, nervous, writes everything down in a little green ledger.” Vega slid a coin across the counter and left her hand on it. “He said he’d meet me here at nine.”</p>
 <p>Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p>
-<p><span class="thought tint">It was a good lie.</span> Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</p>
+<p><span class="thought">It was a good lie.</span> Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</p>
 <p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.”</p>
-<p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the <span style="background:#cfe0f3;box-shadow:0 0 0 2px var(--accent);border-radius:2px">Blue Lamp</span> tomorrow. And don’t ask Kit what he saw.”</p>
-    <p>Outside, the rain had turned to the fine kind that does not fall so much as hang. Across the street, the sign of the <span style="background:var(--accent-tint);border-radius:2px">Blue Lamp</span> buzzed and went out, one letter at a time.</p></div></div></div>
+<p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the <span class="hit cur">Blue Lamp</span> tomorrow. And don’t ask Kit what he saw.”</p>
+      <p>Outside, the rain had turned to the fine kind that does not fall so much as hang. Across the street, the sign of the <span class="hit">Blue Lamp</span> buzzed and went out, one letter at a time.</p></div>
+    </div>
+  </div>
 </div>
 <div class="status">
-  <div class="crumb"><span class="view dd">Text</span><span class="sep">│</span><span class="dd">Part One</span><span class="sep">›</span><span class="dd">Lena’s warning</span><span class="sep">›</span><span class="dd">Vega asks about Kit</span></div>
+  <span class="sb">2,418 words in chapter</span><span class="vsep"></span><span class="sb">p. ~146/248</span>
   
   <span class="sp"></span>
-  <span>2,418 words · p. 142</span>
-  <span class="tog">marks: tinted</span>
-  <span class="mag">⌕</span>
-  <span>Reviser</span>
-  <span class="ai"><span class="dot"></span></span>
+  <span class="sb"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12" stroke-linecap="round"/></svg><span class="dd">Highlights</span></span>
+  <span class="sb"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.6"/><path d="M5.5 2.5v11"/></svg><span class="dd">Reviser</span></span>
+  <span class="sb"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span>History</span></span>
+  <span class="sb"><svg class="logo" width="12" height="12" viewBox="0 0 20 20"><g stroke="#c4673f" stroke-width="2.3" stroke-linecap="round"><path d="M10 2.2v15.6M2.2 10h15.6M4.5 4.5l11 11M15.5 4.5l-11 11"/></g></svg><span>Connected</span></span>
+  <span class="vsep"></span>
+  <span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.333333333333336%"></span></span><span>+</span><span class="pct">100%</span></span>
 </div>
-<div class="ann " style="left:1010px;top:100px"><b>1</b><span>The Bar docks as a strip; the page is never covered</span></div>
-<div class="ann " style="left:1046px;top:690px"><b>2</b><span>Current hit; other hits faint</span></div>
-<div class="ann wrap" style="left:1040px;top:760px;--w:280px"><b>3</b><span>Esc: cursor into the text at this hit; Ctrl+F: back to the strip, same hit</span></div>
-<div class="ann " style="left:560px;top:118px"><b>4</b><span>Replace all makes a preview task instead of replacing blind</span></div>
+<div class="tip " style="left:1100px;top:136px">Next match <kbd>Enter</kbd></div>
+<div class="ann wrap" style="left:1040px;top:176px;--w:330px"><b>4</b><span>▸ at the left of the strip expands it into Replace (inset); the options sit behind the sliders button</span></div>
+<div class="ann wrap" style="left:1040px;top:236px;--w:330px"><b>1</b><span>Find: a small strip, empty every time it opens; live as you type</span></div>
+<div class="ann wrap" style="left:1040px;top:296px;--w:330px"><b>2</b><span>Emptying the box takes you back to where you started</span></div>
+<div class="ann " style="left:1040px;top:756px"><b>3</b><span>Current match strong, the rest faint</span></div>
 
 </div>
-
-<div class="caption"><span class="id">S9</span><span class="scn">Find & replace strip.</span> “Blue Lamp” → “Blue Lantern”. The Bar docks as a strip at the top with the keys shown, and the current hit is highlighted in the page below. Esc puts the cursor in the text at that hit for a hand edit; Ctrl+F goes back to the strip at the same hit.
-<div class="vis"><b>On screen:</b> one strip at the top, the page with hits, the keys &nbsp;·&nbsp; <b>Not on screen:</b> a floating dialog covering the text, navigator, tray</div></div>
+<div class="below">
+  <div class="crop" style="width:1384px;height:330px"><div class="lbl">Replace: the same strip expanded, options open, regular-expression reference open</div>
+    <div style="position:absolute;left:24px;top:52px;width:720px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.1)">
+      
+  <div style="display:flex;align-items:center;gap:4px">
+    <span style="color:var(--ink3);margin:0 4px 0 2px">▾</span>
+    <div class="inp foc" style="width:330px;padding:5px 8px;display:flex;align-items:center;gap:6px;font-size:13px"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span style="flex:1">Blue (Lamp|Light)</span><span style="width:15px;height:15px;border-radius:50%;background:var(--ink4);color:#fff;font-size:9px;line-height:15px;text-align:center">✕</span></div>
+    <span style="color:var(--ink2);font-size:12px;width:62px;text-align:center">3 of 43</span>
+    <span class="ib"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 5-5 5 5"/></svg></span><span class="ib"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span>
+    <span class="ib on"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h7M12 4h2M2 12h2M7 12h7"/><circle cx="10.5" cy="4" r="1.6"/><circle cx="5.5" cy="12" r="1.6"/></svg></span>
+    <span style="flex:1"></span><span class="ib" style="color:var(--ink3)">✕</span></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:5px;padding-left:22px">
+        <div class="inp" style="width:330px;padding:5px 8px;font-size:13px">Blue Lantern</div>
+        <span class="btn" style="margin-left:6px">Replace</span><span class="btn">Replace all…</span></div>
+      <div style="display:flex;align-items:center;gap:16px;margin-top:8px;padding:8px 6px 2px 22px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--ink2)">
+        <span>In <span class="inp" style="padding:2px 8px;font-size:12px">Whole book ▾</span></span>
+        <span style="display:flex;gap:5px;align-items:center"><span class="cb"></span>Match case</span>
+        <span style="display:flex;gap:5px;align-items:center"><span class="cb"></span>Whole words</span>
+        <span style="display:flex;gap:5px;align-items:center"><span class="cb"></span>Match accents</span>
+        <span style="display:flex;gap:5px;align-items:center"><span class="cb on"></span>Regular expression <span style="width:16px;height:16px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:10px;line-height:14px;text-align:center;background:var(--accent-tint)">?</span></span>
+      </div>
+    </div>
+    <div class="menu" style="left:770px;top:52px;width:390px;padding:10px 12px;font-size:12.5px">
+      <div style="font-weight:600;margin-bottom:6px">Regular expressions, the basics</div>
+      <div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">.</code><span style="color:var(--ink2)">any one character</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">\w  \d  \s</code><span style="color:var(--ink2)">a letter or digit · a digit · a space</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">[abc]</code><span style="color:var(--ink2)">one of a, b or c</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">* &nbsp;+ &nbsp;?</code><span style="color:var(--ink2)">repeat: any, one or more, optional</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">^ &nbsp;$</code><span style="color:var(--ink2)">start · end of a paragraph</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">(Lamp|Light)</code><span style="color:var(--ink2)">either word; use $1 in the replacement</span></div><div style="display:flex;gap:12px;padding:2px 0"><code style="width:110px;flex:none;font:12px DejaVu Sans Mono,monospace;color:var(--accent)">\.</code><span style="color:var(--ink2)">a real full stop</span></div>
+      <div style="margin-top:8px;color:var(--accent)">Full reference and a tester <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h7v7M13 3 4 12"/></svg></div>
+    </div>
+    <div class="ann " style="left:24px;top:236px"><b>5</b><span>Replace keeps the last values; “Replace all…” shows a list to check first</span></div>
+    <div class="ann " style="left:24px;top:190px"><b>6</b><span>Plain checkboxes, said in words; accents and case ignored unless ticked</span></div>
+    <div class="ann wrap" style="left:1172px;top:62px;--w:150px"><b>7</b><span>“?” opens a short reference</span></div>
+  </div>
+</div>
+<div class="caption"><span class="id">S09</span><span class="scn">Find, and Replace.</span> Find in chapter 7 for “blue lamp”: a small strip at the top right, like a browser’s. By default it ignores case and accents. Replace is the same strip with a second line; it remembers the last search and replacement, while Find opens clean.
+<div class="vis"><b>On screen:</b> the find strip, matches in the text, one tooltip &nbsp;·&nbsp; <b>Not on screen:</b> key hints on screen, the replace line and options (inset below)</div></div>
 </body></html>

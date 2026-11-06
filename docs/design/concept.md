@@ -1,262 +1,395 @@
-# Libreto — concept: one page, seven pieces (draft 0)
+# Libreto concept, draft 1: one page, a few pieces
 
-Status: **for discussion.** This is not a final design. It reconciles the 315 ideas in `docs/research/writer-needs-ideas.md` with the review notes of 2026-11-06 (`docs/research/writer-needs-ideas-notes-2026-11-06.md`), plus new research (§8). Screen concepts are in `docs/design/concepts/` (§7). Visual style is not decided; the screens show only what is on screen and when.
+Status: **for annotation.** Draft 0 proposed the frame; the owner reviewed the 13 screen concepts in `docs/design/concepts/` and wrote `concepts/review-notes-2026-11-06.md`. This draft folds those notes in. Comment paragraph by paragraph; the numbered questions at the end can each be answered in one line. The screens still use draft 0 vocabulary and will be redrawn after this draft is annotated.
 
-The thesis: the review notes keep asking for the same three things — write first and fix later, never lose your place, AI that is present but silent. The whole list fits into **one page and seven pieces** if we refuse to add chrome and give every entity one grammar.
+The thesis has not changed: write first and fix later, never lose your place, AI that is present but silent. What changed is the vocabulary and the chrome: draft 0 hid too much, and its names (setups, marks, Tray, Pin, Bar) did not explain themselves.
 
----
+## What changed since draft 0
 
-## 1. Core principles (testable)
+1. **Four named axes** replace "setups", "views", "marks" and "modes": Views, Workspaces, Focus, Highlights. Each has one visible place to switch (§1).
+2. **A top strip** above the page: Back, Forward, Undo, Redo, view switcher, breadcrumb. Dimmed until the mouse moves.
+3. **A menu bar** on Windows and Linux (system bar on macOS), with a menu search. Still no toolbar.
+4. **Tray → Side panel**, with a visible handle, its own Back and Forward, and a Recently closed list. **Pin → Keep.**
+5. **The Bar is split**: `Ctrl+F` find, `Ctrl+H` replace, `Ctrl+K` Search & ask. **The chat is its own window**, so the text stays visible.
+6. **Auto-fixes** are a first-class thing: applied as you type, marked faintly, listed with ✓/✕, learnt from. Chapter detection is one of them; the chapter and scene rules are written down (§2).
+7. **Hold `Alt`** reveals everything clickable in the text.
+8. **Notes column** specified: default type, retyping, resolve, scrolling, narrow windows. **Tasks**: a Review session versus fixing one in place; buttons renamed.
+9. **History** (working name) with per-session records; the briefing is its last entry.
+10. **Selection pill → right-click menu** (pill kept only in Pro).
+11. New: start screen, project info and front matter, Book layout step, cards as user groups, settings dialog, languages per passage, tutorials.
+12. Codex: relevance order, minor entities disambiguated, name still open.
 
-1. **Blank-page test.** A new project opens as a page and a status line; nothing else is on screen. Every other piece is summoned by a key, a click or a setup, and disappears the same way.
-2. **Two-second return.** From any screen or piece, one `Esc` (or the "Text" breadcrumb) puts the cursor back where it was in the text. Tested by counting keystrokes from every view.
-3. **Nothing replaces anything.** Opening a card, a task, a chat never closes what was open. Transient things float (peek); kept things are added (pin); the side column has Back. A tester must never say "where did my notes go?" (B14).
-4. **One grammar for every entity.** Name, chapter, scene, note, task, research item, style: single click = peek, double click = go there, `Esc` = dismiss, pin = keep, Back = return (C14). No exceptions, no second mechanism.
-5. **Two marks on the page.** The text shows at most two kinds of visual marks at once (default: style tint and note dots). Spelling, entities, echoes, authorship tints are toggles that swap one of the two in, never a third (A4, D26).
-6. **No toolbar.** A control appears only next to the thing it acts on (selection pill, margin, paragraph), or in the Bar by name. Anything a regular writer uses less than daily is Bar-only (A7, B19).
-7. **AI never touches the page unasked.** Its only unsolicited surfaces are the presence dot and the session briefing. Its work arrives as tasks; its edits arrive as choice blocks. Never mid-sentence (K39, D4).
-8. **Cheapest answer first.** Script → index → small model with a minimal, document-free prompt → big model with codex excerpts. Every call above "index" is loggable with what it sent (A11, K34, R10 note).
-9. **Nothing forced, everything derivable.** Chapters, scenes, styles, cards, summaries, tasks can all be produced *after* the text exists, mostly by scripts and AI (B16, F26). A writer who only types still gets a navigator.
-10. **Setups, not settings.** Differences between writers are named setups (§4), not a growing options map. The preferences dialog fits one screen; anything that would not fit becomes a Bar command or is cut (A32, B12).
-
----
-
-## 2. The pieces
-
-Seven pieces, plus three views of the page. Nothing else may be added without removing something.
-
-| Piece | Holds | Appears | Dismissed |
-|---|---|---|---|
-| **Page** | The book as one continuous text; headings are chapters; soft scene marks; styles; choice blocks (before/after) inline | Always | Never |
-| **Navigator** (left) | Book structure with one-line summaries per scene; search box; task/note counts per chapter; below it, collapsed: People, Places, Things | `Ctrl+1` or setup; collapses to a 4-px handle | Same key; auto-collapsed in Just write |
-| **Margin** (right of page) | Paragraph-anchored things: notes (the per-paragraph note box), task markers, AI dots, footnote stubs | Hover a paragraph shows a faint `+`; notes show when they exist | Notes fold to dots on `Ctrl+M`; a dot expands on click |
-| **Peek** | A floating card for anything clicked: entity, scene, note, task, search hit, style. One size, same layout: title, one line, evidence snippet, actions ("Go", "Pin") | Single click on any linked thing, or hover + `Alt` | `Esc`, click away, scroll; pinned → Tray |
-| **Tray** (right column) | Stack of kept cards: Tasks (the review queue), pinned entity cards, research, the inbox. Has Back/Forward and remembers its stack per project | Pin, "Review", or setup | `Ctrl+2`; never auto-replaced |
-| **Bar** | A Spotlight-style box over the text: one field, three result groups (Commands, In the book, Ask). Grows into the chat when a question is asked; docks to a top strip for Find & Replace | `Ctrl+K` (also a small magnifier in the status line for mouse users) | `Esc` collapses; thread is kept and reopens with the same key |
-| **Status line** (bottom) | Breadcrumb (Part › Chapter › scene, each a menu), words, approx. page, AI presence dot + one-word label, setup name | Always (hidden in Concentration) | — |
-
-**Views of the Page** (switched in the breadcrumb, `Ctrl+Shift+V`; always "Text" to return):
-
-- **Text** — default.
-- **Cards** — scenes as cards (corkboard/outline), generated from the navigator's summaries; drag reorders only on "Apply" (F9).
-- **Book** — the compiled look: pages, headers, numbering, trim. Read-only; "Back to text" (B10, B20).
-
-**Selection pill**: selecting text shows a three-item pill — *Style*, *Note*, *Ask* — nothing else (A17, A18). A fourth item is a design failure.
-
-### Where the 315 ideas land
-
-- **Page**: A1–A15 (styles, editing), A22 (fold), A24 (footnote stubs in margin), A25 (undo), A28/K40/I8/O4 (all one *choice block*), A29–A35, B1–B2 (chapter narrowing: ends of a chapter show "next chapter / whole book" links), B5, B9–B12, B16–B21 (Concentration = page only, status line hidden), B24–B27, D14–D16, D25–D26, J19–J21 (toggleable tints), K36.
-- **Navigator**: C3, C8–C11 (marks in the navigator, not a minimap), C13–C14, F1–F4, F20 (summaries *are* the reverse outline), B6, D6, M7, E9 (styles as a filter).
-- **Margin**: H1–H6, H9 (counts), G10 (placeholders become tasks), K6, A24.
-- **Peek**: D1–D8, D12, C12, E3, J4, L8 ("why this fired" is the peek of a task).
-- **Tray**: H9, K7, K30, I11, I13, O3–O6, G1–G4 (inbox is a Tray card), G11, D1 pinned.
-- **Bar**: C7–C8, E1–E11, K1, K4, K8, K18–K24, K27–K28, A10, A16 (no `/` menu: the Bar is the menu), L11, E7.
-- **Status line**: M1–M3, M5, B10 (page number), K9, K39.
-- **Cards view**: F5–F10, F13, F16–F21, F23–F26, J15–J18 as optional overlays.
-- **Book view**: P1–P10, B20, N9, I4 (diff against last export).
-- **Project setup** (one dialog at creation): P6, P10, Q1, L6, K33, A13; files and safety N1–N8 are menus, never UI.
-- **History** (a Bar command opening a compare in the page): I1–I6.
+Principles kept from draft 0: blank page on a new project; `Esc` always returns the cursor to the text; nothing replaces anything (a peek floats, Keep adds); one grammar for every entity (click = peek, double click = go, Keep = keep); no toolbar; AI never touches the page unasked; cheapest answer first; everything derivable after the text exists; few settings.
 
 ---
 
-## 3. AI presence
+## 1. How Libreto is organised
 
-**States** (one dot in the status line, right end):
+### 1.1 The four axes
 
-| State | Dot | Label | Meaning |
-|---|---|---|---|
-| Off | none | — | No AI level or Claude not connected; scripts still run |
-| Silent | hollow | — | Nothing to say |
-| Working | pulsing | one word: *indexing*, *summarising*, *checking facts* | Spending time or tokens; click shows what and how much |
-| Has something | filled + count | *3 things* | Tasks waiting; click opens the Tray's Tasks |
+Everything the writer can switch belongs to one of four independent axes. Changing one never changes another.
 
-That is the whole unsolicited surface. Plus one margin dot per paragraph where a task sits, visible only when Tasks are open or the "tasks" tint is on. No popups, no toasts, no mascot, no name (see §5).
+| Axis | Values | What it changes | Switch with the mouse | Keyboard |
+|---|---|---|---|---|
+| **View** | Text · Cards · Book | How the book is shown in the page area: the manuscript, scenes as cards, or laid-out pages | View switcher in the top strip; View menu | `Ctrl+Shift+V` cycles; `Esc` in Cards or Book returns to Text |
+| **Workspace** | Just write · Planner · Reviser · Pro | Which areas are open by default, which highlights are on, which AI level runs. A preset, nothing more: no feature is unavailable in any workspace | Workspace name at the bottom right of the status bar (click = menu, hover = one line); View ▸ Workspace | `Ctrl+K`, type the name |
+| **Focus** | on · off | Hides every area except the page. Moving the mouse fades in one "Exit focus" button at the top right and the status bar | View ▸ Focus; that button | `Ctrl+Shift+Enter`; `Esc` exits when nothing else is open |
+| **Highlights** | checkboxes: Styles, Notes, Characters, Places, Spelling, Auto-fixes (Pro adds Authorship) | Which kinds of marks the page shows. Any combination; workspace defaults never turn on more than two | "Highlights" menu in the status bar; View ▸ Highlights | `Ctrl+K`, "Highlight: Characters" |
 
-**Session-start briefing.** When the gap since the last activity exceeds the session threshold (§5), the Bar opens once, as a card over the text:
+So: "Just write" in the status bar is the current workspace, and clicking it lists the four. "Text" in the top strip is the current view, and clicking it lists the three. "3 to review" is the AI status: three tasks wait in the side panel.
 
-> Last time: Vega left the Blue Lamp without paying (chapter 7, "Lena's warning").
-> Open: 2 to-dos, 4 things I checked.
-> [Continue writing] [Review] [Open chapter 7]
+### 1.2 The areas of the window
 
-`Esc` or any key = continue writing. "Review" opens the Tray's Tasks. The card never returns in the session.
+Eight areas. Each has one job, a mouse way and a keyboard way to show or hide it, and `Esc` always ends in the text.
 
-**Review queue** = the Tasks card in the Tray. One list, one grammar, for every source: writer's to-do notes, placeholders, AI findings, imported editor comments, style lint, continuity. Each task: type icon, one line, chapter, confidence (question vs flag). Sorted by relevance (type weight × recency × whether it touches the open chapter). Click = peek with evidence and "why this fired"; double click = go to the place with the choice block already open where there is a proposed fix. Resolve: *Done*, *Not now*, *On purpose* (never again for this fact), *Mute this kind* offered after three "on purpose" in a category (K38, J2). Done tasks fade into history.
+| Area | Where | Holds | Show / hide with the mouse | Keyboard | Open by default in |
+|---|---|---|---|---|---|
+| **Menu bar** | Top of the window (macOS: system bar) | File, Edit, View, Insert, Project, AI, Help. Every feature is in it. Help has a "Find a command" field | Always (not in Focus) | `Alt` or `F10` | Always |
+| **Top strip** | A thin line above the page | Back · Forward · Undo · Redo · view switcher · breadcrumb (Part › Chapter › Scene, each a menu) | Always; dims to 25% when the mouse is still for two seconds. Hidden in Focus | Each control has a shortcut, shown on hover | Always |
+| **Navigator** | Left column | Parts, chapters, scenes with one-line summaries and note/task counts; a filter box; "+" for chapter, part or break; below, collapsed: Codex | A visible 12-px handle with a chevron on the left edge; View ▸ Navigator | `Alt+1` | Planner, Reviser, Pro |
+| **Page** | Centre | The manuscript as one continuous text (or cards, or laid-out pages). Choice blocks appear inline | Always | `Esc` returns here from anywhere | Always |
+| **Notes column** | Right of the page, inside the page area | Notes and task marks beside their paragraphs; a "+" on hover at the right of any paragraph | "Notes ▾" button at the top of the column: Show all · Dots only · Hidden · Show resolved; Highlights ▸ Notes | `Alt+2` | Reviser, Pro unfolded; dots elsewhere |
+| **Side panel** | Right column | Kept cards, stacked: Tasks, codex entries, History, Auto-fixes, Research, Inbox. Own Back · Forward and Recently closed | A visible handle on the right edge; View ▸ Side panel | `Alt+3` | Planner (Inbox), Reviser (Tasks), Pro |
+| **Chat window** | Floating, bottom right, resizable | Conversations with the AI, past conversations | "Chat" button in the status bar; minimising animates it back into that button | `Alt+4` | Never; opens on request |
+| **Status bar** | Bottom | Left: chapter words (click = book total) · "book p. ~142/310" · "3 fixes". Right: Highlights ▾ · Workspace ▾ · History · Chat · AI status (provider logo + label) · zoom slider | Always; fades in on mouse movement in Focus | `Ctrl+K` reaches every item | Always |
 
-**Levels** (set once in the project setup, changeable in the Bar):
+Transient things belong to no area and close with `Esc` or a click outside: the **peek** (§3), **Search & ask** (§5), the **find strip** (§5), **dialogs** (§10) and the **session briefing** (§7).
 
-| Level | What runs | Tokens |
+`F6` cycles page → navigator → notes → side panel → chat; `Shift+F6` goes back; a screen reader announces each area by the name above. Nothing is minimised to a taskbar: a closed card returns from Recently closed, a closed chat from the Chat button, a closed briefing from History. Each thing closes to one known place.
+
+Below about 1100 px the notes column folds to dots and the side columns overlay the page instead of pushing it; the page is never narrower than about 60 characters.
+
+---
+
+## 2. Writing and auto-fixes
+
+### 2.1 Chapters, parts and scenes: the rules
+
+Libreto reads structure from what the writer types. The rules are few, listed in Help ▸ "How Libreto reads structure", and the first chapter heading sets the convention for the book.
+
+| You type, on its own line | Libreto does |
+|---|---|
+| `Chapter`, `CHAPTER`, `Capítulo` (the chapter word of the project language, or English) | Starts a chapter. The number comes from its position, so numbers are never required. |
+| `Chapter 7`, `Chapter seven`, `CHAPTER SEVEN` | Starts a chapter. If 7 is not its position, a task says "You wrote Chapter 7; by order it is 5. Renumber / Keep 7". |
+| `Chapter 7: Lena's warning`, or a title on the next line | Starts a chapter with a title. |
+| Only a number (`7`, `VII`, `7.`) | A chapter only if the book's first chapter was also a bare number. Otherwise it stays text; right-click ▸ Make chapter is one step away. |
+| `Part One`, `PART I`, `Primera parte` | Starts a part. |
+| `***`, `* * *`, `#`, `---`, or three blank lines | A scene break, shown as a centred ornament (the Break style). |
+| `New chapter`, `New page`, `New scene` | Nothing: typed words are text. Chapters are also inserted by Insert ▸ New chapter (`Ctrl+Enter`), the navigator's "+", or `Ctrl+K`. |
+
+Detection is an auto-fix (§2.2): the line turns into a heading with a faint mark; `Ctrl+Z` at once makes it text again, and that line is not converted again in this project. Nothing else is ever written into the manuscript by Libreto.
+
+**Scenes** are not typed. A script proposes boundaries (breaks, a blank line followed by a change of time or place, chapter starts); at AI level 1 or above a small model confirms them and writes the one-line summary that is the scene's name; at level 0 the name is the first words. Scenes live in the index and show only in the navigator and in Cards view, where the writer renames, splits at the cursor, merges or drags a boundary. Chapter 7 of the sample has three scene rows because the text changes place twice.
+
+**Files.** Each chapter is a file in the project folder, kept invisibly: the page always shows the whole book. "This chapter only" in the breadcrumb narrows the same page, with "previous / next / whole book" links at its ends. Word counts are per chapter (click for the book); the page number is always for the book and labelled "book p.".
+
+### 2.2 Auto-fixes
+
+Three severities, from docx-fixer:
+
+- **Auto** (applied as you type): unambiguous typos in the dictionary ("teh"), smart quotes and dashes, double spaces, spaces before punctuation, the dialogue-dash rules of the project language, chapter and break detection.
+- **Review** (a task, §4): anything with two reasonable answers: an unknown word, a capital after a full stop that could be a name, italics that could be Thought or Emphasis, a foreign word that could take the Foreign style. Applied in one accept, never silently.
+- **Info**: repeated words within 50 words, repeated sentence openers, accidental rhymes. Shown only in a Review session or with Highlights ▸ Spelling on.
+
+The mark: an Auto fix gets a faint dotted underline that fades after a minute. Hover shows "was: teh"; a click undoes it. The status bar's "3 fixes" opens the **Auto-fixes** card in the side panel: one row per fix, what you wrote → what it became, chapter, ✓ keep, ✕ undo, click to go there. The list of the whole project is in History.
+
+Learning: an undone fix goes on the project's leave-alone list and is not applied again. If the writer later types the corrected form three times, the fix is offered again as a Review task, not applied. "Add 'Blue Lamp' to the dictionary" is offered on any unknown capitalised word. Settings ▸ Writing turns each Auto category off; nothing finer.
+
+### 2.3 Formatting
+
+No font size and no fonts in the text: the zoom slider changes the display; the Book layout (§12) decides how the book prints. Styles do the rest (§8); bold and italic stay allowed. The **right-click menu** on a selection: Cut · Copy · Paste · Paste as plain text · Style ▸ · Add note · Ask about this · Look up (when the word is a codex entry) · Language ▸. Without a selection it offers Look up, Add note, Make chapter and Make scene break for the current line. Draft 0's selection pill (Style · Note · Ask) exists only in Pro, as a faster path to the same three items. Every control shows its shortcut on hover and nowhere else; the key hints printed on draft 0's screens go.
+
+---
+
+## 3. Navigation
+
+**Back and Forward** (top strip, `Alt+Left` / `Alt+Right`) move the cursor through the places it has been: every jump (double click in the navigator, a search hit, a briefing line, a task, a Book-view click) pushes a place. The side panel has its own smaller Back and Forward for which card was showing; the two histories stay separate because mixing text places and cards makes Back unpredictable. Undo and Redo sit beside them because that is where testers look; they act on the text only.
+
+**Hold `Alt`** for half a second: every clickable thing in the text lights up (characters, places, note dots, auto-fix marks, headings) until the key is released; `Alt+click` opens its peek. A plain tap of `Alt` still goes to the menu bar, as in any Windows or Linux app. Right-click ▸ Look up is the second path.
+
+**Peek → card → page.** Three depths, one object:
+
+- **Peek**: single click (or `Alt+click`) on a name, a scene row, a note dot, a task, a search hit. A floating card anchored to the thing: it moves with the scroll and closes when its anchor leaves the screen, on `Esc`, or on a click outside. A peek of a character shows the **character card** (role, one line, first and last appearance, mentions, open facts), not the scene. The title is a link: for a scene it goes there, so there is no separate "Go"; for a character it opens the full entry. "Go" appears only when the peeked thing has a place other than where you are (a search hit, a task).
+- **Keep** (was Pin), "Keep in side panel" on hover: adds the card on top of the side panel's stack until closed with its ✕. Keeping never swaps another card out.
+- **Page**: double click, or "Open" on the card: the entry's own page in the side panel, with Back.
+
+**Recently closed**: a clock icon at the top of the side panel lists the last twenty closed cards. Getting Lena's card back after closing it is one click there, not another click on her name. Closing the side panel keeps its stack.
+
+**Navigator.** The current chapter and scene are highlighted as the text scrolls and kept in view; the current chapter stays expanded. Long titles wrap; counts ("1 note · 2 tasks") move under the title when there is no room. The filter box filters chapters, scenes and codex entries by name only; searching the text is `Ctrl+F` and `Ctrl+K`. Single click = peek; double click = go; "+" = Chapter, Part or Scene break here.
+
+---
+
+## 4. Notes and tasks
+
+### 4.1 Notes
+
+A **note** is anchored to a paragraph or a selection and has a **type** and an **author**. It is created with the "+" at the right of any paragraph on hover, right-click ▸ Add note, or `Ctrl+Shift+M`, in every workspace and view, without changing anything else on screen. If the column is folded the new note opens as a peek and folds to a dot when done.
+
+- **Type**: starts as *Note*. A second after typing stops, the small model (level ≥ 1) may retype it to *To do*, *Doubt*, *Check fact*, *Idea* or *For the editor*; the chip fades in so the change is noticed. Clicking the chip changes it; "Automatic" lets the model choose again. Types are extensible like styles.
+- **Author**: you, a named reviewer (imported DOCX comments keep theirs), or Libreto. A comment is a note by someone else; there is no second thing.
+- **Menu**: Resolve · Edit · Delete · Expand to a page · Change type. Resolved notes leave the column and the counts, stay in History, and return with "Show resolved".
+- **Layout**: the column scrolls on its own. Notes sit level with their paragraph when they can; colliding notes push each other down; tall ones scroll inside; a connector line is drawn only for the selected note; a note whose paragraph is off screen shows a small arrow that scrolls the text to it. The column coexists with the side panel: notes stay with the page, the side panel holds kept things.
+
+### 4.2 Tasks
+
+A **task** is a note that asks for a decision: To do, Check fact, For the editor, an AI finding (continuity, style, a proposed fix), an imported tracked change, a placeholder like `[name]`. The **Tasks** card in the side panel lists them with one icon family shared by the notes column, the navigator counts and the `Alt` reveal: to do, a box; doubt, a question mark; check fact, a magnifier; AI fix, a wrench; style, Aa; continuity, a chain link; editor, a pen. The hollow dot is gone. Each row: icon, one line, chapter, question or flag. Order is relevance (type weight × recency × touches the open chapter); dragging reorders and is remembered. Tasks have no Keep.
+
+Two ways to work:
+
+- **Review session**: "Review all" at the top of the Tasks card, or "Review" in the briefing. Tasks open one by one in place with a "3 of 12" counter and Next; `Esc` leaves and "Resume review" returns where it stopped.
+- **Fix in place**: while reading, click a task mark in the notes column. The same choice block opens, with no Next; closing it returns to reading.
+
+The **choice block** is inline: before and after side by side, changed words highlighted, three buttons. **Keep mine** dismisses the proposal (it may return if the passage changes). **Take proposed** applies it and History records it. **Not an error** marks the fact as on purpose and never asks again; the hover says so. After three "Not an error" in one category, "Stop checking this kind" is offered once.
+
+---
+
+## 5. Search
+
+Three keys, three jobs.
+
+**`Ctrl+F` Find.** A narrow strip at the top right of the page, like a browser's. Opens empty every time. Searches the whole book live as you type, accents and case ignored; "3 of 14" beside the field; `Enter` next, `Shift+Enter` previous; deleting the text to empty returns the view to where it started. `Esc` leaves the cursor at the hit and closes the strip. A small "⋯" opens options as checkboxes, each explained on hover: match case, whole word, accents matter, regular expression (with a "?" to a one-page reference in the style of regex101). In a narrowed chapter, hits elsewhere show as "+9 in other chapters"; a click widens.
+
+**`Ctrl+H` Replace** (`Ctrl+R` as an alias; question 7). The same strip with a second line; keeps its last values. Replace, Replace and next, Replace all. Replace all never replaces blind: it opens a preview of every hit with ✓/✕, in the look of the Auto-fixes list.
+
+**`Ctrl+K` Search & ask.** The one box for the deep things. Its status bar icon is deliberately bigger than the rest: a magnifier with a spark, plus the provider's logo when an AI is connected. The box appears centred over the dimmed text and moves to the upper third as soon as results exist (even "No results"), then stays. Three groups, each capped at five rows, with "Show 27 more" expanding in place with a scrollbar, reachable by arrow keys:
+
+- **Commands**: anything in the menus ("Workspace: Planner", "New chapter").
+- **In the book**: codex entries first ("Lena, character"), then passages grouped by scene, each with chapter and scene line.
+- **Ask**: one row with the typed text, plus up to three suggested questions built from what is on screen and the open tasks, never generic: "Where did Vega last mention the car?".
+
+Nothing is preselected. One line under the field says what `Enter` does, the only key text on screen: for a word or name that matches the book, "Enter opens Lena"; for anything that reads as a question (a question word, a trailing "?", four words or more), "Enter asks". The arrows move freely. ✕ closes, ⌫ clears, a click outside closes. Reopening shows the last text selected so typing replaces it; it never opens the chat. Quick answers come from the index and a small model, with links, and each has "Continue in chat".
+
+---
+
+## 6. Chat
+
+The chat is a **window**, not the search box: a long conversation needs the text in view. It floats at the bottom right, about a third of the window wide, resizable, and minimises with an animation into the status bar's Chat button (`Alt+4`). The page stays editable. Draft 0's chat-in-the-Bar is withdrawn.
+
+- **Conversations**: a list by date with first lines; "New conversation"; searchable through `Ctrl+K`.
+- **Composer**: `Enter` sends, `Shift+Enter` breaks a line; the send button shows this on hover. No "Enter to send" text.
+- **What it sees**: the whole book, always, through the Codex and retrieval. What is open (selection, card, chapter) is extra context, shown as a removable line "Looking at: chapter 7, selection", never a limit.
+- **What it does**: answers quote the text with links; edits arrive as choice blocks with Apply, never typed into the page; longer work becomes tasks. The AI status reads *Working* meanwhile.
+- No name, no avatar; it signs as "Libreto"; findings are stated as facts, not in the first person.
+
+A chat docked in the side panel and a pop-out window are deferred.
+
+---
+
+## 7. History and the session briefing
+
+Working name **History** ("Time Machine" is Apple's trademark; question 8).
+
+**Engine.** Every save is a snapshot; snapshots group into **sessions** by the Netflix rule (a gap over six hours ends one). Scripts record per session: start and end, words added and removed, chapters and paragraphs touched, notes and tasks created or resolved, auto-fixes, and patterns such as "one paragraph edited 11 times in 15 minutes". At level ≥ 1 the small model writes one line per pattern ("Reworked the wording of Vega's hair colour, chapter 6"). Underneath is a Git-like store the writer never sees. Own spec.
+
+**History card** (status bar ▸ History): sessions by date, each expandable to its lines; every line goes to its place with the before/after as a choice block. "See all changes" opens **Compare**: the old version left, today right, differences marked, a coloured banner "Viewing the Friday 23 October version. Back to today", "Restore this" on every changed block, "Restore whole session" with confirmation. Questions ("When did I write about Lena's car?") go through `Ctrl+K` or the chat and are answered from the session lines.
+
+**Session briefing.** At the start of a session, in any workspace, when there is something to say. One dialog in the shared style:
+
+> **Last session**: Thursday 5 November, 21:10 to 23:40 · 1,850 words
+> You were in:
+> · Vega left the Blue Lamp without paying (chapter 7, "Lena's warning")
+> · Reworking the wording in "The back room" (chapter 6): clock, watch
+> · 4 small fixes. See all changes
+> [Review 6 tasks]
+
+Each line goes there. The only button is Review, and only when tasks exist; there is no "Continue writing", because closing the dialog is continuing. `Esc` or a click outside closes it with an animation into the History button; History ▸ Last session reopens it. Once per session.
+
+---
+
+## 8. Styles and highlights
+
+**Styles.** Six **base types** fixed by Libreto, each with a known export behaviour: *Heading*, *Block* (letter, poem, song, epigraph, sign), *Inline* (emphasis, thought, foreign, sign in a line), *Break*, *Material* (never exports), *Plain*. A **user style** is a base type, a name, a look and a highlight colour; the **New style** dialog has those four rows (base type with a one-line description of its export; name; look from italic, small caps, centred, indented, smaller, colour; highlight colour, used only with Highlights ▸ Styles). "Book title" is Inline, italic, amber. Style ▸ in the right-click menu lists styles by use with a filter and "New style".
+
+A Block holds Inline styles (a Thought inside a Letter). Two Inline styles on the same words are not allowed; the second replaces the first and the status bar says so. A Review task may later ask "14 italics in chapter 3: Thought or Emphasis?" and convert in one accept. The AI proposes a new style only as a task; a foreign word is never italicised unasked.
+
+**Highlights** replace the cycling "marks". Checkboxes: Styles (each style in its own colour, name on hover; Pro adds Labels in the margin), Notes (dots), Characters, Places, Spelling, Auto-fixes, Authorship (Pro). The workspace sets defaults; "Reset to workspace" restores them. Holding `Alt` shows everything regardless.
+
+---
+
+## 9. Codex
+
+Name open (question 9): *Codex*, *Story bible*, *Cast & places*, *Who's who*, *Compendium*. Below, Codex.
+
+The index of the book: **People, Places, Things, Motifs**. Scripts build it (capitalised names, co-occurrence, repeated phrases); at level ≥ 1 a small model confirms entries and merges aliases ("Lena", "the bartender"). An entry: name, aliases, one line, first and last appearance, mentions, facts each pinned to its quote (a moved or deleted quote is marked *changed* or *lost*, never repinned silently), open questions. The writer adds, merges, renames, hides and edits; nothing is written into the manuscript.
+
+Sorted by relevance (mentions × spread). Entries with few mentions fold under "Minor (34)" and are named by role and place: "a man, ticket seller, ch. 7"; "street, the argument about their daughter, ch. 3"; "street, where the apple seller is, ch. 9". Things appear only when they recur in two scenes or carry a capital name; "table" never earns a row unless added. Motifs hold running jokes and repeated images. The navigator's Codex section is collapsed below the chapters and filtered by the same box. Own spec.
+
+---
+
+## 10. Dialogs and settings
+
+**One dialog style**: a title line, a body, buttons at the bottom right with the primary one last. The page behind is dimmed to about 70% but readable, and the wheel over it scrolls it. `Esc` or a click outside closes (unsaved input asks "Discard?"). Menus and the status bar are greyed meanwhile. Dialogs: New project, Project info, Book layout, New style, Settings, Session briefing, confirmations. Peeks and cards are not dialogs.
+
+**Settings** is one window with a short list on the left and few items on the right; most behaviour is fixed. *General* (app language, theme), *Writing* (auto-fix categories, dictionary, leave-alone list), *AI* (provider, key, default level, prompt preview), *Shortcuts* (the list, editable), *Files* (projects folder, backups). Anything per book lives in Project ▸ Info or Book layout. A setting that would need a third column is cut or becomes a `Ctrl+K` command.
+
+---
+
+## 11. Start screen and project info
+
+**Start screen**: *New project*, *Open*, *Recent* (title, folder, last opened, words). No tabs; one project per window; opening another replaces it after saving. The last project reopens by default, the start screen one click away (File ▸ Start).
+
+**New project** is three steps with Back and Next: (1) type: Novel, Short story, Collection, Essay, Blank; (2) title, subtitle, author, language; (3) "How do you work?", the four workspaces with one line each. All changeable later.
+
+**Project info** (Project ▸ Info): title, subtitle, author, date, language, chapter word, series. These are data, not typed text: there is no "Author" style, and typing a name in the text is just text. The **front matter** (title page, copyright, dedication and epigraph if present) is generated from project info and the Book layout, shown in the navigator under "Front matter", and editable there for dedication and epigraph only. Templates per type set the chapter word, the break ornament, default styles and default Book layout; they are few and simple.
+
+---
+
+## 12. Book view and book layout
+
+Book view needs a **Book layout** first (Project ▸ Book layout, offered the first time Book view opens): a preset (Pocket 11 × 18, A5, A4 manuscript, Letter manuscript, Custom), font and size, chapter heading form ("Chapter 7", "SEVEN", "7", title only), running heads, page numbers, front matter order, break ornament. Layouts are named and saved; a project can hold several (editor's manuscript, pocket edition). Export (DOCX now, PDF next, EPUB later) uses one of them.
+
+In Book view page numbers are **exact**: the book is laid out in full, with a progress line for long books. Clicking a paragraph returns to Text at that paragraph; "Back to text" sits in the top strip and `Esc` does the same. In Text view "book p. ~142/310" is an estimate from the current layout, exact after a full layout until the text changes. This is the most Word-like part of Libreto and gets its own spec.
+
+---
+
+## 13. Cards view
+
+Scenes as cards in lanes. Lanes are **groups** the writer names and counts freely ("Act 1", "Week 3", "Lena's thread"); the novel template offers three acts as a start and nothing forces them. Groups live in the index unless promoted to Parts. A card shows the scene line, words, characters, task count; click peeks, double click goes to Text; `Esc` returns to Text.
+
+Dragging previews the new order; before anything moves, continuity warnings from the Codex appear on the dragged card ("Lena's warning would now come before Vega meets Lena"); **Apply** moves the text and History records it. Overlays (characters, tension, time) are deferred.
+
+---
+
+## 14. AI presence, levels and token economy
+
+**Status.** One item at the right of the status bar: the provider's logo (a grey circle when none) and a short label: *Off*, *Not connected*, *Connected*, *Working: indexing*, *3 to review*. Click opens a small menu: what is running and what it has cost this session, the level, connect or disconnect, and in Pro the prompt preview. That, the briefing once per session and the task marks are the whole unsolicited surface. No popups, no toasts, no name.
+
+**Levels** (set at project creation, changed in the AI menu or `Ctrl+K`):
+
+| Level | What runs | Cost |
 |---|---|---|
-| 0 Off | Scripts only: dictionary, structure detection, index, counts | none |
-| 1 Quiet | + small-model micro calls: note typing, scene summaries, name detection confirmation | cents |
-| 2 Reviews | + big-model reviews at session end or on "Review now": continuity, cards, style lint | per review |
-| 3 Proactive | Level 2 runs in the background while the writer pauses; proposals wait in Tasks | highest; dot shows cost |
+| 0 Off | Scripts only: dictionary, structure, index, counts, auto-fixes | none |
+| 1 Quiet | + small-model micro calls: note typing, scene lines, name confirmation, session lines, quick answers | cents |
+| 2 Reviews | + big-model reviews at session end or on "Review now": continuity, Codex facts, style lint | per review |
+| 3 Proactive | Level 2 in the background while the writer pauses; results wait in Tasks | highest; shown in the status menu |
 
-**Saving tokens, in order:**
+**Cheapest answer first**: (1) script, free; (2) index, free: the Codex and search answer "when did Vega last see Kit?" before any prompt; (3) small model with a minimal prompt: one note, one paragraph, the type list; never the document; (4) big model with excerpts: reviews get the Codex plus changed scenes; the chat gets retrieval over the whole book plus what is open. Every call above the index is loggable with what it sent.
 
-1. **Script**: spelling (dictionary first), smart quotes, dashes, structure ("Chapter" lines, `***`), word counts, placeholder scan, repeated-word scan, name co-occurrence. Free, instant.
-2. **Index** (the codex): entities, mentions, scene boundaries, summaries, facts already extracted. The Bar's "In the book" answers from here; "When did Vega last see Kit?" is an index query before it is a prompt (C13, E10).
-3. **Small model, minimal prompt**: a single-purpose call with only the note, the paragraph, and the type list (the A11 note's example). Scene summary from one scene's text. Never the document.
-4. **Big model with excerpts**: reviews get the codex plus the changed scenes only, with the prompt previewable (K34). Chat gets what is on screen (open peeks, pinned cards, selection) and the codex, never the whole book unless asked.
-
-In v1 the big model is Claude in Claude Desktop through MCP; levels 0–1 need no connection, levels 2–3 light the dot only when Claude is connected to this project (K3). The Bar's "Ask" group routes to Claude Desktop with the context already attached (K4); when in-app chat arrives it lands in the same Bar.
+**Providers.** Claude through MCP with Claude Desktop on macOS and Windows; an API key (Haiku by default, in the OS keychain) everywhere, Linux first; other providers through the key path later, each with its logo. Levels 0 and 1 work with scripts and a key; 2 and 3 need a connected provider. The written request to Anthropic stays (§18.1).
 
 ---
 
-## 4. Setups
+## 15. Workspaces
 
-Chosen at project creation with one question ("How do you work?"), switchable in the Bar. A setup is only which pieces are open and which tints are on; nothing is unavailable in any setup.
+A workspace is a preset: which areas are open, which highlights are on, which AI level runs. Switching never hides a feature, changes the text or changes the view.
 
-| Setup | Open by default | Tints | AI level |
-|---|---|---|---|
-| **Just write** | Page, status line. Navigator collapsed to its handle. | Style tint only | 1 Quiet; briefing on |
-| **Planner** | Page, Navigator (with People/Places expanded), Tray with Inbox | Style + entity | 1; Cards view one key away |
-| **Reviser** | Page, Navigator with task counts, Margin notes unfolded, Tray with Tasks | Style + tasks | 2 Reviews; briefing on |
-| **Pro** | All of the above + faint markup, authorship tint available, shortcut sheet | Any two | 3 Proactive; prompt preview on |
+| Workspace | Open by default | Highlights | AI | One line on hover |
+|---|---|---|---|---|
+| **Just write** | Page, top strip, status bar; navigator collapsed; notes as dots | Styles | 1 | "Just the page. Everything else one key away." |
+| **Planner** | + Navigator with Codex expanded, side panel with Inbox | Styles, Characters | 1 | "Structure and people in view; Cards one key away." |
+| **Reviser** | + Navigator counts, notes column unfolded, side panel with Tasks | Styles, Notes | 2 | "Notes and tasks open; reviews at session end." |
+| **Pro** | All of the above, selection pill, style labels, shortcut sheet | any | 3 | "Everything on, including the AI's prompts." |
 
-Concentration mode (`Ctrl+Shift+Enter`) is not a setup: it hides everything but the page from any setup and returns to it.
-
----
-
-## 5. Answers to the open questions
-
-**Comments vs notes.** One thing: a **note**, anchored to a paragraph or a selection, with a *type* and an *author*. Types built in: To do, Doubt, Idea, Check fact, For the editor; the writer adds types the way they add styles. A "comment" is just a note whose author is someone else (an editor, a beta reader, the AI). The per-paragraph note box used in this review is the editor for all of them. Notes that need a page become a note document with one click ("Expand") and stay linked. Every To do / Check / AI note is also a task; the Tray's Tasks is a filter over notes, not a second store. (H6, A11, A35.)
-
-**Styles.** Two layers. Six **super-types** fixed by Libreto, each with a known export behaviour: *Heading*, *Block* (Letter, Poem, Song, Epigraph, Sign), *Inline* (Emphasis, Thought, Foreign, Sign-in-line), *Break* (scene, section), *Material* (never exports), *Plain*. A **user style** = super-type + name + one look choice from a short list (colour, caps, centred, indented, italic, small). That is the whole "based on" model: a style is based on its super-type and nothing else; no inheritance chains (A5, A12). **Bold and italic stay allowed** as plain formatting; a review task may later ask "these 14 italics: Thought or Emphasis?" and convert in one accept, never block (A8). The AI proposes new styles when it reads a sign or a letter, as a task (A1, A6). A *marks* toggle in the status line cycles plain → tinted → labelled so the page never has to be a colour party (A4).
-
-**Scenes in flowing novels.** The script proposes boundaries (`***`, blank-line + time or place shift, chapter starts); the small model confirms and writes the one-line summary; the writer sees the result only as navigator rows and can drag a boundary or merge rows. Scene marks live in the index until the writer makes one explicit (then it is a Break style in the text). Nothing is written into the manuscript by the AI (D6, C9, F1).
-
-**Panel-state loss.** Peek floats, so looking at something changes nothing. Pinning adds a card on top of the Tray stack and the Tray has Back/Forward, remembered per project. A card is never swapped for another (B14, B15).
-
-**Chat placement.** The Bar. Narrow side chats are unreadable; a chat is a conversation over the text, centred, two-thirds of the page width, with the text dimmed but visible behind it, like Spotlight grown tall. `Esc` collapses it and keeps the thread; the dot reads *working* while an answer is being made. The chat sees what is open (peeks, pins, selection) (B15, B14).
-
-**AI name and persona.** No name, no avatar, no first person in findings ("Vega's eye colour differs: green in ch. 2, grey in ch. 9"). In the chat it answers as "Libreto". A named assistant invites Clippy; a nameless one is furniture (K7, K41). Tone follows the writer's tone.
-
-**What a session is.** Netflix rule: a gap of more than 6 hours ends a session. The briefing shows only when a new session starts *and* there is something to say (something in Tasks, or a last-place line). Short breaks never trigger it (K31, K30).
-
-**When the index updates.** Scripts: on every save, debounced to a second, free. Small-model summaries: when a scene changed by more than a few sentences *and* the writer left it or paused for two minutes. Big-model reviews: session end, "Review now", or background in level 3. Minimum change to the text never triggers the expensive layer (D24, R3).
-
-**Single file vs chapter files.** The writer sees one book, always: the page is the whole text, so what came before and after is one scroll away (A24). "This chapter only" is a narrowing of the same page, with "previous / next / whole book" links at its ends (B1, B2). Chapter files are storage, invisible; a new chapter is a heading, typed or from the Bar, and Libreto splits the file.
-
-**Find & replace focus.** The Bar docks as a strip at the top; the text never gets covered. Keys: `Enter` next, `Shift+Enter` previous, `Ctrl+Enter` replace and next, `Ctrl+Shift+Enter` replace all with a preview task. `Esc` once moves focus to the text at the current hit with the strip still showing; `Ctrl+F` returns focus to the strip at the same hit. Two places, one key each way (E7).
-
-**Peek vs card vs floating window.** Three depths, one object: **peek** (transient, floating, one layout), **card** (the same content pinned in the Tray), **page** (double click: the entity's own page in the page area, with Back). No other floating windows exist (D8, D3, D16).
+Opening or closing an area by hand stays until the workspace is switched; "Reset workspace" returns to the preset. Focus is not a workspace: it hides everything from any workspace and returns to it.
 
 ---
 
-## 6. Cut, defer, merge
+## 16. Accessibility, languages and tutorials
 
-**Cut** (complexity without daily use):
+**Keyboard and screen readers.** Every feature is in the menu bar and in `Ctrl+K`; every area has a shortcut and `F6` reaches it; `Esc` returns to the text; shortcuts show on hover and in Help ▸ Shortcuts; areas and cards have names a screen reader announces. The zoom slider changes text size only; a high-contrast theme exists.
 
-- A20 sentence commands, A21 multi-cursor: a hidden pro shortcut at most; no UI.
-- A26 undo tree, A27 selective undo: replaced by plain undo/redo that survives typing (redo stack kept as a snapshot) plus History.
-- B3 selection view, B7 dialogue view: the Bar's results and the per-character extract in a peek cover them.
-- B22, B23, B28, M4, M6, M10, M11: wellbeing gadgets; optional means cut for v1.
-- C9 numbered bookmarks, C10 minimap: the navigator's marks do this.
-- D9, D19, D22–D24, D27, J6, J13, J25: later analysis modules.
-- E5, E6, E8: metadata search, saved searches, editable results.
-- F11, F12, F14, F15, F22, F27: corkboard extras; the cards view starts flat.
-- G5, G12, G14, I7, I9, I14, K10 (a level replaces snooze), K25, K26, L3, L7.
-- N3 several projects open: one at a time.
-- O2, O8, P9, P11, P13, Q3–Q5.
-- R1, R2, R4–R6, R8, R9, R11, R12: spaceship ideas stay on the list.
+**Languages.** The project language sets the dictionary, the chapter word, the typography rules (Spanish dialogue dashes and « », English quotes) and the language the AI writes in. A passage (selection, scene or chapter) can be marked with another language from right-click ▸ Language; dictionary, auto-fixes and AI follow inside it. The Foreign style is for single words and carries an optional language. The app's own language is a Settings item.
 
-**Defer** (good, needs its foundation first): D13 custom card fields (AI fills them, after D1), D20–D21, F17–F19 overlays, J3–J5 story time, J8–J11, K32 blurbs, P4 EPUB, O1 share links, D26 character pictures.
-
-**Merge**:
-
-- Comments + notes + to-dos + placeholders + AI findings → *notes with types*, filtered as *tasks*.
-- Chapter view + full view → one page with narrowing.
-- Hover card + panel card + smart search → peek / card / page.
-- Corkboard + outline + reverse outline + synopsis → navigator summaries, shown as Cards view.
-- Alternative takes + proposal view + scene variants + imported tracked changes → *choice block*.
-- Session briefing + previously on + open where I left off → the briefing.
-- Workspaces + writer type → setups.
-- Ask the book + search by meaning + chat + palette → the Bar.
-- Snapshots + compare + cut file + what changed since sent → History.
+**Tutorials.** First run: a twenty-second tour of three things (the page, the navigator handle, `Ctrl+K`). Then one tip at a time, when it first becomes relevant (the first note, the first task, the first time `Alt` would have helped), dismissable, never repeated, replayable from Help ▸ Tips. The visible handles and the dimmed top strip are the lasting reminders.
 
 ---
 
-## 7. Screens to mock up
+## 17. Answers to the screen review
 
-Each shows the text with at most two marks. "Hidden" is what the screen deliberately leaves out.
+| Screen | Questions raised | Answered in |
+|---|---|---|
+| S1 | Chapter rules, numbering, other languages, files; views and "Just write"; Back and Undo at the top; shortcuts on hover; font size and right click; auto-fix mark and list; navigator handle; counts; the magnifier; the circle | §2, §1, §3, §5, §14 |
+| S2 | When the briefing shows; start screen, tabs; briefing lines and History; closing and reopening; buttons; status bar items; recovering closed cards; Alt; menus; Focus; dialogs | §7, §11, §1, §3, §10 |
+| S3 | Scenes and their names; navigator filter; wrapping counts; Go, Pin, key hints; Codex scope, relevance, minor entries, name; Planner; marks; settings; zoom | §2.1, §3, §9, §15, §8, §10, §1.2 |
+| S4 | "+" only for notes; retyping; many notes; resolve, delete, edit; reviewer comments; default type; current chapter; Ctrl+M; notes with other panels and narrow windows | §4.1, §3, §1.2 |
+| S5 | Keep and the side panel; hiding it; character card not scene; Go; unkeep; marks; peek on scroll | §3, §1.2, §8 |
+| S6a | Hundreds of results; suggested questions; key hints; Ctrl+F vs Ctrl+K; Enter; ✕ and clear, animation; "more"; caps; "In the book" | §5 |
+| S6b | Enter to send; text visible while chatting; long chats and history; Ctrl+K again; what the chat sees | §6, §5 |
+| S7 | Side panel arrows, show/hide, capacity; buttons; Pin on tasks, drag order; icons; Review vs fix in place; Ctrl+2 | §1.2, §3, §4.2, question 4 |
+| S8 | Pill vs right click; cut, copy, paste; new style; highlight per style; two styles; "Book title" | §2.3, §8 |
+| S9 | Key explanations; option toggles; regex; live search and backspace; Ctrl+F clean, Ctrl+R keeps; replace layout | §5 |
+| S10 | Layout step; paper sizes; exact pages; Back at the top; configuration | §12 |
+| S11 | Groups instead of acts; dragging and continuity; reaching Planner | §13, §1.1 |
+| S12 | Title and author at creation; ways to create a chapter; front matter; Author style; templates; vocabulary; mixed languages; steps | §11, §2.1, §16, §1 |
 
-**S1 — Just write, first minute.** Vega's story, blank project in *Just write*. Visible: page with the cursor, status line (0 words, dot hollow, "Just write"). Hidden: navigator handle only, no Tray, no pill. Text: plain, one typeface. **Interaction:** the writer types "Chapter 1" on its own line and keeps writing; the script makes it a heading on the next paragraph, with a one-time underline hint in the status line "Chapter detected — Ctrl+Z to keep as text". No popup.
-
-**S2 — Session briefing.** Reviser setup, next morning. Visible: page dimmed behind the Bar card ("Last time: Vega left the Blue Lamp without paying… Open: 2 to-dos, 4 checks"), three buttons. Hidden: everything else untouched behind. **Interaction:** `Esc` dismisses to the cursor; "Review" opens the Tray's Tasks with the first task highlighted.
-
-**S3 — Navigator with summaries.** Chapter 7 open. Visible: navigator rows "Ch 7 · Lena's warning — Vega asks about Kit; Lena lies about the back room; Vega leaves without paying" (three scene rows, one line each), task counts in grey, search box at top. Text: style tint only. **Interaction:** single click on a scene row → peek (summary, first line, "3 mentions of Lena"); double click → the page scrolls there; Back in the breadcrumb returns.
-
-**S4 — Margin note.** Paragraph "Kit said no." Visible: the `+` on hover, then the note box beside the paragraph with a joining line, type chip set by the small model to *Doubt* a second after typing "He could have said maybe, check later". Text: one note dot. Hidden: Tray. **Interaction:** `Ctrl+M` folds the note to a dot; the dot shows in the navigator's count for chapter 7.
-
-**S5 — Peek, pin, Tray keeps state.** Tasks open in the Tray. Visible: the writer clicks *Lena* in the text; a peek floats beside the word: picture, "Bartender at the Blue Lamp", first appearance ch. 2, last seen 14 pages ago, "4 scenes". Text: entity tint on for this one name only. **Interaction:** "Pin" adds the Lena card above Tasks in the Tray; Tasks stays; Back returns to it.
-
-**S6 — Bar: search, then ask.** `Ctrl+K`, typed "lena". Visible: three groups — Commands (none), In the book ("Lena — character", then hits with chapter and scene summary), Ask ("When did Vega last see Lena?" suggested). Text dimmed behind. **Interaction:** choosing Ask grows the Bar into a two-thirds-width conversation; the answer comes from the index with links; `Esc` collapses it and the thread is kept.
-
-**S7 — Reviewing a task with a choice block.** Task "Vega's eye colour: green (ch. 2), grey (ch. 9)". Visible: the peek with both snippets and "why this fired"; double click goes to ch. 9, where the paragraph is shown as a choice block: before | after side by side, changed word highlighted, *Keep mine* / *Take* / *On purpose*. Text: tasks tint only. **Interaction:** *Take* applies, snapshots, marks the task done; the Tray advances to the next task.
-
-**S8 — Styles from the pill.** Writer selects "You can't pass". Visible: the pill (Style · Note · Ask); Style opens a short list sorted by use with a search field; "Sign" chosen; the text turns centred capitals with a faint tint. Hidden: no toolbar, no dialog. **Interaction:** the status-line *marks* toggle cycles plain → tinted → labelled, showing the same page three ways.
-
-**S9 — Find & replace strip.** "Blue Lamp" → "Blue Lantern". Visible: the Bar docked as a strip at the top with the two fields and four keys shown; the page below with the current hit highlighted, never covered. **Interaction:** `Esc` drops focus into the text at the hit; the writer edits by hand; `Ctrl+F` returns to the strip at the same hit; `Ctrl+Shift+Enter` makes a preview task instead of replacing blind.
-
-**S10 — Book view.** Breadcrumb switched to Book. Visible: two facing pages with running heads and page numbers, chapter 7 opening on a recto, "p. 142 of ~310" in the status line, "Back to text" at the left. Hidden: navigator, margin, Tray. **Interaction:** clicking a paragraph in Book view returns to Text at that paragraph; the approximate page number stays in the status line afterwards.
-
-The screens are in `docs/design/concepts/` (`index.html` shows them all with captions).
+Draft 0's screens contradicted each other: S2 (Reviser) hid the side panel and S5 showed it. §15 is now the rule.
 
 ---
 
-## 8. What the new research adds
+## 18. What the research adds (kept from draft 0)
 
-Full reports are summarised here; sources are linked in each point.
+### 18.1 Claude inside the app with the writer's own login
 
-### 8.1 Claude inside the app with the writer's own login
+- **Not allowed today without Anthropic's approval.** Claude Code's legal page (February 2026): "Anthropic does not permit third-party developers to offer Claude.ai login into their own applications, or to route requests through Free, Pro, or Max plan credentials on behalf of their users." Tools that reused Claude Code's tokens were blocked from January 2026 ([legal page](https://code.claude.com/docs/en/legal-and-compliance#authentication-and-credential-use), [Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview)). No public "Sign in with Claude" programme exists; the channel named is [Contact Sales](https://www.anthropic.com/contact-sales).
+- **Allowed and using the subscription:** a local MCP server installed in Claude Desktop as a one-click `.mcpb` bundle, plus an **MCP App** that shows interactive cards inside the Claude chat ([bundles](https://claude.com/docs/connectors/building/mcpb), [MCP Apps](https://claude.com/docs/connectors/building/mcp-apps/getting-started)). About four clicks, once. `.mcpb` runs on macOS and Windows only; v1 is Linux first, so Linux starts with the API key.
+- **Grey area:** spawning the writer's own signed-in Claude Code. JetBrains states "Anthropic terms do not allow subscriptions to be used this way" ([JetBrains](https://www.jetbrains.com/help/air-ides/air-use-claude-subscription.html)). Not for writers.
+- **Cheap tokens:** Haiku 5.5 costs $0.10 / $0.50 per million tokens; a note-type classification costs about $0.00004 ([pricing](https://platform.claude.com/docs/en/about-claude/pricing)). Local models are possible but experimental.
 
-- **Not allowed today without Anthropic's approval.** Claude Code's legal page (rewritten February 2026): "Anthropic does not permit third-party developers to offer Claude.ai login into their own applications, or to route requests through Free, Pro, or Max plan credentials on behalf of their users." Credentials may not be collected or intermediated; sign-in must go through Anthropic's own flow. Tools that reused Claude Code's tokens were blocked from January 2026 ([legal page](https://code.claude.com/docs/en/legal-and-compliance#authentication-and-credential-use), [Agent SDK overview](https://code.claude.com/docs/en/agent-sdk/overview)).
-- **No public "Sign in with Claude" or approval programme** was found. The channel named is [Contact Sales](https://www.anthropic.com/contact-sales).
-- **Allowed and using the subscription:** a local MCP server installed in Claude Desktop as a one-click `.mcpb` bundle, plus an **MCP App**, which shows interactive cards (our proposals) inside the Claude chat ([MCP bundles](https://claude.com/docs/connectors/building/mcpb), [MCP Apps](https://claude.com/docs/connectors/building/mcp-apps/getting-started)). Setup is about four clicks, once.
-- **Grey area:** spawning the writer's own installed and signed-in Claude Code (`claude -p`). JetBrains states that "Anthropic terms do not allow subscriptions to be used this way" for an SDK chat, and instead runs the real `claude` program in a terminal ([JetBrains](https://www.jetbrains.com/help/air-ides/air-use-claude-subscription.html)). Not for writers.
-- **Cheap tokens:** Haiku 5.5 costs $0.10 / $0.50 per million tokens in/out; a note-type classification costs about $0.00004. Local models (Transformers.js, `@electron/llm`) are possible but experimental ([pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
-- **Gap: Linux.** `.mcpb` bundles run on macOS and Windows only, and v1 is Linux first. On Linux the first path is the optional API-key chat in the Bar.
+**Proposal:** "Connect Claude" (MCP + MCP App) on macOS and Windows, the API-key path everywhere, scripts and index for levels 0 and 1, and a written request to Anthropic about starting the writer's own Claude Code or offering in-app login.
 
-**Proposal:** v1 keeps "Connect Claude" (MCP + MCP App) on macOS and Windows, the API-key chat (Haiku by default, key in the OS keychain) everywhere, and the cheap path (scripts → index → small model) for levels 0–1. In parallel we write to Anthropic asking whether an open-source app may start the writer's own unmodified, self-signed-in Claude Code, or offer in-app login.
+### 18.2 File format
 
-### 8.2 File format: Markdown or something else (A3)
+- Tested with pandoc 3.1.3: `<!-- ^id -->` paragraph anchors are **lost** on DOCX export, and `{.sign}` classes need a filter to become Word styles.
+- **Recommendation: Djot** (by the author of pandoc and CommonMark). Same readability and token cost as Markdown; ids and styles on any block or span are part of the syntax (`{#p-7f3a}`, `[I should not be here.]{.thought}`, `::: sign`); djot.js and pandoc ≥ 3.1.12 follow the same rules. An HTML subset is the runner-up (about 40% more tokens); ProseMirror JSON, TEI, DocBook and ODT are rejected as storage.
+- If accepted: `.dj` files, `{#id}` anchors, a `styles.yaml`, notes anchored by paragraph id plus quoted words, alternates and History in their own files so a chapter file always reads as the book. A one-day round-trip test on a real chapter comes first.
 
-- Tested with pandoc 3.1.3: the planned `<!-- ^id -->` paragraph anchors are **lost** on DOCX export, and `{.sign}` classes do not become Word styles without a small filter.
-- **Recommendation: Djot** (by the author of pandoc and CommonMark) instead of Markdown + pandoc attributes. Same readability and token cost; ids and styles on any block or span are part of the syntax (`{#p-7f3a}` above a paragraph, `[I should not be here.]{.thought}`, `::: sign`); the editor library (djot.js) and the export tool (pandoc ≥ 3.1.12) follow the same rules. HTML-subset files are the runner-up (about 40% more tokens, harder to read). ProseMirror JSON, TEI, DocBook and ODT are rejected as storage.
-- Changes to `storage.md` if accepted: `.dj` files; `{#id}` anchors; a `styles.yaml` (id, name, super-type, look); comments anchored by paragraph id + quoted words + text around them; alternates in their own file so the chapter file always reads as the book. A one-day test on a real chapter (Djot → DOCX → Djot) should come first.
+### 18.3 Lessons from our own tools
 
-### 8.3 Lessons from our own tools
+- **literary-critic:** every finding pinned with its quote and never moved silently (*changed* or *lost*); a story bible with saved questions (setups without payoff, threads silent for 1000+ words); script checks for repeats within 50 words, rhymes, sentence openers; "ask the codex before reading the text"; one change per card.
+- **docx-fixer:** Spanish dialogue-dash rules that work; the Auto / Review / Info severities (adopted in §2.2); DOCX export pitfalls.
+- **opos:** focus mode folds panels to zero and fades chrome to 25%; every paragraph has a stable id; notes follow a rewritten paragraph and say so.
+- **integral-job-search:** few required steps, the rest offered and declinable; position saved continuously; "a subject declined twice is not raised again" (adopted for tips and "Not an error").
 
-- **literary-critic:** pins every note and finding with the exact quote plus text around it, and never moves a pin silently (marked *changed* or *lost*); a story bible of typed items with saved questions (setups without payoff, threads silent for 1000+ words, near-repeats); script checks for repeated phrases, the same word within 50 words, accidental rhymes, repeated sentence openers; "ask the codex before reading the text"; a "who writes" setting (off / up to 12 words / on); one change per card. Running jokes are not tracked yet: treat them as motifs.
-- **docx-fixer:** Spanish dialogue-dash rules that work (opening `—` glued to the word, closing dash before punctuation, `.—` flagged; "full stop before the narrator's dash" left to a person); three severities AUTO / REVIEW / INFO; a list of DOCX pitfalls for export (custom styles flagged, `qFormat`, no `autoRedefine`). Smart typing can apply many of these as the writer types.
-- **opos:** focus mode folds the side panel to zero, centres the page and fades chrome to 25% (hover brings it back); every paragraph linkable by a stable id; link colour says where a link goes; terms with hover definitions and backlinks; notes as post-its under their paragraph that follow a rewritten paragraph and say so.
-- **integral-job-search:** one goal, steps that each have a visible output; only a few steps required, the rest offered and declinable; position saved continuously; resume says what it resumes and why; "a subject declined twice is not raised again". For Libreto: Capture → Plan → Draft → Revise → Deliver as optional, resumable steps (only Draft and Deliver required), offered by the briefing, never forced.
+### 18.4 What writers say
 
-### 8.4 What writers say (forums; Reddit refused automated fetching)
-
-- Scrivener is kept for organising and left for writing: "I love Scrivener for organising my chapters… I hate it for actually writing in." Compile is the main complaint; the manual "rivals War and Peace" ([L&L forum](https://forum.literatureandlatte.com/t/this-software-is-inscrutable-and-damn-near-unusable/139718), [Mumsnet](https://www.mumsnet.com/talk/creative_writing/2633625-Scrivener)).
-- One file vs chapters: writers want scene units **and** a seamless whole-book view with search across everything; split files make continuity checks hard ([Writing Forums](https://www.writingforums.com/threads/managing-your-book-the-nuts-and-bolts.210547/), [Codidact](https://writing.codidact.com/posts/25162)). This supports "one page with narrowing".
+- Scrivener is kept for organising and left for writing; compile is the main complaint ([L&L forum](https://forum.literatureandlatte.com/t/this-software-is-inscrutable-and-damn-near-unusable/139718), [Mumsnet](https://www.mumsnet.com/talk/creative_writing/2633625-Scrivener)).
+- Writers want scene units **and** a seamless whole-book view with search across everything ([Writing Forums](https://www.writingforums.com/threads/managing-your-book-the-nuts-and-bolts.210547/), [Codidact](https://writing.codidact.com/posts/25162)): one page with narrowing.
 - Maintaining wiki links by hand is "an enormous amount of work": links must be automatic.
-- Readers in 2026 count spelling help as fine (11% call it AI-written), structural advice as 50/50, and any AI draft as AI-written (about 90%) ([Book Riot](https://bookriot.com/what-counts-as-ai-survey-results/)). Default AI to quiet, keep "no AI" first-class.
+- Readers count spelling help as fine, structural advice as 50/50, any AI draft as AI-written ([Book Riot](https://bookriot.com/what-counts-as-ai-survey-results/)): default AI to quiet, keep "no AI" first-class.
 
-### 8.5 UX patterns adopted
+### 18.5 UX patterns adopted
 
-- **Corrections** (Gmail, LanguageTool, Word): red for spelling, one quieter mark for everything else, style checks hidden unless asked for. Dismissal says its scope in words: *Ignore here* (returns only if the text changes), *Not a mistake: add "Blue Lamp"*, *Stop checking this rule*. A list of what was turned off, to undo it.
-- **Find & replace:** a strip docked at the top that never covers the text (VS Code), Enter / Shift+Enter, Esc to the text at the hit, Ctrl+F back to the strip; replace moves to the next hit (Obsidian's bug avoided).
-- **Margin notes that don't fit:** colliding notes push each other down, tall ones scroll inside, the note slides toward its paragraph on hover (gwern.net sidenotes); the note and its words highlight each other (Word's modern comments). A joining line is drawn only for the selected note, so the page never fills with lines.
-- **Peek:** inside the editor a hover card needs a modifier key or a click, so it never fires while writing (Obsidian); each card has a "don't show these" cog (Wikipedia); a peek can be promoted to the Tray in one step (Arc, VS Code); the Tray keeps its own back/forward (Obsidian per-tab history).
+Corrections with one quiet mark and dismissals that say their scope (Gmail, LanguageTool); a find strip that never covers the text (VS Code, Chrome); margin notes that push each other, scroll inside, and connect only when selected (gwern.net, Word); a peek that needs a click or a modifier so it never fires while writing (Obsidian), promoted to a panel in one step (Arc), with a panel history and recently closed (every browser).
 
 ---
 
-## 9. Decisions for you
+## 19. Cut, defer, merge
 
-Proposed answers are in §5; these are the ones that change the direction, in order of impact.
+**Cut**: the selection pill outside Pro; the cycling "marks" badge; the chat inside the search box; "Continue writing" and "On purpose" buttons; key hints printed beside controls; tabs; several projects open at once; "Enter to send" text; A20, A21 sentence commands and multi-cursor; A26, A27 undo tree (History covers them); B3, B7; B22, B23, B28, M4, M6, M10, M11 wellbeing gadgets; C9, C10; D9, D19, D22–D24, D27, J6, J13, J25; E5, E6, E8; F11, F12, F14, F15, F22, F27; G5, G12, G14, I7, I9, I14, K10, K25, K26, L3, L7; O2, O8, P9, P11, P13, Q3–Q5; R1, R2, R4–R6, R8, R9, R11, R12.
 
-1. **Seven pieces** (Page, Navigator, Margin, Peek, Tray, Bar, Status line) and nothing else: accept as the frame?
-2. **Chat in the Bar** (a Spotlight-like box that grows into a centred conversation over the dimmed text), not a side panel.
-3. **Notes = comments = to-dos**: one thing with a type and an author; Tasks is a filtered list of notes.
-4. **Styles**: six fixed super-types + user styles (name + one look); bold and italic stay allowed, a later review offers to turn them into styles.
-5. **AI with no name and no avatar**, four levels (Off, Quiet, Reviews, Proactive), one dot in the status line.
-6. **Djot** instead of Markdown, after a one-day test.
-7. **Claude**: MCP + MCP App on macOS/Windows, API-key chat everywhere (Linux first), and a written request to Anthropic. Is Linux without the subscription path acceptable for v1?
-8. **Cuts** in §6: anything there you want back?
+**Defer**: chat docked in the side panel or popped out; Cards overlays; D13 custom Codex fields; D20–D21; J3–J5 story time; J8–J11; K32 blurbs; P4 EPUB; O1 share links; D26 character pictures; local models; providers beyond the key path.
+
+**Merge**: comments, notes, to-dos, placeholders, AI findings and imported tracked changes → notes with types, filtered as tasks; chapter view and full view → one page with narrowing; hover card, panel card and entity page → peek / card / page; corkboard, outline, reverse outline and synopsis → navigator lines shown as Cards; alternative takes, proposals and scene variants → the choice block; briefing, "previously on", "open where I left off", snapshots, compare and "what changed since sent" → History; ask the book, search by meaning and command palette → Search & ask.
+
+---
+
+## 20. Open questions for the owner
+
+1. The four axes (View, Workspace, Focus, Highlights) and the eight areas of §1: accept as the vocabulary?
+2. Top strip with Back · Forward · Undo · Redo · view switcher · breadcrumb, dimmed when the mouse is still: yes?
+3. Breadcrumb at the top and counts at the bottom: yes, or breadcrumb back at the bottom?
+4. Panel shortcuts `Alt+1` navigator, `Alt+2` notes, `Alt+3` side panel, `Alt+4` chat, leaving `Ctrl+1/2/3` free: yes?
+5. `Ctrl+K`: `Enter` opens or asks depending on the shape of the text, with one status line saying which. Acceptable, or should `Enter` always ask?
+6. Tasks: a Review session with Next, versus fix in place with no Next: is that what you meant?
+7. Replace on `Ctrl+H` (Word, VS Code, browsers) with `Ctrl+R` as an alias, or `Ctrl+R` only?
+8. Name for History: *History*, *Sessions*, *Timeline*, *Versions*?
+9. Name for the Codex: *Codex*, *Story bible*, *Cast & places*, *Who's who*, *Compendium*?
+10. Bare-number headings follow the book's first heading (§2.1): fine, or always ask?
+11. Chat as a floating window at the bottom right, docked chat deferred: yes?
+12. One project per window, opening another replaces it: yes, or allow two windows?
+13. Front matter generated from Project info, no "Author" style: yes?
+14. An undone auto-fix returns as a Review task after the correct form is typed three times: keep, or never return?
+15. Highlights: workspace defaults limited to two, writer may enable more: keep the limit?
+16. Djot instead of Markdown, after the one-day round-trip test: run the test?
+17. Linux v1 without the Claude subscription path (API key only): acceptable?
+18. Anything in §19 you want back?
+
+## 21. Specs needed later
+
+- **History engine**: snapshots, sessions, pattern detection, session lines, Compare, restore, storage.
+- **Book layout and export**: presets, headings, running heads, front matter, DOCX/PDF, exact pagination.
+- **Codex**: extraction, aliases, relevance, minor entries, pinned facts, motifs, editing.
+- **Auto-fix rules**: the Auto / Review / Info tables per language, the leave-alone list, the learning rule.
+- **AI levels, providers and costs**: what each level runs, when, with which prompt, at what cost; MCP and key paths; logging.
+- **Search & ask**: index, retrieval, suggested questions, the Enter rule.
+- **Storage**: the Djot test and the file layout.
