@@ -1,0 +1,141 @@
+# Screen concepts: review notes
+
+_Exported 2026-11-06 18:21_
+
+## S1 · Just write, first minute
+
+When I write "Chapter 1", it detects it and creates a new title. Right. But what if I only write "Chapter"? Isn't numeration automatic? What if I write "Chapter 2" after "Chapter 3"? What if I write "Capítulo"? Same for "New chapter" or "New page"? I mean, the user must know the rules, even if it understands user's intention.
+When a new chapter is detected, is a new file created? Here we are in a "Just write" view (that I don't know how it fits other views or what does it exactly mean), but if I change to chapter view, will it behave as a chapter file?
+Which are the other views? What happens if I click on "Just write"?
+You really did what I asked and kept that simple without any toolbar. Most than I expected, but I love it! But maybe a back and forward arrows could be set at the top, between left panel and text, where anyone would look for them. And Undo and redo should be visible too. Maybe they can be dimmed when mouse is not moving. Every button or visible tool must show its shortcut when hovering. That's valid for all the app. Not everybody uses keyboard shortcuts. But OK, no toolbar as an entity, no font size, bold, italics, etc. if it can be avoided. I think right click can help with that once text is selected. I don't want to be too strict, but I think font size should not be changed in the text. Styles are encouraged. And AI can help with formatting (for example, putting in italics a foreign word). We need to set rules for AI to know when to check and fix usual problems, but without that bothering Word style, that changes things and you don't realize. For example, if a typo is corrected, a visible but not bothering sign can be shown. It could disappear after some seconds or minutes, but history of auto-fixed words should be stored and allowed to be reviewed by the writer in a very quick way: a list with check mark or X to accept or reject them quickly (or going to the place). Each with what was written and what was corrected. It must learn not to propose or auto-fix again something that has been rejected, unless in the future the writer usually writes it right again and the fix is again probably expected.
+Navigator is too folded, there is no hint there's something there. A discreet arrow or similar could help understand it. Anyway, some initial tutorial can help get it better. A very simple one, not a lot of things the user won't remember tomorrow. Visual clues must help remember. For example, if tutorial shows the user that there is a left panel and he finds it useful and it is visible as an arrow, when he thinks "I need the book overview" and looks to the left, he'll see the arrow and quickly understand how to show and hide it. Discreet, but visible.
+About bottom bar: I expected breadcrumbs at the top, as usual, but I don't dislike them at the bottom. What I don't understand is the "Back" button I saw in other screenshots. If it's the back button I propose at the top, I prefer it there, up.
+The "Chapter detected" is good, but I think it should be like what I said about fixing a typo, shown in the text. It's not really a bad idea to show it on the status bar, but it's harder to see and it gets confused with breadcrumbs. Word shows something in the text. We'll do that, too, but in a more effective way, not a popup but an underline or similar and maybe a right panel or dot like "pending messages" that open that auto-fixed things panel.
+About the number of words, in this screenshot I guess is for the whole book, but it is also shown by chapter. We should include an approximate page and total, something like "p. ~ 15/32". Hovering it explains briefly that pages are approximate until final text is generated.
+The magnifying glass is for search (later screenshots), which include database info, chatbot... It should be clearer everything it can offer and be much more visible. It's one of the main tools of the app. For example, a bigger magnifying glass with that kind of "Gemini diamond" or something similar that looks like "Search and ask to AI". You can think of other options. Even if Anthropic is connected, the Claude logo next to the glass. If OpenAI, then ChatGPT logo...
+The circle at the rightmost side is for "AI connected"? Or "Saving"? Or what?
+In this mode there are no other panels? Again, what is "Just write" and how to change from one mode to the other? Just clicking "Just write"? Same for "Text" at the leftmost side. Does it switch between something? How to make sure the user understands that?
+I think having so little UI is better for the user to try things that if he sees a lot of icons everywhere, but tutorials should help learning things, one at a time, no one long tutorial at the beginning.
+
+## S2 · Session briefing
+
+Do you need to click "Reviser" at the bottom right for it to be shown or it is shown at the beginning of a session? By the way, we need to design an initial screen just opening the app. It could show some options: "New blank project", "New project from template" (or not, blank project could include a project type), Open a project and a list of recently used projects. We had something similar in nacho-viewer, something easy. We there have tabs, but I think here they don't make sense. Or they could make, but it is opening more variables. If we can work on a way to easily find the info, go back, show split screen and other techniques, we don't need to have multiple tabs open, which are hard to know what they contain. Only one text.
+About the card: It's OK, it shows what was done in last session and date and time. We just need to make sure the info is direct and understandable. Maybe it could include all things done in last session, not only the last edited place. For example:
+"""
+You were in:
+- Vega left the Blue Lamp without paying (chapter 7, "Lena's warning")
+- Refining wording in "The back room" (e.g. clock-watch) (chapter 6...)
+- Other minor fixes. See more... [link or arrow to unfold]
+"""
+Even a simple diff view. Then, the user can remember "Oh, yes, I was fighting with that word, I have a new idea". Each line must be clickable to go to the place and we must find a way to go back to last session's work box to continue with other things. I'm thinking it can be a special case of a "Time machine" section where the writer can see VERY CLEARLY and with helping notes what he was doing in each session (number of words, paragraphs changed, affected chapters...). But it must be very easy to understand and follow, moving through dates and allowing asking for things ("When did I write about Lena's car?", "Take me to the part where I couldn't find the words for Tom's feelings"...). It will make use of our engine, which must have these things summarized. So, if the writer takes a time to fix a paragraph or a dialog, it must be stored just like that, "Writer was struggling during 15 minutes with wording about Vega's hair color". I don't know if that is the most efficient way, but something that an AI (or better a script) can find easily.
+With this, the Last session box is only a summarized view of Time Machine's last session diff (I know, Time Machine is taken :-).
+About buttons, clicking outside the box or Esc, that window must be closed, but it should be available to open it again. Maybe an animation takes it to a place where Time Machine can be found. Time Machine must have a Last session link that should open that view and a way to see ALL the changes in every session.
+Our engine must allow that kind of diffs and things, and the user can use AI to ask complex things so that only a part of a diff from a week before is restored. It will be some kind of Git implementation, but the complexity is totally transparent to the user and must be shown in a very intuitive way: easy to find any previous change and restore it or see all changes in a session, etc. Even show the status of the text before/after a given session, with a diff with today's or other version's content, side by side, always showing "Warning! You are viewing friday 23 version" with a different, red background light (or other visual hint) and a button to Go back to today's version. Of course, the engine and the Time Machine may need specs just for themselves.
+The buttons you set will be obsolete. "Continue writing" is not clear in this context: you can click on a line of your latest changes or close the dialog to continue writing. We need to design all dialogs the same style. I don't know if they need a title or not, but all of them visually equal.
+About the bottom bar: Again, tell me what is shown when you click "Text" or other breadcrumb words. The number of words is always from the open document (chapter), right? Then, how to switch to the full text to see global statistics? Otherwise, the page number is from all the text. That could be confusing. "Reviser" is a mode? What does it change? And "6 things" mean the 5 lines in "Tasks" panel?
+I think we should use the right part of the bottom bar to open tooling (Time machine, modes, panels...). Not sure how to no overload it, they could be small menus or similar, places where users can go to show things they miss. As always, very simple, of course. And easy to see. Maybe windows have animations that minimize them to a place and the user knows where they are. That way, if working on a text, opening a character card, for example, and, after navigating through it (should those cards have their own back and forward buttons, as if they were a browser?), they close the dialog on purpose or accidentally, they know how to get them back easily. I know a lot of info means a lot of UI, but we must find a way to keep it simple and intuitive. Maybe dialogs can be minimized just above the bottom bar as windows? I don't like it, because there is always a limit, but we need to find a good idea so that all tools are where they are expected to and the user can go back and forth if closing them. I mean, if they got to a character card they got by clicking a character and the window is closed, the right way to go back to that dialog should not be clicking the character name again.
+Oh, and about clicking things that don't show links or visual clues in the text, maybe clicking Alt or Ctrl could show them and make them clickable. Otherwise, it could be done with a right click on a word, but you never know if that word will show something in the contextual menu or bubbles. Showing colors, underlines, etc. could help. If we don't even have a menu (or do we), Alt can be a good key.
+About menus, your Mac screenshots don't show them because they are at the top macOS bar. Does it mean that in Windows or Linux they would be at the top of the window? I mean, no toolbar but yes menu bar? After all, every feature must be discoverable at some place and accessible by keyboard (moving between panels and bottom bar could be done with a shortcut too...). Oh, and if we have menus, a menu search box is needed to find options, unless we use Ctrl+K to run commands, but I think both are positive.
+We also need to think about Focus mode: what disappears, how to make it appear again, which tools are available and findable for a non-techie user, for example with the mouse...
+About dialogs, it is good that text is dimmed, but maybe the user wants to see the dialog while reading the text behind, so it should be readable AND scrollable at least. For the rest, the dialog must be modal, as in nacho-viewer, or dismissed by just clicking out of it. But menus should probably be grayed out or not clickable when a dialog is open.
+
+## S3 · Navigator with one-line scene summaries
+
+More direct comment, as many things have been said before.
+I like the overview panel at left. I don't still know what is a scene and who gives it its name or how parts and chapters are created.
+What is "Search the book"? is it only a chapter filtering by name or it includes AI, codex/bible search? Wasn't it the magnifying glass at the bottom? Does it open a dialog or is just a search box at its place?
+About "1 note, 2 tasks", it looks very useful, but it may have spacing problems if chapter title is longer. I guess it could always take two or more lines...
+Clicking a scene is peek. Ok. I see a summary, some statistics and first line of the scene (again, are there three scenes in this short chapter? How a scene is defined?). I understand "Go", but maybe just clicking the title could do it. And I don't understand "Pin". Where is it pinned? We should not show "Esc" or shortcuts everywhere, better when hovering. I don't know if you just put it there for me to understand.
+Double click takes there, perfect!
+The "Back" button, I told you before.
+And the Codex part is interesting. Is it for all the book? I think so, but then there may appear lots and lots of characters, they should be shown by relevance. Some of them could only be "a guy" and they will need some extra explanation: "The guy who sells the ticket", "The guy who asks for directions, chapter 7"... Same for places and things: "Street" could mean a lot of things, many conversations can take place in the street without specifying which street: "Street (argument about their daughter)", "Street (where the apple seller is)"...
+And things... Not everything should earn its place in that list. Imagine a "Table". Home table? Office table? Shop table? We need to work on that when we define the codex (by the way, what will be its final name? Codex? Bible? Other thing?).
+Again: What "Planner" is and how to change from one mode to the other and what everyone means?
+What is "marks: tinted"? I see "It was a good lie" tinted, but I don't know if that is a tag, a setting... We must talk about a settings dialog. We have a lot of features, but I'd prefer most of them to be fixed and only configure really important things for different users. We could need tabs or a left menu if there are many of them.
+By the way, where is the zoom to make text font bigger? As we don't need pages in these views, it's no problem if less text fits on the screen. A Word-like slider can be effective. I see it at the bottom right, where most people would look for it.
+
+## S4 · Margin note
+
+I like the "+" at the right of each paragraph, and I like it to open only comments and not a lot of options (we'll see).
+Can the note type be changed after setting it automatically? Can it be reset automatically too?
+I like the clean dot to hide all of them. If there are plenty of them, it can be hard to see. We anyway need a way to show them and see how to scroll them in a different way that scrolling text. Lines that point from a paragraph to a note? What if they go out of the screen (a very long note doesn't leave space for more and there are many more)? Lines going out of the screen until notes panel scrolled?
+We need a way to mark them as fixed (how will they be shown then?) or to delete them or to edit them.
+How these notes mix with comments from a reviewer? Are they the same?
+Is there a default note type set before inferring it?
+Again, what "marks: tinted" means here? And Reviser? "3 things", what does it open?
+About the left menu with the text outline, how is each chapter or scene marked as current when you scroll through the text? Does it open and close chapters and highlights current scene?
+Ctrl+M is OK, but how to do it if you don't remember the shortcut? A button on top of the notes section?
+Can notes be shown when other panels are open (as in next screenshots?). How do we manage which info is on screen. I see your "On screen" and "Not on screen" messages, but it's not yet clear to me how to show and hide things and when. For example, how did the user ask to show notes here? Can't the user add notes at any point without changing the view? What if there is a right panel and the user adds a note? What if the screen width is reduced?
+
+## S5 · Peek, pin, the tray keeps its stack
+
+What does Pin serves? Pinning it at the top of that panel. What's that panel? Why in previous screenshots in Reviser mode there was no right panel? Can the right panel be hidden just as the left one?
+Why a Character on top of a task list? Also, this does not look as Lena's character card, it talks about the scene, not about the character. That must not be a problem, we need to show the user the right information at the right time, but who decides what is useful at that moment? What does "Go" mean here? I just clicked "Lena" to be shown a card. If I click Go, I go back to the Lena I just clicked?
+How to unpin a card (or mark a task as fixed)?
+"marks: entity: Lena". You need to explain me what those marks mean and why do we need them to be shown on the status bar if we already see that dialog.
+What happens if I scroll down? The dialog is kept at the same place? I think that's right, although it could be moved while the linked place is visible (to not be hidden out of the screen) and then disappear when the text is out of view.
+
+## S6a · Bar: one field, three result groups
+
+I always liked universal search boxes :-)
+I see commands, which is good.
+Then "In the book", which is what many people could want, but that could return hundreds of results.
+And then Ask, which is a good idea, if it really helps the user for what he wants to ask. Choosing those questions is something I'm interested in. Generic questions won't help the writer who knows his characters.
+Move, Open, Ask and Close keys should not be shown. Navigation must be very intuitive.
+Now, is there a Ctrl+F apart from this Ctrl+K? I mean a simple "Search for occurrences" with Intro to go to next one. In that case, we need to make clear the difference between them. Ctrl+F for regular search (Ctrl+R could be for replace) and Ctrl+K for "deeper", more semantic searches.
+I understand I can type a question right there. So the first result should not be selected by default if I don't move down, because Intro should answer to my question. What If I write "lena" and click Intro? Will it show me the result of a "lena" query to the chat? That could be confusing for the user.
+An X to close it without Esc should also be there, although clicking out of it should close the dialog too. A way to empty the search field too. Discreet, nice. The bar must be very attractive when Ctrl+K is pressed. Something simple that means "ask anything", with text behind dimmed. It could have some animation: it appears at the middle of the screen but moves to an above place when results appear (not moving more or less up with more or less results, just to the right place), even if text shown is "No results".
+What if I click on "27 more options"? Is it clickable by keyboard? Will it open a new page or bigger dialog or just a vertical scroll bar will appear to read it all?
+Is there a max number of items by section so the dialog content fits into the screen at first sight (before expanding other sections)?
+"In the book" means scenes? That could be useful, if we define "scene" correctly.
+
+## S6b · The Bar grown into a chat
+
+"Enter to send" out.
+I like it becomes the chat. I imagined a chat always at the same place (bottom of right panel), so you can see the text while chatting and compare both versions, which I think is important. This way looks good to me, but you lose the option of looking at text while chatting. It must look you can't continue a very long an interesting chat session with the AI. It looks more like just asking to get you to places or answer easy things. We need to find a way to be able to chat with it, check older conversations... Maybe a floating chat box at the bottom right (minimizable) as in a technical support chat window? It's not the same asking for a reference than wanting a long chat with the AI. Should we separate both things? Just not "Ask a follow-up" but start a new question or rather go to the chat? Or just use Ctrl+K to find things, being with scripts and Codex or with small help by a simpler AI that finds places ("Where Lena talks about its young life?"). If it gets short, then you need the real AI chat.
+If I click Ctrl+K again to do a new search and I find the chat, that will be very confusing. Where do I look for Vega now?
+About "what the chat can see", I think it could be to limit the search to useful places or even to reduce the context. But what if the user is expecting to see Lena's first appearance? I think it should always have all the book, it never knows what the user wants to know.
+
+## S7 · Reviewing a task with a choice block
+
+This is very nice! I still don't know how the tray works or what are the "< >" arrows next to "Tray", or how to get to this info and not another one (now I can see Reviser again, but "marks: tasks". You definitely need to explain me this. What are modes, sections, situations, variables... How they behave. If I can't understand it now, any other user may have problems too.
+About buttons, you should have "Keep mine", "Take proposed". "On purpose" can be confusing. Does it mean it won't ask you again?
+I now understand better the tray, but I don't still know how to make it appear or disappear or how many things the tray can keep.
+Here click and double click doesn't make the same sense as before, but it looks consistent. Go (or clicking the title in blue, as before) gets you there. I still don't get the Pin thing. I guess it just gives priority to a task above the rest of tasks. Can they be ordered by dragging?
+The symbol you use for tasks (what you call hollow dots) is weird, we need something more self-explained. I see what are in the tray are (at least) notes like those before, and they were represented by a dot. Why this has another look? Isn't it a note? Well, this is a correction with previous and later texts, but then, how is each type of note shown?
+When you say "Take" applies the change and the tray moves on, I understand "Keep mine" also moves on. But when the user decided he is reviewing all tasks? How did he arrive here? Is there a way he just clicks the "hollow dot" while there is no tray and he only wants to fix that because he is just reading that part and didn't get reading to the next fix and he may not want to continue with al tasks? I mean, is there a way to say: "Let's fix things" and another one to just say: "I'll click here because I'm now reading here and I'll fix it now, but I'm not yet worried about other fixes"?
+What is Ctrl+2 here? To open the tray? Maybe I'd expect to use Ctrl+1, Ctrl+2, Ctrl+3 for some headings. Showing panels can be very useful with keyboard shortcuts, but they must be open also through other ways (menu, status bar?).
+
+## S8 · Styles from the selection pill
+
+Good, although how do we get to the pill? I thought of it more like a right click, not just when selecting. Or how can I cut, copy and paste, select all, etc? What usually is in a contextual menu.
+Also, "Style", "Note" and "Ask" are very different things. I thought notes were added with the "+" sign. And Ask with Ctrl+K. I like you can select text to ask a question or to add a note, but we need to determine how that pill or right-click menus work.
+I like the Block and Inline texts, they show how it will behave. And create new is a good addition, but what does appear when creating a new style?
+Again, "marks: tinted" and now with your three versions, which explain a little what "marks" mean, and I now understand they cycle, but are they able to be chosen? If I select "tinted" all styles will be tinted the same? Titles, emphasis, signs... How are styles defined? What if two different styles are applied to one line or paragraph and you have "labelled" selected? How would I create something like a style for "Book title" (which could be shown in italics)?
+
+## S9 · Find & replace strip
+
+Your approach looks good. Here shortcuts are needed to be explained, but in general I don't like those Key + explanations visible. Maybe a (?) which shows keys could help here. I like your filters, although they don't look as something to click and choose (just like that cycle "marks", I think I prefer a select box). All options must be clear: "Aa" I understand what it means, but at least when clicking it should be explained before choosing one. For pro users, regex would be nice. I'm sure there are libraries for that and another (?) would help much more there :-) regex101.com is a wonderful tool and it has a "Reference" section with basic knowledge about that.
+Does search goes advancing for the text as you type? What if you use backspace until there is nothing? Are you taken back to the original place? I'd expect that.
+If you click Esc, you get the cursor at place, I like it. Then Ctrl+F (or Ctrl+R?) again opens it with the same info. Hmm... Maybe a search box with Ctrl+F should be smaller, just like Chrome's. It could have additional advanced elements (Aa, etc.), but working as expected by default (accents, uppercase...). And instead Ctrl+R, which is what sometimes needs you to go to the text to adjust a special case is the one that keeps fields filled. Ctrl+F should be always clean when reopened and it can take all the screen width. Not sure how to add advanced search to the simple find box.
+I'm just thinking: let's suppose find is the long-width bar and includes all search options: Aa, regex...
+And replace is the same box but with a new line below with the replacing text. They can be switched with a "+" or arrow or whatever that expands the strip. Ctrl+F is always clean by default, while Ctrl+R keeps last searched info. Not sure, try to make it clear, please.
+
+## S10 · Book view
+
+I like the look. I understand it is like a "compiled" version and we need a previous setup step to get here. For example, many people will print their books in A4 or Letter, and the example you put looks more like a pocket book size, which is also very useful, because the final state of the book will probably be that one. At this point, page number should be exact, I think. Or it is just an approximation of the place where you are and not all book is computed? Now you put the "Back" button up :-)
+At this point, many things can be configured: "SEVEN" or "Chapter 7"? Which fonts? Which sizes? Styles, headers, footers, page numbering, front matter... I expect a previous step to configure all this (with different layouts and the ability to create new ones). This will be the more complex and "Word" part of the app, because the output must be detailed and the way the user wants it (or the editor asks it).
+
+## S11 · Cards view
+
+I like how it looks! What if someone doesn't want to use Acts and uses just groups of scenes and wants 7 groups?
+What happens when dragging? How Libreto reacts to moving things that break continuity?
+How do you get to Planner? Through Text/Book/Cards or through Just write/Reviser/Planner? What is the difference between these elements?
+
+## S12 · Setups chooser
+
+Now I understand it better, but not yet absolutely. Is at this point when Title, Author and basic information must be added, so the author does not need to do it later manually? For example, I can understand how to create a new Chapter (although how many ways exist to do that? A "+" button in the overview panel?), but how to create the front matter, which should also appear in the overview? If the user writes "John Smith" and clicks to the "Author" style, that text is put at the front of the book or where he put it? Or isn't Author even a style and Title and author (and subtitle and date, etc.) are set in a dialog and they are automatically configured for each type of document?
+Do we have templates for multiple document types? Are they configurable or we just choose a basic one for each one? I understand we then can configure output, but we could keep simple the basic data any document of a type should have.
+But I like this screen, it's quite clear, although some vocabulary may not be understood by a newcomer. And Bar could be "bottom Bar" or similar. Maybe some animations would help understand it better.
+Good the Language chooser, that makes AI and dictionaries work from the first time. What if the text contain mixed languages (not only foreign words but whole scenes or dialogs, directed to bilingual people)?
+I see a "Back" button. Which other steps should be?
