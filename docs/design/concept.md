@@ -29,7 +29,7 @@ Principles kept: blank page on a new project; `Esc` always returns to the text; 
 | Axis | Values | Switch with the mouse | Keyboard |
 |---|---|---|---|
 | **View** | Text · Cards · Book | Switcher at the bottom left of the status bar | `Ctrl+Shift+V` cycles; `Esc` in Cards or Book returns to Text |
-| **Workspace** | Just write · Planner · Reviser · Pro | Workspace name in the status bar | `Ctrl+K`, type the name |
+| **Workspace** | Write · Plan · Research · Review · Everything (§23) | Workspace name in the status bar | `Ctrl+K`, type the name |
 | **Focus** | on · off | Focus button at the right of the top strip; View ▸ Focus | `Ctrl+Shift+Enter`; `Esc` exits |
 | **Highlights** | checkboxes, any combination | Highlights menu in the status bar | `Ctrl+K`, "Highlight: Characters" |
 
@@ -189,7 +189,7 @@ A task is a note that asks for a decision. The Tasks tab lists them with one bad
 
 ### 6.1 Commands
 
-A **command** is anything Libreto can do, by name: "New chapter", "Workspace: Planner", "Highlight: Characters", "Open the Codex at Lena", "Export PDF", "Go to chapter 9". Menus run commands; Search & ask lists them when the typed text matches; the AI runs the same list, which is how it opens tabs and links to places. One list, three doors.
+A **command** is anything Libreto can do, by name: "New chapter", "Workspace: Plan", "Highlight: Characters", "Open the Codex at Lena", "Export PDF", "Go to chapter 9". Menus run commands; Search & ask lists them when the typed text matches; the AI runs the same list, which is how it opens tabs and links to places. One list, three doors.
 
 ### 6.2 Search & ask
 
@@ -364,7 +364,7 @@ The decision on whether to go further, in either direction, is the owner's (ques
 
 ## 18. Workspaces, Focus, start screen, accessibility
 
-**Workspaces** are presets of open areas, highlights and AI level, now with the Desk: Just write (nothing open), Planner (navigator, Desk on Codex), Reviser (navigator counts, notes column, Desk on Tasks), Pro (all, plus style labels and the prompt preview). "Reset workspace" in the Workspace menu returns to the preset.
+**Workspaces** are presets of open areas, highlights and AI level, named by the task: Write, Plan, Research, Review, Everything (table in §23.2). "Reset" in the Workspace menu returns to the preset.
 
 **Focus** hides everything but the text, with no word count; moving the mouse fades in Exit focus. **Start screen** as drawn; other project types (screenplay, essay collection) may need their own required fields, settled by a short research pass before v1. **Accessibility** as in draft 1: everything in menus and `Ctrl+K`, `F6` and `Esc`, names for screen readers, a high-contrast theme.
 
@@ -432,7 +432,74 @@ Not all features matter equally. Rough column: **v1** ships first; **later** wai
 10. Replace on `Ctrl+H` with `Ctrl+R` as an alias: fine?
 11. The v1 / later split in §20: anything to move?
 12. Djot round-trip test and Linux without the subscription path: still yes?
+13. Workspaces named by task (Write, Plan, Research, Review, Everything) instead of Just write, Planner, Reviser, Pro: yes?
+14. "Panels off" on `Ctrl+\` as the one way back to the page, besides Focus: yes?
+15. Research stored as Codex entries in the project's `research/` folder, no web browser inside Libreto in v1: fine?
+16. Should the AI search the web for research (costs tokens, needs a provider that can), or only read what the writer brings?
 
 ## 22. Specs needed later
 
 History engine (snapshots, sessions, diffs by paragraph id, Compare, restore) · Book layout, typography engine and export · Codex (extraction, aliases, relevance, minor entries, research, the window) · Auto-fix rules per language and the typed vocabulary · AI levels, providers, costs, logging and provenance · Search & ask, commands and retrieval · Chat (titles, history, retrieval of past chats) · Sharing and three-way compare · Help book and tutorials · Statistics · Storage (Djot and file layout).
+
+---
+
+## 23. Sessions and flows
+
+How a writer gets the screen ready for a task, moves around, and gets back to the page. Screens S25 to S28 show the extremes: everything open, panels off, and every menu open at once.
+
+### 23.1 Three gestures
+
+1. **Pick a workspace.** One click on the workspace name in the status bar, or `Ctrl+K` and its name. It sets the open areas, the Desk tab, the highlights and the AI level together. Workspaces are named by what the writer is about to do.
+2. **Adjust by hand.** The toggles at both ends of the strip (navigator, Desk), the Chat button, Highlights. When the layout no longer matches the preset, the workspace name shows a dot ("Write ·"); choosing the workspace again resets it.
+3. **Back to the page.** `Ctrl+\` (View ▸ Panels off) closes navigator, notes column, Desk and chat in one go and quiets the highlights; pressing it again restores exactly what was open. Focus (`Ctrl+Shift+Enter`) goes further and hides the strip and status bar. `Esc` only closes transient things (peeks, menus, the find strip) and returns the cursor to the page; it never closes a panel.
+
+Libreto reopens a project in the layout it was closed in. After six hours away the session briefing offers the next session as buttons, with what is waiting: *Write* (chapter 7, where you stopped) · *Review* (5 tasks) · *Research* (2 new clippings).
+
+### 23.2 Workspaces
+
+| Workspace | Navigator | Notes column | Desk | Chat | Highlights | AI |
+|---|---|---|---|---|---|---|
+| **Write** | closed | closed | closed | closed | spelling, auto-fixes | quiet (level 1) |
+| **Plan** | open | closed | Codex | closed | characters, places | level 2; Cards view one click away |
+| **Research** | open | closed | Codex on Research | open | characters, places, things | level 2 |
+| **Review** | open, with counts | open | Tasks | on demand | notes, tasks, auto-fixes | level 2 |
+| **Everything** | open, with counts | open | Codex | open | all, with style names | the writer's level |
+
+A writer who changes a workspace and likes it can choose "Save as Write" in the Workspace menu; "Reset" goes back to Libreto's preset.
+
+### 23.3 A writing session
+
+1. Open the project: the cursor is where it was, in Write.
+2. Write. Unknown names, typos and doubtful commas get quiet marks; nothing interrupts.
+3. A doubt about a character: hover the name for a peek; "Open full card" opens the Desk on the Codex beside the page. `Alt+3` closes it again.
+4. A thought for later: `Ctrl+Alt+M` adds a note at the paragraph without leaving the sentence.
+5. Moving: the breadcrumb for the chapter or scene, `Alt+1` for the navigator, `Ctrl+K` "go to 9", `Alt+←` to come back.
+6. Close the window. The session is saved with its time and words; History lists it.
+
+### 23.4 A research session
+
+**Where research lives.** In the project, as **Research entries** in the Codex: a title, the writer's own notes, the sources (images, PDFs, web links, quoted passages) and links to people, places, things and chapters. On disk, the project's `research/` folder holds one Markdown file per entry plus its files (storage, R-43), so research travels and backs up with the book. It is never part of the manuscript, its word count or its export.
+
+1. Choose Research. The Desk opens on Codex ▸ Research, the chat below it.
+2. Bring material in. Drag a file, an image or a link onto the Codex, or onto a name in the text to link it at once ("photo of the Blue Lamp's bar" onto *Blue Lamp*). Or Insert ▸ Research…. Or paste a link in the chat and ask "keep this": the AI makes an entry with a summary and the source.
+3. Pin facts. Select a passage in a clipping and choose "Pin as fact"; it shows on the entry's card and in continuity checks.
+4. Use it while writing. Hovering a place shows its research picture in the peek; Search & ask finds text inside research; chat answers cite the entries they used.
+5. Not in v1: a web browser inside Libreto. Links open in the system browser; dragging a page back makes an entry.
+
+### 23.5 A review session
+
+1. Choose Review. The navigator shows note and task counts per chapter, the notes column sits beside the text, the Desk is on Tasks.
+2. Optionally ask for a pass: AI ▸ Review this chapter. Findings arrive as tasks in the list, never as edits.
+3. "Review all" walks the list one item at a time: the page scrolls to each, Enter accepts or resolves, Tab skips. Proposed text appears as a choice block with Apply.
+4. Work from an editor: File ▸ Send to an editor, later receive their copy and compare (S21).
+5. Done when the counts reach zero; History records "Review · 14 tasks".
+
+### 23.6 Changes this round
+
+- Workspaces renamed by task and **Research** added: five presets instead of four.
+- **Panels off** (`Ctrl+\`) as the one key back to the page; `Esc` never closes panels.
+- A dot on the workspace name when the layout differs from the preset; "Save as …" per workspace.
+- **Seven menus**: the Project menu is gone (settings and export to File, statistics to View).
+- Paste as plain text is `Ctrl+Alt+V`, because `Ctrl+Shift+V` cycles the views.
+- The session briefing offers the next session as buttons.
+- Research entries: storage and the ways to add them defined (§23.4).
