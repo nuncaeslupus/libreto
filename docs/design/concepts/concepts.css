@@ -374,3 +374,8 @@ mark{background:none;color:inherit;font-weight:600}
 .dark .inp,.dark .opt,.dark .btn{background:#26272a;color:var(--ink)}
 .dark .btn.pri{background:var(--accent);color:#14161a}
 .dark .rd,.dark .cb{background:#26272a}
+/* draft 3: modes in the strip, breadcrumb at the left */
+.strip .crumbs{position:static;transform:none;max-width:330px;justify-content:flex-start;margin-left:10px;height:auto}
+.modes{position:absolute;left:50%;top:6px;transform:translateX(-50%);display:flex;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px;font-size:12.5px;z-index:3}
+.modes span{padding:3px 15px;border-radius:6px;color:var(--ink2)}
+.modes .on{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.1)}
