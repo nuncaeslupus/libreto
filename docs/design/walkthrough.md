@@ -1,8 +1,8 @@
-# Libreto, a walk through the window (concept draft 4)
+# Libreto, a walk through the window (concept draft 5)
 
 Status: **for annotation.** One document, in the order a writer who has never seen Libreto would meet things. Before each screen, a short paragraph says how you get there, what it is for and what it lets you do; then the picture. Not a guide and not a specification. The pictures are in `concepts-d4/`; the review page puts a note field under each one.
 
-Draft 4 answers the draft 3 notes by taking things away. The list of what changed, and why, is at the end, with the open questions.
+Draft 5 answers the notes on draft 4 (screens 1 to 8 so far) and keeps draft 4's answers to the draft 3 notes. What changed, and why, is at the end, with the open questions.
 
 ## Libreto in one minute
 
@@ -10,19 +10,20 @@ Libreto is a writing app for books. Its window is a **page in the middle**, with
 
 The AI has **one door**: the round **Ask** button at the bottom right of the window, or `Ctrl+K`. The same box finds a chapter, looks up a name, runs a command ("export PDF") and asks a question about the book; when the question needs the AI, the box becomes a conversation. The AI can do anything you can do in Libreto, but it never changes your text, your chapters or your cards without a button you click first. When no AI is connected, the button is gray and the box still finds, looks up and runs commands.
 
-Five rules hold everywhere:
+Six rules hold everywhere:
 
 1. **The page never moves.** Columns open in the margins; the text stays centered.
 2. **One family of marks.** Red, blue and green underlines on the exact characters; small icons in the right gutter at the exact line; the same icons count in the chapter list, in the Review list and in the Highlights menu.
 3. **One way back.** `Esc` closes whatever just opened and returns the cursor to the text; `Back` (`Alt+←`) returns from any jump, across modes too; `Ctrl+Shift+H` hides both columns and brings them back.
 4. **Nothing replaces your words unasked.** Fixes while you type are small, green and undoable; everything else arrives as a proposal with buttons.
 5. **Keys that exist on every keyboard.** Letters, digits, F-keys and Enter with `Ctrl`, `Shift` and `Alt`; no brackets, slashes or backslashes.
+6. **One Undo, one notice.** Everything that changes the text, yours or Libreto's, is one list: `Ctrl+Z`, the Undo on a notice and the ✗ on a card are the same step. A notice is a card at the bottom of the page, never on a timer, and a line in History.
 
 | Mode | Left | Center | Right | What it is for |
 |---|---|---|---|---|
 | Write | chapters (optional) | the text | Reference (optional) | writing; the default |
-| Plan | chapters (optional) | cards, full width | Reference (optional) | seeing and reordering scenes |
-| Research | your library: the Codex and your topics | a topic or a Codex entry, large | what it links to | gathering and sorting material |
+| Plan | none | cards, the whole window | the clicked card's detail, beside it | seeing and reordering scenes |
+| Research | your library: the Codex (what the book says) above your topics (what you gather) | a topic or a Codex entry, large | what it links to | gathering and sorting material |
 | Review | chapters with counts and filters | the text, margin open | notes beside their lines | the second pass |
 | Book | page thumbnails | spreads | layout settings | printing and exporting |
 
@@ -30,43 +31,59 @@ History, Compare, Statistics and Help are not modes: they open **over** the wind
 
 ## s01-start: Start
 
-When Libreto opens with no book, it asks for the least it can: a title and where to keep the book. The point of the screen is the sentence under the location: it names the **exact folder Libreto will create**, so there is no doubt whether a folder is made inside the one you chose. It always is: one folder per book, named after the title, inside the location; everything about the book (text, notes, research, history) lives in it. "Documents/Libreto" is the default and is marked recommended (on a Spanish system it reads "Documentos/Libreto"); "Change…" picks another place and the sentence updates. Recent books open with one click; "Import a Word file" turns a manuscript's headings into chapters.
+When Libreto opens with no book, it asks for the least it can: a title, what kind of text it is, and where to keep it. The **kind of text** is a row of plain choices (Novel · Novel without parts · Short story · Play · Essay · Plain text) and each one is only a set of names for up to three structure levels: a novel has parts, chapters and scenes; a play has acts and scenes; a short story has scenes; plain text has none. Those names are then used everywhere (the left list, the Insert menu, the Plan lanes, the printed book), and a book can gain or lose a level later from the Insert menu, so the choice is a start, not a cage.
+
+Under the location there is no sentence to parse anymore. A label, **"Will be stored in"**, and under it the **full path on one line**, growing as you type the title; characters a folder cannot hold are dropped from the folder name as you type (the title keeps them). The line under that is always there: one folder per book, inside it the text as plain Markdown files, one per chapter, readable in any editor without Libreto; notes, research and history in their own subfolders. "Documents/Libreto" is the default (on a Spanish system it reads "Documentos/Libreto"); "Change…" picks another place and the path updates.
+
+Each book gets a **cover tile**: a colored square with the title's initial by default, a picture if you drop one, or a small sketch from the AI when one is connected ("Sketch a cover" under the tile). The tile shows here, in the recent books, and on the Book mode's title page until a real cover replaces it. Recent books open with one click; "Import a Word file" turns a manuscript's headings into chapters.
 
 ## s02-write-first-minute: Write, the first minute
 
-A new book opens on an empty page in Write mode, both columns closed. The top strip has the column toggles at its two ends, Back, Forward, Undo and Redo, where you are in the book, and the five modes in the middle. The status bar shows the style at the cursor (in its own look), the words, the page this would be in the printed book, and how many small fixes Libreto made. The round **Ask** button at the bottom right is the AI's door; its tooltip says `Ctrl+K`.
+A new book opens on its first chapter in Write mode, both columns closed. The heading reads "Chapter 1" in gray: a placeholder, since a numbered chapter needs no title, and typing replaces it. The top strip has the left toggle, Back, Forward, Undo and Redo, then **where you are** (chapter › scene, each a menu of its siblings) with all the room it needs, and at the right end the five **modes** as a pill, next to the right toggle. The pill is the same width everywhere, so the eye learns its place; the breadcrumb grows and shrinks beside it, and on a narrow laptop with a large font it is the breadcrumb that gives way, never the modes. The status bar shows the style at the cursor (in its own look), the words, the page this would be in the printed book, and how many small fixes Libreto made; **every item that opens a menu looks like it does**, with a soft background and a small ▾. The round **Ask** button at the bottom right is the AI's door; its tooltip says `Ctrl+K`.
 
-The marks are the thing to look at. Three underline colors, always on the exact characters: **red** dotted for a spelling suggestion ("recieved"), **blue** dotted for grammar or punctuation Libreto is not sure about, **green** dotted for a change it already made ("teh" became "the"; a comma was added, and the underline sits under the comma itself, two characters wide so you can find it). Hovering a green mark says what was there; a click undoes it. In the right gutter, a small green tick sits at the line of each fix. Nothing else is on the screen: no toolbar, no panel, no hint text.
+The marks are the thing to look at. Three underline colors, always on the exact characters: **red** dotted for a word Libreto does not know and cannot fix alone, **blue** dotted for grammar or punctuation it proposes, **green** dotted for a change it already made. The rule for what gets done without asking is short: **Libreto changes by itself only what has one possible answer and does not touch meaning**: a word that is not a word with exactly one correction one slip away ("teh", "recieved", a doubled letter, a missing apostrophe), a space before a comma, a double space, straight quotes to curly. Two possible answers ("quite" or "quiet" are both words), agreement ("the letters was"), anything longer than a word: proposed, in blue. When a fix happens, the red underline fades to green in under half a second and the icon appears in the gutter; the text never moves. In the right gutter, **one icon per line**, with a small count when a line holds several.
+
+**Hovering any mark**, or resting the cursor inside it and pressing `Ctrl+.`, opens the same small card everywhere: a title that says what happened ("Fixed · typo", "Proposed · grammar"), **Was** and **Now**, and two buttons, ✓ and ✗ (`Enter` and `Delete` while the card is open; `Esc` closes it). `F8` and `Shift+F8` jump to the next and previous mark. A grammar proposal is **one underline under the whole affected text**, never two underlines for one problem. One word carries one underline: red before blue (spelling is settled before grammar is judged), blue before green (an open proposal shows over a done fix); the gutter icon still counts both.
 
 ## s03-marks-up-close: The marks, up close
 
-Not a moment in the app: the family of marks at twice the size, so the rules can be checked once. Underlines: red = spelling, blue = grammar, green = done by Libreto; a **dashed gray** underline or rule = something Libreto proposes but has not done (a detected chapter heading, a detected scene). Gutter icons at the exact line: an amber **note**, a blue **task**, a green **fix**; several on one line stack sideways, three at most and then "+2". The same icons, with numbers, count notes and tasks beside each chapter on the left, label the filter chips in Review, and sit beside the checkboxes of the Highlights menu. The rule to remember: **dotted green is done, dashed gray is proposed, icons in the gutter are things to look at.**
+Not a moment in the app: the family of marks at twice the size, so the rules can be checked once. Underlines: red = unknown word, blue = proposed, green = done by Libreto; a **dashed gray** underline or rule = structure Libreto proposes but has not made (a detected chapter heading, a detected scene break). Nothing exists until you keep it: a proposed heading stays an ordinary paragraph, and only "Keep" styles it as a heading and starts the chapter file at the next save. Gutter icons at the exact line: an amber **note**, a blue **task**, a green **fix**, a dashed gray **proposal**; one icon per line, with a count when a line holds several. **Clicking a count** opens the stack as a list card: one row per mark, Was → Now, ✓ and ✗, `Enter` walking down the rows. Red marks have no gutter icon: they are the one mark you fix by typing, and their card offers the candidates ("Did you mean…") and "Add to the book's words", which makes a Codex entry. In Review they do appear, as a **Spelling** filter and in the walker.
+
+The same icons, with numbers, count notes and tasks beside each chapter on the left, label the filter chips in Review, and sit beside the checkboxes of the Highlights menu. Review filters by **people, not roles**: You · Marta · AI. Names come from sharing (you name the reader when you send a copy, and the notes that come back carry that name), Word comments bring their author, and anything unnamed is "A reader", renameable; the AI never guesses who someone is. The rule to remember: **dotted green is done, dashed gray is proposed, icons in the gutter are things to look at, and every one of them opens the same card.**
 
 ## s04-welcome-back: Coming back
 
-Libreto reopens exactly as you left it: same mode, same chapter, same columns, the cursor where it was. No dialog asks what you want to do. Instead, a line at the bottom of the window says for a few seconds where things stand: when you last wrote, what is waiting (cards not placed, clippings in the Inbox, notes to review). Clicking it opens Ask with the same summary and a button for each item; ignoring it costs nothing. It can be turned off in Settings.
+Libreto reopens exactly as you left it: same mode, same chapter, same columns, the cursor where it was. No dialog asks what you want to do. Instead a **notice card** at the bottom of the page says where things stand: when you last wrote, what is waiting (cards not placed, clippings in the Inbox, notes to review), with a button for each. It is on no timer: it stays until you type or click elsewhere, and then **slides into the Ask button**, so you see where it went. From then on, "Where you left off" is the first item in Ask's clock menu, the top suggestion in an empty Ask box, and the first row in History; nothing seen late is lost. The card can be turned off in Settings.
 
 ## s05-chapters: Chapters, on the left
 
-Open the left column with the icon at the top left or `Ctrl+Shift+L`. It lists parts, chapters and scenes. Scenes are indented under their chapter with a thin guide line and lighter text, **no bullets**, so nothing on this list looks like a mark. Beside each chapter, the same gutter icons count what is waiting there ("2 notes · 1 task"), capped at 99+. One click peeks at a chapter without leaving your place; a double click goes there; `Back` returns. The filter box at the top matches **titles and text**, so "lena" shows every chapter where she appears, with a count. The breadcrumb in the strip names the chapter and the scene, each a menu of its siblings; parts live only in this list.
+Open the left column with the icon at the top left or `Ctrl+Shift+L`. It lists the structure levels by the names your kind of text gave them: parts, chapters and scenes for a novel. Scenes are indented under their chapter with a thin guide line and lighter text, **no bullets**, so nothing on this list looks like a mark. Beside each chapter, the same gutter icons count the notes and tasks waiting there, capped at 99+ (the exact number is a hover away; word counts live on the Plan cards, in Statistics and in the same tooltip). One click peeks at a chapter without leaving your place; a double click goes there; `Back` returns. The filter box at the top matches **titles and text**, so "lena" shows every chapter where she appears, with a count, and the matched letters in a title are highlighted. Nothing finer is offered here: Find (`Ctrl+F`) and Ask do the rest.
 
-Adding is meant to need no key: the **"+ New chapter"** button at the bottom of the list (after the current chapter, with the cursor in its heading), a right click on any row ("New chapter before / after", "New part", "Rename", "Delete chapter…"), the **Insert** menu, or simply typing "Chapter 8" on its own line. `Ctrl+Enter` does the same from the keyboard: a heading "Chapter 8" appears at the cursor, waiting for a title; the text after the cursor becomes the new chapter's first paragraph, and Undo puts it back.
+Every row has a right-click menu for its level. A **chapter**: New chapter before / after, New part before / after, Rename, Remove the chapter mark (the text joins the previous chapter), Delete chapter…. A **scene**: Rename, Start a new chapter here, Remove the scene break, Delete scene…. A **part**: New part before / after, Rename, Remove the part mark (its chapters stay). Removing a mark never deletes text, asks nothing, and has Undo; deleting does ask, in words that mean something: "Delete the scene 'Vega asks about Kit'? 1,300 words, about 5 pages, go to History." Cutting text from one chapter and pasting it into another is allowed, scene break lines included, and nothing interrupts the paste; if the AI later finds the timeline broken, that is a task in the margin, not a dialog.
+
+**"+ New chapter"** at the bottom adds one after the current chapter, with the cursor in its heading and a notice that says where it went. The same from the Insert menu, from `Ctrl+Enter` (the text after the cursor becomes the new chapter's first paragraph), or by typing "Chapter 8" on its own line. **Dragging a row does not move it**: a small sign under the pointer says "Moving happens in Plan", the Plan mode lights up in the strip while the rest dims, and clicking the sign opens Plan with that chapter's card selected. Structure can grow later: adding the first part puts every chapter in "Part One", and removing the part level keeps the chapters. **Front matter** is the first row of the list, with a title page, a dedication and an epigraph as styles inside it, printed only if filled; **Back matter** closes the list the same way.
 
 ## s06-scene-breaks: Scene breaks, typed and detected
 
-Typing `***` on its own line makes a scene break, drawn as a soft gray rule. When the time or place jumps without one, Libreto proposes a break with a **dashed** rule, the same dashed look as any other proposal: nothing changes until you click it and choose "Keep" or "Not a scene". A detected chapter heading looks the same way: dashed underline, two choices. The chapter list shows detected scenes in lighter text until they are kept.
+A line that holds only a repeated symbol (`***`, `* * *`, `---`, `~`, a single `*` or `-`, any length) becomes a scene break, drawn as a soft gray rule, with a notice ("Scene break · Undo") for the time you meant the character itself. On disk it is a `***` line in the chapter's Markdown file. When the time or place jumps without a break, Libreto proposes one with a **dashed** rule and a dashed icon in the gutter, and the card is the usual one: "Proposed · scene break", Keep or Not a scene. A detected chapter heading looks the same way. The chapter list shows detected scenes in lighter text until they are kept, named by the AI when one is connected (and marked so) and by their first words in gray when not.
 
-Removing a break is as plain as removing a character: `Backspace` or `Delete` with the cursor next to it, or a click on the rule and "Remove". The two scenes merge, the row fades out of the list, and a line at the bottom says "Scene break removed · Undo" for a few seconds. Insert ▸ Scene break (`Ctrl+Shift+Enter`) and right-click ▸ "Scene break here" add one without typing.
+A scene break is a block like a paragraph: a click selects it with the same selection color, it is copied, cut and pasted as its `***` line, `Backspace` or `Delete` removes it, and right-click offers "Remove scene break" and "Name this scene…". Insert ▸ Scene break (`Ctrl+Shift+Enter`) puts one at the cursor, in the middle of a sentence if that is where the cursor is, and Undo joins the halves again.
+
+Removing a break merges two scenes, the row fades out of the list and a notice says "Scene break removed · Undo". **Notices are one thing in the whole app**: a card at the bottom center of the page, never on a timer, folding away when you move on, and each one is a line in History's Today list with its Undo. **Undo is one list**: everything that changes the text, yours or Libreto's, goes on it, and the Undo on a notice, the ✗ on a card and `Ctrl+Z` are the same step. Tips use the same card: when Libreto sees you retype what a fix changed, or delete a detected break by hand twice, it offers one tip a day at most ("Undo a fix with Ctrl+Z or the ✗ on its card · Show me · Not this one again"); the tips are a fixed list of recognizable habits, need no AI, live in Help ▸ Tips, and have a switch in Settings.
 
 ## s07-styles: Styles
 
-A style says **what** a piece of text is (a thought, a letter, a sign on a door, a chapter heading), not how it looks. The look is chosen later, per book, in Book; on the page every style still shows a plain working look so you can see it: a thought is italic, a sign is small caps. Highlights can add a tint and a name in the margin on top of that, but a book title is in italics whether highlights are on or off.
+A style says **what** a piece of text is (a thought, a letter, a sign on a door, a chapter heading), not how it looks. The look is chosen later, per book, in Book; on the page every style still shows a plain working look so you can see it: a thought is italic, a sign is small caps. A **chapter** is a container, the file on disk; its **heading** is the chapter's first line in the Chapter heading style, and a chapter without one shows its number in gray, in Write and as the divider in the whole-book view. That is also why applying "Chapter heading" to a paragraph in the middle of a chapter **starts a new chapter there**, with a notice and Undo: a heading is where a chapter begins.
 
-The chip at the bottom left always shows the style at the cursor, written in that style's look. Click it, press `Ctrl+T`, or right-click ▸ "Style as" for the palette: a short list with a filter box, headed "What is this text?". The same list in all three places. A scene break is not a style: it is structure, and lives in Insert with chapters and parts.
+The chip at the bottom left always shows the style at the cursor, written in that style's look. Click it, press `Ctrl+T`, or right-click ▸ "Style as" for the palette: the style names in the ordinary interface font, each with a short sample in its own look at the right, so the list reads as a list and the looks stay visible; a filter box on top, "+ New style…" at the bottom (a name and what it is based on). With the cursor in a paragraph and no selection, a paragraph style takes the whole paragraph, a text style (Emphasis, Thought, Foreign) takes the word under the cursor or, at the end of a word, what you type next. Every menu in Libreto, this one included, walks with the arrows and `Enter`, and typing filters it; icons appear in menus only where the same icon exists elsewhere in the app, so the menu teaches the icon. A scene break is not a style but structure: it lives in Insert, in the right-click menu next to "New chapter here", and under `Ctrl+Shift+Enter`.
+
+When something is wrong by Libreto's own rules (a forty-word heading, two headings in a row), it becomes a task in the margin without any AI; "AI: review this chapter" adds the AI's findings the same way, as tasks, chapter by chapter in the background with a line in the status bar ("Reviewing 7 of 11 · Stop"), and the Review list counts them as they arrive.
 
 ## s08-ask-type: Ask: type and go
 
-`Ctrl+K`, or a click on the round button, opens **Ask** at the bottom right: one box for everything. As you type, results appear above the box in five short groups: **Go to** (a chapter or scene), **Look up** (a person, place, thing or research topic, opened in the Reference panel), **Do** (a command, such as "Export PDF" or "Highlight characters"), **In the text** (hits for the typed words, with "Open Find" to walk through them), and **Ask** (the typed text as a question, plus one or two questions Libreto builds from the book). The best match is preselected, so `Enter` on "chapter 9" simply goes there and `Back` returns; `Tab` moves down the list; `Esc` closes the box and puts the cursor back in the text. Commands are the app's own menu items and actions, found by their words; there is nothing to learn and no slash. Without an AI, the Ask group is gray and says so; everything else works.
+`Ctrl+K`, or a click on the round button, opens **Ask** at the bottom right: one box for everything. As you type, results appear above the box in five short groups: **Go to** (a chapter or scene), **Look up** (a person, place, thing or research topic, opened in the Reference panel), **Do** (a command, such as "Export PDF" or "Highlight people"), **In the text** (hits for the typed words, with "Open Find" to walk through them), and **Ask** (the typed text as a question, plus one or two questions Libreto builds from the book). `Enter` on the preselected row acts and `Back` returns; `Tab` moves down the list; `Esc` closes the box and puts the cursor back in the text.
+
+**No AI is involved while you type.** The groups come from Libreto's index: chapter and scene titles, Codex names, topic titles, the commands with a few words each ("rename", "highlight", "export"), and the text itself. The order is fixed and plain: an exact name before a prefix before a part of a word, the current chapter first, what you used recently first; the best match is the top row of the first group that has one, so there is no guessing to explain. Each group shows three rows and "4 more…" when there are more. The Ask group appears only when an AI is connected; its questions are templates filled with the name you typed, ready before you ask, and the AI runs only when you press `Enter` there. The same answer goes for the Codex: names, mentions, first appearances and counts are computed; a capitalized name that appears three times is proposed as an entry for you to keep; what the AI adds (facts from the text, summaries, open questions) is marked as the AI's. There is no small model on the device in version 1: the list stays instant and predictable, and an on-device model can come later as a choice in Settings for scene names and checks.
 
 ## s09-ask-chat: Ask: a conversation
 
@@ -160,11 +177,46 @@ A sheet from the word count in the status bar or View ▸ Statistics: words per 
 
 ## s29-inventory: Everything in the status bar and the menus
 
-Not a moment: the status bar menus and the seven menus opened together, to see what lives where after the changes. The style palette has a filter; Highlights lists people, places, things, motifs, styles, notes, tasks, fixes and AI-written text; the zoom menu has "Fit width"; History rows are links. File has Share…; View has Focus (`F11`), Panels (`Ctrl+Shift+H`) and Statistics; `Ctrl+0` resets zoom.
+Not a moment: the status bar menus and the seven menus opened together, to see what lives where after the changes. The style palette has a filter; the view item offers By chapter and Whole book (S32); Highlights lists people, places, things, motifs, styles, notes, tasks, fixes and AI-written text; the zoom menu has "Fit width"; History rows are links. File has Share…; View has Focus (`F11`), Panels (`Ctrl+Shift+H`) and Statistics; `Ctrl+0` resets zoom.
 
 ## s30-window-sizes: Three window sizes
 
 How the window adapts. At **1440 px** and above, both columns fit in the margins. Between **1200 and 1440**, one column at a time; opening the other closes the first. Below **1200**, the open column lies over the margin and the edge of the page, and the page stays put; below about 900 the page itself narrows. The Ask panel keeps its width and shortens.
+
+## s31-right-click: Right-click, everywhere
+
+Not a moment in the app: the right-click menus side by side, so they can be checked as one family. The rule is the same for all of them: **the few things done here most often, then the way to the rest.** In the text with a selection: Style as ▸, Emphasis, Thought, Add note, Ask about this, Look up (when the selection is a name), Find in the book, Cut / Copy / Paste. In the text with no selection: Style as ▸, New chapter here, Scene break here, Add note, Ask, Paste. On a mark or its gutter icon: ✓ Keep, ✗ Undo, Add note, "Why?" (the AI explains a proposal), Ignore this word (for a red mark). On a chapter row: New chapter before / after, New part before / after, Rename, Remove the chapter mark, Delete chapter…; on a scene row: Rename, Start a new chapter here, Remove the scene break, Delete scene…. On a Plan card: Open, Rename, Labels ▸, Move to ▸ (chapter list), Unplace, Delete…. On a Codex entry: Open, Rename everywhere, Highlight in the text, Research this, Delete…. Every menu walks with the arrows and `Enter`, typing filters it, `Esc` closes it; the only icons are the ones the app already uses for marks and modes.
+
+## s32-chapter-or-book: By chapter, or the whole book
+
+The page can hold one chapter or the whole book, and the switch is the **"By chapter ▾"** item at the right of the status bar, next to Highlights. **By chapter** is the default: the page is one chapter, and at its end a gray line reads "Next · 8 Closing time ↓" (at the top, "Previous · 6 The back room ↑"). Clicking it goes there; so does the cursor: the down arrow on the last line, or `Page Down` at the end, crosses into the next chapter's first line, the up arrow on the first line crosses to the end of the previous one, and `Ctrl+Page Down` / `Ctrl+Page Up` jump a whole chapter from anywhere. **Whole book** shows every chapter on one long page, each heading as a divider with its part above it when parts exist; the chapter list follows the scroll and highlights where you are, a double click on a row scrolls there, and the status bar still counts the chapter under the cursor. Either way the marks, the notes and the Reference panel behave the same; the switch is remembered per book. `Back` returns from any jump.
+
+## s33-notices-and-undo: Notices, Undo and tips
+
+Not a moment in the app: the one way Libreto tells you something changed, and the one way back. Every automatic change and every notice is the same **card at the bottom center of the page**: an icon, one line that names the place ("Scene break removed in ch. 7"), **Undo**, and ✕. It is never on a timer: it folds away when you type or click elsewhere, and it remains as a line in **History ▸ Today**, each line with its own Undo, so a notice seen late is a notice, not a loss. **Undo is one list.** Your typing, Libreto's fixes, a kept proposal, a deleted scene, a move applied in Plan, a change the AI applied: all on the same stack, so `Ctrl+Z`, the Undo on the notice and the ✗ on a mark's card are the same step, in the same order, and Redo brings it back. The fixes item in the status bar lists today's fixes with Keep / Undo and "Undo all"; History holds the snapshots for anything bigger, such as a chapter deleted last week. **Tips** use the same card, one a day at most, and only when Libreto recognizes a habit from a fixed list (retyping what a fix changed, removing detected breaks by hand, reaching for the mouse for something with a key): "Show me" demonstrates, "Not this one again" is remembered, Help ▸ Tips lists them all, and Settings has the switch.
+
+## What changed in draft 5, and why
+
+Everything below answers the notes on draft 4 for screens 1 to 8; screens 9 to 30 are unchanged apart from the strip, the status bar and the notice card.
+
+- **Modes at the right of the strip.** The breadcrumb needs room on laptops with large fonts and the two cannot both be centered; the pill at a fixed right edge is where design tools put their mode switch, and the breadcrumb owns the left. One line, no second row.
+- **Status bar items look clickable**: a soft background and a ▾ on every item that opens a menu. A hint alone was not enough.
+- **One card for every mark**, on hover or `Ctrl+.`: what happened, Was / Now, ✓ ✗ with `Enter` / `Delete`; `F8` walks the marks. The same card is the margin card in Review.
+- **The fix rule is written down**: one possible answer and no meaning touched; "recieved" is fixed, "quite / quiet" is proposed. A fix fades red to green and never moves the text.
+- **One underline per problem, one underline per word**, red before blue before green; one gutter icon per line with a count; a count opens the stack as a list.
+- **Red marks** have no icon in Write and a Spelling filter in Review; their card offers candidates and "Add to the book's words".
+- **Review filters by people**, named when you share; the AI never guesses who a reader is.
+- **The welcome line is a card**, on no timer, that slides into the Ask button and stays reachable there and in History.
+- **Kind of text at Start** sets the names of up to three structure levels (parts / chapters / scenes, acts / scenes, nothing); a book can gain or lose a level later. Front matter and Back matter are rows in the list.
+- **Start shows the full path on one line** under "Will be stored in", cleaned as you type, and a cover tile per book.
+- **Right-click menus per level and per place**, written out in S31; removing a mark never deletes text and never asks, deleting asks in words and pages.
+- **Dragging in the chapter list points to Plan** instead of moving; cutting and pasting across chapters is free and any coherence problem becomes a task later.
+- **Scene breaks** from any repeated symbol, with Undo; the break is a selectable block; a proposed break is a mark like any other, with the usual card; detected scenes are named by first words without an AI.
+- **By chapter or Whole book** (S32), with a gray Next / Previous line and cursor crossing; `Ctrl+Page Down` jumps a chapter.
+- **One notice, one Undo** (S33): the card at the bottom, History ▸ Today, one stack for everything, tips through the same card.
+- **A chapter heading starts a chapter**: applying the style mid-chapter splits there. The style palette reads as a list (names in the interface font, samples at the right), with "+ New style…".
+- **Ask needs no AI while you type**: index, fixed order, three rows per group; questions are templates; no on-device model in version 1. The Codex is kept by the writer, by rules (names, mentions, counts, proposed entries) and, when connected, by the AI, marked as such.
+- **On disk**: Markdown, one file per chapter, `***` for a scene break, readable without Libreto; said in S01 and S06.
 
 ## What changed in draft 4, and why
 
@@ -186,15 +238,26 @@ How the window adapts. At **1440 px** and above, both columns fit in the margins
 
 ## Questions
 
+Open from draft 4 (screens 9 to 30 are still unread):
+
 1. "Ask" as the name of the single door (button and `Ctrl+K`)? Alternatives: Assistant, Chat, the provider's name.
 2. Keep Review as a mode (same page, margin open), or make it a switch inside Write?
 3. The Reference panel without tabs and without its own search box: yes?
 4. Research mode as the library with two sections, Codex and Research: right split, right names?
 5. Keys: `Ctrl+Shift+H` panels, `F11` Focus, `Ctrl+Enter` chapter, `Ctrl+Shift+Enter` scene break, `Ctrl+Shift+P` Plain: fine?
-6. Marks: red/blue/green underlines and note/task/fix icons as drawn: fine?
-7. No "what now" dialog, a line at the bottom instead: yes?
-8. "Styles" as the word, with "What is this text?" as the palette's title, or another word?
-9. Hold `Alt` kept, with `Ctrl+Shift+A` as the alternative?
-10. One color per card plus "Color by": enough for planning?
-11. The chat floating only, docking later: yes?
-12. Pictures in the manuscript (figures) in v1?
+6. "Styles" as the word, with "What is this text?" as the palette's title, or another word?
+7. Hold `Alt` kept, with `Ctrl+Shift+A` as the alternative?
+8. One color per card plus "Color by": enough for planning?
+9. The chat floating only, docking later: yes?
+10. Pictures in the manuscript (figures) in version 1?
+
+New in draft 5:
+
+11. Modes at the right of the strip: acceptable, or would you rather lose Undo / Redo from the strip and keep the pill centered?
+12. The mark card's keys: `Ctrl+.` to open, `Enter` ✓, `Delete` ✗, `F8` next mark. Fine on your keyboard?
+13. Dragging in the chapter list only points to Plan. Too strict, or right?
+14. Kinds of text at Start: Novel, Novel without parts, Short story, Play, Essay, Plain text. Missing one? Should a book be able to change kind later, or only gain and lose levels?
+15. The "By chapter / Whole book" switch at the right of the status bar, next to Highlights, rather than centered: fine?
+16. The cover tile: colored initial by default, a picture if dropped, an AI sketch on request. Worth having in version 1?
+17. Tips: one a day at most, from a fixed list of habits, with "Not this one again". Enough, or still intrusive?
+18. No on-device model in version 1: the Ask list and the Codex upkeep run on the index and rules alone, the AI only when connected. Agreed?

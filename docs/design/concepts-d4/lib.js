@@ -30,6 +30,7 @@ const icons = {
   fix: S('<circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/>', { sw: 1.6 }),
   pen: S('<path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/>', { w: 14, vb: '0 0 16 16' }),
   clock: S('<circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/>', { w: 14, vb: '0 0 16 16' }),
+  view: S('<rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M5.5 6h5M5.5 9h5M5.5 12h3"/>', { w: 14, vb: '0 0 16 16' }),
   magnifier: S('<circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/>', { w: 14, vb: '0 0 16 16', sw: 1.6 }),
   plus: S('<path d="M8 3v10M3 8h10"/>', { w: 14, vb: '0 0 16 16', sw: 1.6 }),
   'history-list': S('<circle cx="5" cy="5" r="3.2"/><path d="M5 3.4V5l1 .7"/><path d="M10 4h4M10 8h4M3 12h11"/>', { w: 15, vb: '0 0 16 16', sw: 1.4 }),
@@ -65,8 +66,8 @@ function strip(o = {}) {
     + ib('undo', on(o.undo, true) ? '' : 'off') + ib('redo', on(o.redo, false) ? '' : 'off')
     + `<span class="gap"></span>`
     + crumbsHtml(o.crumbs)
-    + `<span class="modes">${MODES.map((m) => `<span${m === mode ? ' class="on"' : ''}>${m}</span>`).join('')}</span>`
-    + `<span class="right">${ib(o.rightOn ? 'sidebar-right-on' : 'sidebar-right', 'tog' + (o.rightOn ? ' on' : ''))}</span>`
+    + `<span class="right"><span class="modes">${MODES.map((m) => `<span${m === mode ? ' class="on"' : ''}>${m}</span>`).join('')}</span>`
+    + ib(o.rightOn ? 'sidebar-right-on' : 'sidebar-right', 'tog' + (o.rightOn ? ' on' : '')) + `</span>`
     + `</div>`;
 }
 
@@ -107,15 +108,16 @@ function statusBar(o = {}) {
   const zoom = o.zoom === undefined ? 100 : o.zoom;
   const knob = Math.min(100, Math.max(0, (zoom - 50) / 150 * 100));
   let h = `<div class="status">`;
-  if (o.style !== false) h += `<span class="sb"><span class="chipst${look}">${icons.style}${esc(o.style || 'Plain')}<span class="dd" style="margin-left:-2px"></span></span></span>`;
-  if (o.words) h += `<span class="sb">${esc(o.words)}</span>`;
-  if (o.pages) h += `<span class="sb">${esc(o.pages)}</span>`;
-  if (o.fixes) h += `<span class="sb cnt">${icons.fix}${esc(o.fixes)}</span>`;
+  if (o.style !== false) h += `<span class="sb m"><span class="chipst${look}">${icons.style}${esc(o.style || 'Plain')}<span class="dd" style="margin-left:-2px"></span></span></span>`;
+  if (o.words) h += `<span class="sb m"><span class="dd">${esc(o.words)}</span></span>`;
+  if (o.pages) h += `<span class="sb m"><span class="dd">${esc(o.pages)}</span></span>`;
+  if (o.fixes) h += `<span class="sb m cnt">${icons.fix}<span class="dd">${esc(o.fixes)}</span></span>`;
   if (o.left) h += o.left;
   h += `<span class="sp"></span>`;
   if (o.right) h += o.right;
-  h += `<span class="sb${o.highlightsOn ? ' act' : ''}">${icons.pen}<span class="dd">Highlights</span></span>`;
-  h += `<span class="sb">${icons.clock}<span>History</span></span>`;
+  if (o.view !== false) h += `<span class="sb m">${icons.view}<span class="dd">${esc(o.view || 'By chapter')}</span></span>`;
+  h += `<span class="sb m${o.highlightsOn ? ' act' : ''}">${icons.pen}<span class="dd">Highlights</span></span>`;
+  h += `<span class="sb m">${icons.clock}<span class="dd">History</span></span>`;
   h += `<span class="vsep"></span>`;
   h += `<span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:${knob}%"></span></span><span>+</span><span class="pct">${zoom}%</span></span>`;
   return h + `</div>`;
@@ -242,6 +244,35 @@ function tip(text, o = {}) {
   return `<div class="tip${o.wrap ? ' wrap' : ''}" style="${pos};top:${o.y}px">${esc(text)}${o.key ? `<span class="k">${esc(o.key)}</span>` : ''}</div>`;
 }
 
+
+// ---------- mark card (hover / Ctrl+.) and notices (draft 5) ----------
+// markCard({kind:'fix'|'prop'|'spell'|'gram'|'note', title, sub, before, after, acts:[['✓','Keep','Enter'],['✗','Undo','Delete']], x, y, w, right})
+//   One card for every mark, everywhere: the title says what happened, the body shows before → after,
+//   the buttons decide. Window coordinates by default.
+function markCard(o = {}) {
+  const pos = o.right !== undefined ? `right:${o.right}px` : `left:${o.x || 0}px`;
+  const acts = o.acts || (o.kind === 'fix'
+    ? [['✓', 'Keep', 'Enter'], ['✗', 'Undo', 'Delete']]
+    : [['✓', 'Apply', 'Enter'], ['✗', 'Skip', 'Delete']]);
+  const ico = o.kind === 'fix' ? icons.fix : o.kind === 'note' ? icons.note : o.kind === 'task' ? icons.task : (icons.prop || icons.fix);
+  let body = '';
+  if (o.before !== undefined || o.after !== undefined) {
+    body = `<div class="mc-ba"><span class="mc-l">Was</span><span class="mc-t">${o.before || ''}</span><span class="mc-l">Now</span><span class="mc-t">${o.after || ''}</span></div>`;
+  }
+  if (o.text) body += `<div class="mc-x">${o.text}</div>`;
+  return `<div class="mc ${o.kind || 'fix'}" style="${pos};top:${o.y || 0}px${o.w ? `;width:${o.w}px` : ''}">`
+    + `<div class="mc-h">${ico}<b>${esc(o.title || 'Fixed')}</b>${o.sub ? `<span class="mc-s">${esc(o.sub)}</span>` : ''}</div>`
+    + body
+    + `<div class="mc-a">${acts.map(([g, t, k]) => `<span class="mc-b"><i>${g}</i>${esc(t)}${k ? `<kbd>${esc(k)}</kbd>` : ''}</span>`).join('')}</div>`
+    + `</div>`;
+}
+// notice(text, {kind:'fix'|'info', undo:true, place}) — the one notice card: bottom center of the page,
+//   never on a timer; folds when the writer moves on and stays in Changes (status bar) and History.
+function notice(text, o = {}) {
+  const ico = o.kind === 'fix' ? icons.fix : (icons.info || icons.note);
+  return `<div class="notice ${o.kind || 'info'}"${o.style ? ` style="${o.style}"` : ''}>${ico}<span class="ntx">${text}</span>${o.undo === false ? '' : `<span class="lk">Undo<kbd>Ctrl+Z</kbd></span>`}<span class="nx">✕</span></div>`;
+}
+
 // ---------- annotations and captions ----------
 // ann(n, text, x, y, {w, r}) — orange numbered callout, window coordinates; w wraps at that width
 function ann(n, text, x, y, o = {}) {
@@ -315,6 +346,7 @@ const lena = {
 const sample = { chapter7Paragraphs, chapter7Plain, chapter1Paragraphs, navRows, crumbs7, lena };
 
 module.exports = {
+  markCard, notice,
   esc, attr, sty, icons, ib, win, strip, navigator, reference, refCard, askButton, askPanel, statusBar,
   pageCol, page, gm, gutter, lineTop, sheet, toast, tip, caption, ann, sample, MODES,
 };

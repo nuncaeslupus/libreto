@@ -78,7 +78,7 @@ const html = css + L.win({
   left: library,
   right: ref,
   page: L.pageCol(topic, { paddingTop: 36 }),
-  status: { style: 'Plain', words: '1,140 words', left: `<span class="sb">4 files</span>` },
+  status: { style: 'Plain', view: false, words: '1,140 words', left: `<span class="sb">4 files</span>` },
   ask: 'normal',
   extra: L.ann(1, 'The Inbox takes anything dropped in, sorted later', 20, 400, { w: 240 })
     + L.ann(2, 'Two sections, two things: the Codex is what the book says, Research is what you gather', 20, 470, { w: 240 })

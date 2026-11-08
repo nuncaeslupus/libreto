@@ -93,7 +93,7 @@ const html = css + L.win({
   left: library,
   right: ref,
   page: L.pageCol(entry, { paddingTop: 36 }),
-  status: { style: false, left: `<span class="sb">31 mentions · ch. 2–8</span><span class="sb">2 topics</span>` },
+  status: { style: false, view: false, left: `<span class="sb">31 mentions · ch. 2–8</span><span class="sb">2 topics</span>` },
   ask: 'normal',
   extra: L.tip('Rename everywhere', { x: 612, y: 174 })
     + L.ann(1, 'The whole Codex, one entry at a time: this is the only place it shows at full size', 20, 600, { w: 240 })

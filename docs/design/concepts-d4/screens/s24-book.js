@@ -81,7 +81,7 @@ const html = L.win({
   left: thumbs,
   right: lay,
   page: `<div class="bookbg"></div>${spread}`,
-  status: L.statusBar({ style: false, words: '86,240 words', pages: 'p. 146 of 248', left: '<span class="sb">laid out in 1.8 s</span>' }),
+  status: L.statusBar({ style: false, view: false, words: '86,240 words', pages: 'p. 146 of 248', left: '<span class="sb">laid out in 1.8 s</span>' }),
   ask: 'normal',
   extra: css
     + L.ann(1, 'A template to start from: paperback 5.5 × 8.5 in, trade 6 × 9 in, A5, manuscript, reading PDF', 770, 104, { w: 290 })

@@ -541,3 +541,35 @@ mark{background:none;color:inherit;font-weight:600}
 
 /* tooltip without a key cap */
 .tip .k{color:#c7c8cc;margin-left:6px}
+
+
+/* ---------- draft 5 ---------- */
+/* modes at the right of the strip: the breadcrumb owns the left, the pill ends at a fixed edge */
+.modes{position:static;transform:none;margin-right:6px}
+.strip .crumbs{max-width:none;flex:1 1 auto;min-width:0;justify-content:flex-start}
+/* status bar: everything that opens a menu looks like it does */
+.status .sb.m{background:rgba(0,0,0,.045);padding:2px 8px}
+.status .sb.m .dd:after{content:" ▾";font-size:9px;color:var(--ink3)}
+.status .sb.m.cnt{color:var(--fix)}
+/* the mark card */
+.mc{position:absolute;z-index:44;width:300px;background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 30px rgba(0,0,0,.14),0 1px 3px rgba(0,0,0,.06);font:12.5px/1.35 var(--ui);color:var(--ink);padding:8px 10px 8px}
+.mc-h{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.mc-h svg{width:15px;height:15px;flex:none}
+.mc.fix .mc-h svg{color:var(--fix)}.mc.prop .mc-h svg,.mc.gram .mc-h svg{color:var(--gram)}.mc.spell .mc-h svg{color:var(--spell)}.mc.note .mc-h svg{color:var(--note)}.mc.task .mc-h svg{color:var(--task)}
+.mc-h b{font-weight:600}.mc-s{color:var(--ink3);margin-left:auto;font-size:11.5px}
+.mc-ba{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font:14px/1.4 var(--text);margin:2px 0 6px}
+.mc-l{font:10.5px/1.9 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.mc-t{color:var(--ink)}
+.mc-x{color:var(--ink2);margin:0 0 6px}
+.mc-a{display:flex;gap:6px;border-top:1px solid var(--line2);padding-top:7px}
+.mc-b{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:#fff;color:var(--ink)}
+.mc-b i{font-style:normal;font-size:12px}.mc-b kbd{margin-left:2px}
+.mc-b:first-child{border-color:var(--accent,#2f6fb3);color:var(--accent,#2f6fb3)}
+/* the notice card */
+.notice{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:26;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--note);border-radius:9px;padding:8px 10px 8px 12px;font:13px var(--ui);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.14);white-space:nowrap}
+.notice.fix{border-left-color:var(--fix)}
+.notice svg{width:15px;height:15px;color:var(--ink2);flex:none}.notice.fix svg{color:var(--fix)}
+.notice .lk{color:var(--accent,#2f6fb3);margin-left:6px}.notice .lk kbd{margin-left:6px}
+.notice .nx{color:var(--ink3);margin-left:4px}
+.toast{background:#fff;color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--note);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.toast .lk{color:var(--accent,#2f6fb3)}

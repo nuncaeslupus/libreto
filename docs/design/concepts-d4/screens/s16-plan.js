@@ -97,7 +97,7 @@ const html = css + L.win({
   crumbs: L.sample.crumbs7,
   page: '',
   content: board,
-  status: { style: false, words: '86,240 words', pages: '11 chapters · 23 scenes', fixes: '3 fixes' },
+  status: { style: false, view: false, words: '86,240 words', pages: '11 chapters · 23 scenes', fixes: '3 fixes' },
   ask: 'normal',
   extra: L.ann(1, 'Moves collect here; nothing changes in the text until Apply', 300, 100, { w: 260 })
     + L.ann(2, 'Before the drop: what the move would break, from the index', 730, 568, { w: 250 })
