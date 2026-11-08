@@ -82,7 +82,7 @@ const st=document.getElementById('status');
 function mark(){tas.forEach(t=>{const a=document.querySelector('nav a[href="#'+t.dataset.id+'"]');if(a)a.classList.toggle('has',t.value.trim()!=='')})}
 tas.forEach(t=>{t.value=store[t.dataset.id]||'';t.addEventListener('input',()=>{store[t.dataset.id]=t.value;try{localStorage.setItem(KEY,JSON.stringify(store));st.textContent='Saved'}catch(e){st.textContent='Not saved in browser: download before closing'}mark()})});mark();
 function md(){let s='# Libreto walkthrough (${draft}): review notes\\n\\n_Exported '+new Date().toISOString().slice(0,16).replace('T',' ')+'_\\n';tas.forEach(t=>{s+='\\n## '+t.dataset.title+'\\n\\n'+(t.value.trim()||'_(no notes)_')+'\\n'});return s}
-document.getElementById('dl').onclick=()=>{const b=new Blob([md()],{type:'text/markdown'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='libreto-walkthrough-d4-notes.md';document.body.appendChild(a);a.click();a.remove()};
+document.getElementById('dl').onclick=()=>{const b=new Blob([md()],{type:'text/markdown'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='libreto-walkthrough-${draft.replace(/^draft\s*/i, 'd').replace(/\s+/g, '-')}-notes.md';document.body.appendChild(a);a.click();a.remove()};
 document.getElementById('cp').onclick=async()=>{try{await navigator.clipboard.writeText(md());st.textContent='Copied'}catch(e){st.textContent='Copy failed: use Download'}};
 const imgs=[...document.querySelectorAll('section img')],lb=document.getElementById('lb'),li=lb.querySelector('img');
 let cur=0,s=1,x=0,y=0,drag=null,pts=new Map(),pinch=null;
