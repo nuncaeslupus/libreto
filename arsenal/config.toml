@@ -141,6 +141,8 @@ queue-automation = true
 
 attribution = true
 
+branch-protection = "existing"
+
 [models]
 orchestrator = ""
 workers = "sonnet"
@@ -180,6 +182,7 @@ reviewer-identity = "distinct-session"
 preset = ""
 
 [skills]
+android = false
 extract = false
 python = false
 workflow = true
