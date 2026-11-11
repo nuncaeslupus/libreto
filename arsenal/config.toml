@@ -180,6 +180,7 @@ reviewer-identity = "distinct-session"
 preset = ""
 
 [skills]
+android = false
 extract = false
 python = false
 workflow = true
