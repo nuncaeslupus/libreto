@@ -8,6 +8,7 @@
 **Revision log**:
 - r1 — first draft, from design topics 1–4 (`docs/design/`) and `docs/research/requirements.md`
 - r2 — applied `libreto-spec-v1-2026-11-04-2234-notes.md`: styles by function, Word compatibility, module API, plain-name mentions, command list, parts to specify
+- r2 addendum (2026-11-11) — D-17 (MCP Apps as an optional extra of "Connect Claude") and D-18 (save AI tokens: AI for the first pass, plain code after)
 
 ---
 
@@ -132,6 +133,8 @@ These depend on taste or need their own work; each becomes a short design doc re
 | D-14 | Character and place cards in v1: name, picture, description, notes, mentions; no relationship maps | agreed | 2026-11-04 |
 | D-15 | Styles by function, easy to create, look redefinable per export | agreed | 2026-11-04 |
 | D-16 | DOCX import and export with styles and comments (Word compatible) | agreed | 2026-11-04 |
+| D-17 | Possible extra, not in v1 scope: the "Connect Claude" MCP server may also serve MCP Apps views (e.g. the before/after proposal card) inside Claude. Opening the whole app inside Claude needs a remote server and a verified directory listing, so it only fits a future web version. Goal unchanged: use the writer's subscription, not API keys; re-check when Anthropic adds options | open | 2026-11-11 |
+| D-18 | Save AI tokens as far as possible: AI does the first pass (building the Codex: characters, places, names, scene summaries) and later only fresh or changed text, never the whole book again. Everything that can be solved without AI is solved with plain code (index, search, mentions, renames, spelling, scene breaks, counts, checks); results are cached and reused; AI is asked only when the writer asks or no rule can answer | agreed | 2026-11-11 |
 
 ## Appendix A. Commands, first draft
 
