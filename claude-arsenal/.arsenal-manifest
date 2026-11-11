@@ -1,4 +1,4 @@
-# source: https://github.com/nuncaeslupus/claude-arsenal
+# source: https://github.com/nuncaeslupus/claude-arsenal.git
 .bundle-version
 AGENTS.md
 CHANGELOG.md
@@ -51,6 +51,24 @@ references/quota-governance.md
 references/repo-housekeeping.md
 references/state-layout.md
 references/worker-loop.md
+scripts/.mypy_cache/.gitignore
+scripts/.mypy_cache/3.12/cache.0.db
+scripts/.mypy_cache/3.12/cache.1.db
+scripts/.mypy_cache/3.12/cache.10.db
+scripts/.mypy_cache/3.12/cache.11.db
+scripts/.mypy_cache/3.12/cache.12.db
+scripts/.mypy_cache/3.12/cache.13.db
+scripts/.mypy_cache/3.12/cache.14.db
+scripts/.mypy_cache/3.12/cache.15.db
+scripts/.mypy_cache/3.12/cache.2.db
+scripts/.mypy_cache/3.12/cache.3.db
+scripts/.mypy_cache/3.12/cache.4.db
+scripts/.mypy_cache/3.12/cache.5.db
+scripts/.mypy_cache/3.12/cache.6.db
+scripts/.mypy_cache/3.12/cache.7.db
+scripts/.mypy_cache/3.12/cache.8.db
+scripts/.mypy_cache/3.12/cache.9.db
+scripts/.mypy_cache/CACHEDIR.TAG
 scripts/apply_decisions.py
 scripts/arsenal_config.py
 scripts/arsenal_migrate.py
