@@ -1,32 +1,14 @@
-# Session Handover
+# Handover
 
-<!-- Written at session end. A new session reading this file can resume without
-     additional context. -->
+## Where things stand (2026-11-13)
 
-## Last task
-
-- **ID**: <!-- e.g. lo-a3f8 -->
-- **Title**: <!-- task title -->
-- **Status at handover**: <!-- open | in_progress | done | blocked -->
-
-## What was done this session
-
-<!-- One-paragraph summary. Include commit SHAs if relevant. -->
+- **Concept drafts 4, 5 and 6 of the walkthrough** live on `claude/project-thread-4w0xxt`, PR #7 (stacked on PR #6, base `claude/project-thread-cjnuji`; merge #6 first). Nothing is merged yet; the design PRs wait for the owner's approval.
+- **Draft 6** (`docs/design/walkthrough.md`, 34 screens in `docs/design/concepts-d4/`) answers the 73 notes on draft 5 (`docs/design/concepts/review-notes-d5-2026-11-13.md`). Big decisions: six modes as tabs (Codex is a mode), four mark colors with one meaning each, Write = underlines + own notes / Review = badges, counts, filters, "Review all" (new S34), whole book as default view, no kinds of text, notices with "Got it" and a bell, Share as two commands, Compare from Review, the AI in Settings ▸ AI. Fourteen open questions at the end of the walkthrough; a "To the specification" list names what moves to the spec (Codex spec, Ask ranking, AI-less matrix, menu inventory, undo semantics, overlap rules, on-disk format, read cadence).
+- **Review page** for the owner, in the arsenal 5.25 screenshot-spec format: `docs/design/concepts-d4/make-screens.py docs/design/walkthrough.md 6` writes `screens-d6.md` (one `## SNN · Title` per screen, context, picture); `create_reader.py --input docs/design/concepts-d4/screens-d6.md --output-dir docs/design/concepts-d4` (the 5.25 script from `origin/chore/arsenal-5.24.0`, needs `pip install markdown`; the vendored 5.15 copy has no `--bake`) writes `libreto-screens-d6-v1-<stamp>-reader.html`, committed and copied to `/mnt/project-files/libreto/design/`. On approval: his notes export next to the doc + `--notes … --bake` → `…-reviewed.html`, status approved. The old `make-review.js` page format is retired.
+- **Toolkit** (`concepts-d4/lib.js`, `d4.css`): draft 6 added `MODES` with Codex, tabs, ☰ / Find / bell in the strip, `statusBar({review, keys, view:'Whole book', show})`, `reference({open})`, mark kinds note / pending / done / unknown, `notice(…, {got})`, 320 px columns, no menu bar row. Builder briefs: `tmp/d6-screens-brief.md` (gitignored; same pattern as d5).
 
 ## What remains
 
-<!-- Bulleted list of sub-tasks or acceptance-criteria items not yet met. -->
-
-## How to continue
-
-1. Read `claude-arsenal/references/worker-loop.md` for the worker loop algorithm.
-2. Run `python3 claude-arsenal/scripts/task_select.py --issues <issues.json>` for
-   the next unblocked task.
-
-## Surface profile at handover
-
-<!-- Copy of session/surface_profile.json for quick reference. -->
-
-## Queue snapshot at handover
-
-<!-- Output of: python3 claude-arsenal/scripts/query_status.py --detail -->
+1. The owner reviews draft 6 (all screens) and sends `libreto-walkthrough-d6-notes.md`; draft 7 or approval follows.
+2. On approval: convert to the arsenal spec format (screens.md, baked reviewed copy) and start the Codex / Ask-ranking / AI-less-matrix spec pages listed in "To the specification".
+3. PR #8 (arsenal bundle 5.15 → 5.25) is the owner's to merge; PR #6 before PR #7.
