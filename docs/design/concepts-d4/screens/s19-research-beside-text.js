@@ -44,9 +44,9 @@ const css = `<style>
 const html = css + L.win({
   mode: 'Write',
   crumbs: L.sample.crumbs7,
-  right: L.reference({ kind: 'Topic', name: 'Bars in the 1950s', backOn: true, body: topic }),
+  right: L.reference({ kind: 'Topic', name: 'Bars in the 1950s', backOn: true, body: topic, open: 'Edit in Research ↗' }),
   page: L.pageCol(col + peek, { paddingTop: 40 }),
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
   ask: 'normal',
   extra: L.ann(1, 'Alt+click a name, choose Research on the peek: the topic opens beside the text, readable and scrollable', 60, 420, { w: 300 })
     + L.ann(2, '“Edit in Research” opens the topic in the mode; Back returns to the sentence', 1090, 722, { w: 240 })

@@ -1,142 +1,85 @@
-// S03: The marks, up close. Not a window: a board of crops at twice the size, so the rules can be checked once:
-// the underlines, one word one underline, the gutter icons (one per line, with a count), the stack list card a
-// count opens, the keys, the Review filter chips (kinds, then people), the counts beside chapters, the Highlights menu.
+// S03: The marks, up close (draft 6). Not a window: a board of crops at twice the size, so the rules can be checked
+// once: the four underlines (red unknown, blue pending, green done, amber note), the blue dashed rule of a detected
+// break or heading, the four Review badges, the four cards side by side, and the rule in one line.
 const L = require('../lib');
 const I = L.icons;
 
-// --- marks the toolkit does not have yet (lib.js has no proposal icon): the look defined here is reused in S02 ---
-const svg = (inner, sw = 1.5) => `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
-const propIcon = svg('<circle cx="8" cy="8" r="6.3" stroke-dasharray="2.6 2.4"/>');
-const icon = (kind) => (kind === 'prop' ? propIcon : I[kind]);
-// one icon per line: the first mark's icon, then a small count when the line holds several (sel: the clicked count)
-const gmCount = (kind, n, top, o = {}) => `<span class="gms" style="top:${top}px"><span class="gm ${kind}">${icon(kind)}</span><span class="gm more${o.sel ? ' sel' : ''}">${n}</span></span>`;
-const gmProp = (top) => `<span class="gm prop" style="top:${top}px">${propIcon}</span>`;
-
 const css = `<style>
 .s03{position:relative;display:flex;flex-wrap:wrap;gap:20px;padding:24px 28px 14px;background:#d9d9d6;align-items:flex-start}
-.s03 .crop>.z{zoom:2;padding:14px 16px 16px}
-.s03 .crop>.z.tall{padding-bottom:44px}
-.s03 .crop>.z1{padding:14px 16px 16px}
+.s03 .crop>.z{zoom:2;padding:12px 16px 14px}
+.s03 .crop>.z1{padding:18px 20px 86px}
 .s03 .text{font:18px/1.72 var(--text);color:var(--ink)}
-.s03 .text p{margin:0}
-.s03 .para{position:relative;width:250px}
-.s03 .proplbl{font:11px var(--ui);color:var(--ink3);margin-left:8px;vertical-align:1px}
-.s03 .gm.prop{color:var(--ink3)}
-.s03 .gm.prop svg{width:16px;height:16px}
-.s03 .gm.more.sel{box-shadow:0 0 0 2px #fff,0 0 0 3.5px currentColor;border-radius:4px;background:#fff}
-.s03 .ex{display:flex;gap:18px;align-items:flex-start}
-.s03 .ex>div{flex:none}
-.s03 .ex .cap{font:9.5px/1.35 var(--ui);color:var(--ink3);margin-top:6px;white-space:normal}
-.s03 .ex .text{white-space:nowrap}
-.s03 .gi{display:inline-flex;align-items:center;gap:4px;margin-left:12px;vertical-align:middle;color:var(--ink3)}
-.s03 .gi svg{width:16px;height:16px}
-.s03 .gi .more{font:600 10px var(--ui);color:var(--ink3)}
-.s03 .navbox{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:270px;font-size:13px}
-.s03 .nrow .cnt{width:auto;flex:none;display:flex;gap:7px;justify-content:flex-end;font-size:11px;color:var(--ink2);padding:0 2px 0 6px}
-.s03 .nrow .cnt span{display:inline-flex;align-items:center;gap:3px}
-.s03 .nrow .cnt svg{width:11px;height:11px}
-.s03 .nrow .cnt .k-note{color:var(--note)}.s03 .nrow .cnt .k-task{color:var(--task)}
-.s03 .nrow.cur{background:#e6e6e3;font-weight:600}.s03 .nrow.cur .cnt{font-weight:500}
-.s03 .kf{display:flex;gap:4px;flex-wrap:nowrap;align-items:center}
-.s03 .kf span{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 9px;border-radius:12px;color:var(--ink2);border:1px solid transparent;white-space:nowrap}
-.s03 .kf span.on{background:#fff;border-color:var(--line);color:var(--ink);font-weight:600}
-.s03 .kf svg{width:12px;height:12px}
-.s03 .kf .k-note svg{color:var(--note)}.s03 .kf .k-task svg{color:var(--task)}.s03 .kf .k-fix svg{color:var(--fix)}
-.s03 .kf .sep{width:1px;height:16px;background:var(--line);margin:0 5px;padding:0;border:0;border-radius:0}
-.s03 .kf .sp{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--spell);padding:0;border:0}
-.s03 .menu{position:static;width:200px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.s03 .menu .mi{padding:4px 10px;gap:8px}
-.s03 .menu .mi svg{width:13px;height:13px}
-.s03 .menu .mi .lb{flex:1}
-/* the stack list card: what a click on a count opens */
-.s03 .stk{width:320px;background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 30px rgba(0,0,0,.14),0 1px 3px rgba(0,0,0,.06);font:12.5px/1.35 var(--ui);color:var(--ink);padding:8px 10px}
-.s03 .stk-h{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-weight:600}
-.s03 .stk-h .gm{flex:none}
-.s03 .stk-r{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;border-top:1px solid var(--line2)}
-.s03 .stk-r.cur{background:var(--accent-tint);border-top-color:transparent}
-.s03 .stk-r .gm{flex:none}
-.s03 .stk-r .ba{flex:1;min-width:0;font:14px/1.3 var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.s03 .stk-r .ba .was{color:var(--ink2)}
-.s03 .stk-r .ba i{font-style:normal;color:var(--ink3);margin:0 6px}
-.s03 .stk-r .acts{display:flex;gap:4px;flex:none}
-.s03 .stk-r .acts span{width:22px;height:22px;border:1px solid var(--line);border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink)}
-.s03 .stk-r .acts span:first-child{color:var(--accent);border-color:var(--accent)}
-.s03 .stk-f{border-top:1px solid var(--line2);margin-top:4px;padding-top:7px;color:var(--ink3);font-size:11.5px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-/* the keys */
-.s03 .keys{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;align-items:center;font:12.5px var(--ui);color:var(--ink)}
-.s03 .keys .k{display:flex;gap:4px;justify-content:flex-end;align-items:center;white-space:nowrap;color:var(--ink3)}
-.s03 .keys kbd{font-size:11.5px;padding:1px 6px}
-.s03 .legend{width:290px;font:14px/1.5 var(--ui);color:var(--ink);padding:4px 4px 0}
-.s03 .legend b{font-weight:600}
+/* notes underline their words in amber in this legend only */
+.s03 .u-note{border-bottom:2px dotted var(--note);padding-bottom:1px}
+.s03 .urow{display:grid;grid-template-columns:200px 1fr;align-items:baseline;gap:0 14px;white-space:nowrap}
+.s03 .urow .cap{font:9.5px/1.3 var(--ui);color:var(--ink2)}
+.s03 .urow .cap b{font-weight:600}
+.s03 .k-spell{color:var(--spell)}.s03 .k-gram{color:var(--task)}.s03 .k-fix{color:var(--fix)}.s03 .k-note{color:var(--note)}
+.s03 .rule{border-top:1.5px dashed var(--gram);height:0;margin:16px 40px 14px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.s03 .struct p{margin:0;font:13px/1.6 var(--text);color:var(--ink2)}
+.s03 .struct .cap{font:9.5px/1.35 var(--ui);color:var(--ink2);margin-top:6px}
+.s03 .struct h4{margin:6px 0 0;font:400 17px/1.3 var(--text);display:inline-block}
+.s03 .bdgs{display:flex;gap:22px;align-items:flex-start}
+.s03 .bdgs>div{display:flex;flex-direction:column;align-items:center;gap:5px;width:84px;text-align:center}
+.s03 .bdgs>div:last-child{width:112px}
+.s03 .bdgs .gm{width:16px;height:16px}
+.s03 .bdgs b{font:600 10px/1.2 var(--ui);color:var(--ink)}
+.s03 .bdgs small{font:9px/1.25 var(--ui);color:var(--ink3)}
+.s03 .bdgs small.both{color:var(--note);font-weight:600}
+.s03 .gms2{display:inline-flex;align-items:center;gap:2px;height:16px}
+.s03 .gms2 .more{font:600 10px var(--ui);color:var(--task)}
+.s03 .cards{display:flex;gap:22px;align-items:flex-start}
+.s03 .cards .mc{position:relative;left:auto!important;top:auto!important;box-shadow:0 1px 3px rgba(0,0,0,.08);width:310px}
+.s03 .cards .mc-b{white-space:nowrap}
+.s03 .cards .cand{display:flex;flex-direction:column;gap:2px;margin:0 0 6px}
+.s03 .cards .cand span{font:14px/1.4 var(--text);padding:2px 6px;border-radius:5px}
+.s03 .cards .cand span.cur{background:var(--accent-tint)}
+.s03 .cards .cand small{font:10.5px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.s03 .cards .mc-x.nt{font:14px/1.45 var(--text);color:var(--ink)}
+.s03 .legend{width:1384px;font:600 22px/1.5 var(--ui);color:var(--ink);padding:6px 4px 0;text-align:center}
+.s03 .legend span{font-weight:700}
 </style>`;
 
 const crop = (label, w, inner, z = 'z') => `<div class="crop" style="width:${w}px"><div class="lbl">${label}</div><div class="${z}">${inner}</div></div>`;
 
-// 1. the underlines
-const underlines = `<div class="text" style="white-space:nowrap">Vega had <span class="u-spell">recieved</span> <span class="u-fix">the</span> letters<span class="u-fix">, </span><span class="u-gram">which were</span> still sealed.&nbsp;&nbsp;&nbsp;&nbsp;<span class="u-prop">Chapter 8</span><span class="proplbl">proposed heading</span></div>`;
+// 1. the four underlines, one meaning each
+const urow = (cap, text) => `<div class="urow"><span class="cap">${cap}</span><span class="text">${text}</span></div>`;
+const underlines = urow('<b class="k-spell">Red</b> · a word Libreto does not know', 'by six the gutters on <span class="u-spell">Harborstreet</span> had given up')
+  + urow('<b class="k-gram">Blue</b> · pending: proposed, not decided', 'on the table <span class="u-gram">the letters was</span> still sealed')
+  + urow('<b class="k-fix">Green</b> · done by Libreto, one Undo away', 'she had <span class="u-fix">received</span> no word<span class="u-fix">, </span>and')
+  + urow('<b class="k-note">Amber</b> · a note on the words it is about', 'a view of the <span class="u-note">back-room door</span>');
 
-// 2. one word, one underline
-const oneWord = `<div class="ex">`
-  + `<div style="width:236px"><div class="text"><span class="u-gram">the letters was still sealed</span></div><div class="cap">One problem, one underline under the whole affected text, never one per word</div></div>`
-  + `<div style="width:186px"><div class="text"><span class="u-gram">the </span><span class="u-spell">leters</span><span class="u-gram"> was</span></div><div class="cap">Red over blue: spelling is settled before grammar is judged</div></div>`
-  + `<div style="width:200px"><div class="text"><span class="u-gram">the letters was</span><span class="gi">${propIcon}<span class="more">2</span></span></div><div class="cap">Blue over green: “the” was fixed, but the open proposal shows; the gutter icon still counts both</div></div>`
+// 2. pending structure: the blue dashed rule of a detected scene break, the dashed underline of a detected heading
+const struct = `<div class="struct" style="width:300px"><p>She stood there long enough for the light to go out.</p><div class="rule"></div><p>The next morning the rain had started again.</p>`
+  + `<div class="cap">A detected scene break: a blue dashed rule where it would go</div>`
+  + `<h4 class="u-prop">Chapter 8</h4><div class="cap">A detected heading: the same dashed blue. Nothing exists until you keep it</div></div>`;
+
+// 3. the four badges of Review, at the exact line
+const bdg = (kind, name, where, cls = '') => `<div>${L.gm(kind)}<b>${name}</b><small class="${cls}">${where}</small></div>`;
+const badges = `<div class="bdgs">`
+  + bdg('unknown', 'Unknown', 'Review only') + bdg('pending', 'Pending', 'Review only') + bdg('done', 'Done', 'Review only') + bdg('note', 'Note', 'Write and Review', 'both')
+  + `<div><span class="gms2">${L.gm('pending')}<span class="more">3</span></span><b>Several</b><small>one line, one badge with a count</small></div>`
   + `</div>`;
 
-// 3. the gutter: one icon per line, a count when the line holds several; the clicked count carries a ring
-const gutterText = `<div class="text"><div class="para"><p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.” “Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands.</p>`
-  + L.gm('note', L.lineTop(0)) + L.gm('task', L.lineTop(1)) + L.gm('fix', L.lineTop(2)) + gmProp(L.lineTop(3))
-  + gmCount('note', 2, L.lineTop(4)) + gmCount('fix', 3, L.lineTop(5), { sel: true }) + `</div></div>`;
-
-// 4. the stack list card a count opens
-const stkRow = (kind, was, now, cur) => `<div class="stk-r${cur ? ' cur' : ''}"><span class="gm ${kind}">${icon(kind)}</span><span class="ba"><span class="was">${was}</span><i>→</i>${now}</span><span class="acts"><span>✓</span><span>✗</span></span></div>`;
-const stack = `<div class="stk"><div class="stk-h"><span class="gm fix">${I.fix}</span>3 marks on this line</div>`
-  + stkRow('fix', 'teh', 'the', true) + stkRow('fix', 'recieved', 'received') + stkRow('prop', 'the letters was', 'the letters were')
-  + `<div class="stk-f"><kbd>Enter</kbd> ✓ and walks to the next row · <kbd>Delete</kbd> ✗ · <kbd>Esc</kbd> closes</div></div>`;
-
-// 5. the keys
-const keys = `<div class="keys">`
-  + `<span class="k"><kbd>Ctrl+.</kbd></span><span>opens the card of the mark at the cursor</span>`
-  + `<span class="k"><kbd>Enter</kbd></span><span>✓ Keep or Apply</span>`
-  + `<span class="k"><kbd>Delete</kbd></span><span>✗ Undo or Skip</span>`
-  + `<span class="k"><kbd>Esc</kbd></span><span>closes the card</span>`
-  + `<span class="k"><kbd>F8</kbd> · <kbd>Shift+F8</kbd></span><span>next · previous mark</span>`
-  + `</div>`;
-
-// 6. the Review filter chips: kinds, then people; Spelling shows the red marks
-const chips = `<div class="kf"><span class="on">All 11</span><span class="k-note">${I.note}Notes 5</span><span class="k-task">${I.task}Tasks 3</span><span class="k-fix">${I.fix}Fixes 3</span><span class="sep"></span><span>You 6</span><span>Marta 2</span><span>AI 3</span><span><span class="sp"></span>Spelling 4</span></div>`;
-
-// 7. counts beside chapters
-const counts = `<div class="navbox">`
-  + `<div class="nrow"><span class="cv"></span><span class="n">6</span><span class="t">The back room</span><span class="cnt"><span class="k-note">2${I.note}</span></span></div>`
-  + `<div class="nrow cur"><span class="cv">${I.chevron}</span><span class="n">7</span><span class="t">Lena’s warning</span><span class="cnt"><span class="k-note">1${I.note}</span><span class="k-task">2${I.task}</span></span></div>`
-  + `<div class="nrow"><span class="cv"></span><span class="n">9</span><span class="t">The pawnshop</span><span class="cnt"><span class="k-task">99+${I.task}</span></span></div>`
-  + `</div>`;
-
-// 8. the Highlights menu
-const row = (on, sw, label, ic) => `<div class="mi"><span class="cb${on ? ' on' : ''}"></span><span class="sw" style="background:${sw}"></span>${ic ? `<span style="color:${sw};display:inline-flex">${ic}</span>` : ''}<span class="lb">${label}</span></div>`;
-const highlights = `<div class="menu">`
-  + row(true, 'rgba(59,110,168,.55)', 'People') + row(true, 'rgba(47,138,102,.55)', 'Places') + row(true, 'rgba(138,92,194,.55)', 'Things')
-  + row(false, 'rgba(176,86,126,.55)', 'Motifs') + row(true, '#d1a73a', 'Styles')
-  + row(false, 'var(--note)', 'Notes', I.note) + row(false, 'var(--task)', 'Tasks', I.task) + row(false, 'var(--fix)', 'Fixes', I.fix)
-  + row(false, '#9a9ca1', 'AI-written')
+// 4. the four cards, side by side: the same card, only the buttons differ
+const cards = `<div class="cards">`
+  + L.markCard({ kind: 'unknown', title: 'Unknown · Harborstreet', text: '<div class="cand"><small>Did you mean…</small><span class="cur">Harbor Street</span><span>Harbor street</span></div>', acts: [['+', 'Add to dictionary', ''], ['◉', 'Make a Codex entry', '']] })
+  + L.markCard({ kind: 'pending', title: 'Pending · one word', sub: 'from Marta', before: 'she walked in<span class="was">·</span>to the bar', after: 'she walked <span class="now">into</span> the bar' })
+  + L.markCard({ kind: 'done', title: 'Done · typo', sub: 'just now', before: 'rec<span class="was">ie</span>ved', after: 'rec<span class="now">ei</span>ved' })
+  + L.markCard({ kind: 'note', title: 'Note · Marta', text: '<div class="mc-x nt">Is this the same coin as in chapter 2?</div>' })
   + `</div>`;
 
 const html = css + `<div class="s03">`
-  + crop('Underlines', 1384, underlines, 'z tall')
-  + crop('One word, one underline', 1384, oneWord)
-  + crop('Gutter icons: one per line, a count when the line holds several', 664, gutterText)
-  + crop('Click a count: the stack as a list', 352, stack, 'z1')
-  + crop('Keys', 328, keys, 'z1')
-  + crop('Filter chips (Review): kinds, then people', 1384, chips, 'z tall')
-  + crop('Counts beside chapters', 600, counts)
-  + crop('Highlights menu', 444, highlights)
-  + `<div class="legend"><b>Dotted green</b> = done · <b>dashed gray</b> = proposed · <b>icons in the gutter</b> = things to look at · every one of them opens the same card.</div>`
-  + L.ann(1, 'Nothing exists until you keep it: a proposed heading stays an ordinary paragraph; only Keep styles it and starts the chapter file at the next save', 867, 156, { w: 440 })
-  + L.ann(2, 'The proposal icon is the dashed gray look as a circle: the same mark as the dashed underline and the dashed rule', 704, 858, { w: 300 })
-  + L.ann(3, 'One icon per line, at the exact line, with a count when the line holds several marks. Red marks have no icon: they are fixed by typing', 704, 792, { w: 300 })
-  + L.ann(4, 'A click on a count opens the stack as a list card: one row per mark, Was → Now, ✓ and ✗; Enter walks down the rows', 1076, 740, { w: 300 })
-  + L.ann(5, 'Review filters by people, not roles: You, Marta, the AI. Names come from sharing and from Word comments; anyone unnamed is “A reader”. Spelling lists the red marks', 1000, 1128, { w: 340 })
-  + L.ann(6, 'The same icons, with numbers, count notes and tasks beside each chapter, capped at 99+', 40, 1514, { w: 300 })
+  + crop('Underlines: four colors, one meaning each', 1384, underlines)
+  + crop('Pending structure', 684, struct)
+  + crop('Badges in Review, at the exact line', 680, badges)
+  + crop('One card for every mark: only the buttons differ', 1384, cards, 'z1')
+  + `<div class="legend"><span class="k-spell">red</span> you fix by typing · <span class="k-gram">blue</span> waits in Review · <span class="k-fix">green</span> is done · <span class="k-note">amber</span> is a remark</div>`
+  + L.ann(1, 'Blue like every proposal; dashed because it marks a place, not characters', 230, 640, { w: 300 })
+  + L.ann(2, 'In Write only the amber note shows in the gutter; the other three, and the count, belong to Review', 752, 674, { w: 560 })
+  + L.ann(3, 'The changed part tinted, no italics; a space that matters shows as a middle dot (in·to)', 382, 990, { w: 290 })
+  + L.ann(4, 'Unknown: Add to dictionary when the word is right, Make a Codex entry when it is a name', 50, 1012, { w: 290 })
+  + L.ann(5, 'Readers’ changes and AI findings are blue like any proposal: who it comes from is a word on the card (“from Marta”) and a filter in Review, never another color', 1046, 970, { w: 300 })
   + `</div>`;
 
 module.exports = {
@@ -144,12 +87,12 @@ module.exports = {
   file: 's03-marks-up-close',
   title: 'The marks, up close',
   width: 1440,
-  height: 1831,
+  height: 1154,
   html,
   caption: L.caption({
     id: 'S03', title: 'The marks, up close',
-    scene: 'Not a moment in the app: a legend. The family of marks at twice the size: the four underlines, the one-word-one-underline rule, the gutter icons with one icon per line and a count, the list a count opens, the keys, the same icons on the Review filter chips (then the people), as counts beside chapters and in the Highlights menu.',
-    on: 'Underlines: “recieved” red dotted (unknown word), “the” green dotted (done), “, ” green dotted on the comma and the space, “which were” blue dotted (proposed), “Chapter 8” dashed gray (proposed heading). One word, one underline: one underline under “the letters was still sealed”; red “leters” inside a blue phrase; a blue phrase over a fixed “the” with a proposal icon and the count 2. Gutter icons: a note, a task, a fix, a dashed proposal, a note with the count 2, a fix with the count 3 and a ring. The stack list card: 3 marks on this line, rows teh → the (current), recieved → received, the letters was → the letters were, each with ✓ ✗, “Enter ✓ and walks to the next row · Delete ✗ · Esc closes”. Keys: Ctrl+. · Enter · Delete · Esc · F8 / Shift+F8. Filter chips: All 11, Notes 5, Tasks 3, Fixes 3, then You 6, Marta 2, AI 3, Spelling 4. Counts: 6 The back room 2 notes, 7 Lena’s warning 1 note 2 tasks, 9 The pawnshop 99+ tasks. Highlights menu: People, Places, Things, Motifs, Styles, Notes, Tasks, Fixes, AI-written with swatches and the icons. The rule in one line',
-    off: 'a window, text around the marks, any moment in the book, the mark card itself (S02 shows it), the walker in Review (S15)',
+    scene: 'Not a moment in the app: a legend. The family of marks at twice the size: the four underlines, the blue dashed rule of pending structure, the four badges of Review, and the one card in its four versions, which differ only in their buttons.',
+    on: 'Underlines: “Harborstreet” red dotted (unknown), “the letters was” blue dotted (pending), “received” and “, ” green dotted (done), “back-room door” amber dotted (a note, in this legend only). Pending structure: a blue dashed rule between two paragraphs (detected scene break) and “Chapter 8” with a dashed blue underline (detected heading). Badges: red ? Unknown, blue … Pending, green ✓ Done (Review only), amber Note (Write and Review), a blue … with the count 3. Cards: Unknown · Harborstreet (Did you mean… Harbor Street, Harbor street; + Add to dictionary · ◉ Make a Codex entry), Pending · one word · from Marta (Was she walked in·to the bar, Now she walked into the bar; ✓ Apply Enter · ✗ Skip Delete), Done · typo (Was recieved, Now received; ✓ Keep Enter · ✗ Undo Delete), Note · Marta (Is this the same coin as in chapter 2?; ↩ Reply · ✓ Done Enter). The rule in one line',
+    off: 'a window, any moment in the book, gray “proposed structure” marks, a gutter in Write (S02), the Review margin (S15), the stack list of several marks on one line (Review), the Show menu (S29)',
   }),
 };

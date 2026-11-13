@@ -24,33 +24,13 @@ const css = `<style>
 .s32 .menu .mi{padding:4px 10px}
 </style>`;
 
-const status7 = L.statusBar({ style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' })
-  .replace(`<span class="sb m">${L.icons.view}`, `<span class="sb m act">${L.icons.view}`);
-const viewMenu = `<div class="menu" style="left:954px;bottom:6px;width:172px"><div class="mhd">On the page</div>`
-  + `<div class="mi hov"><span>By chapter</span><span class="r">✓</span></div><div class="mi"><span>Whole book</span></div></div>`;
-
+// in Write the chapter list counts only your notes
+const noteOnly = (r) => (r.type === 'chapter' ? { ...r, tasks: 0, fixes: 0 } : r);
 const back = { type: 'front', title: 'Back matter' };
-const rows7 = L.sample.navRows.map((r) => (r.type === 'scene' ? { ...r, here: r.title === 'Vega leaves without paying' } : r)).concat([back]);
 
-const topCol = `<p class="first">${q0}</p><p>${q1}</p><p>${q2}</p><p>${q3}</p><p>${q4}</p><p>${q5}<span class="cursor"></span></p>`
-  + `<div class="nextln">Next · 8 Closing time ↓</div>`;
-
-const top = L.win({
-  mode: 'Write',
-  crumbs: { chapter: 'Chapter 7 · Lena’s warning', scene: 'Vega leaves without paying' },
-  left: L.navigator({ rows: rows7 }),
-  page: L.pageCol(topCol, { paddingTop: 16 }),
-  status: status7,
-  content: viewMenu,
-  ask: 'normal',
-  extra: L.ann(1, 'The chapter’s edge: click the line, or press the down arrow on the last line, and the cursor crosses into the first line of chapter 8. Up on the first line goes back into 6', 1080, 520, { w: 300 })
-    + L.ann(2, 'Ctrl+Page Down / Ctrl+Page Up jump a whole chapter from anywhere; Back returns from any jump', 640, 796, { w: 270 })
-    + L.ann(3, 'By chapter is the default; the switch is remembered per book', 954, 728),
-});
-
-// ---- bottom frame: Whole book ----
+// ---- top frame: Whole book, the default ----
 const rows8 = [];
-for (const r of L.sample.navRows) {
+for (const r of L.sample.navRows.map(noteOnly)) {
   if (r.type === 'scene') continue;
   if (r.n === 7) rows8.push({ ...r, cur: false });
   else if (r.n === 8) rows8.push({ ...r, cur: true }, { type: 'scene', title: 'Lena locks the back room', here: true }, { type: 'scene', title: 'Kit finds the ledger' }, { type: 'scene', title: 'Vega reads the ledger' });
@@ -58,33 +38,59 @@ for (const r of L.sample.navRows) {
 }
 rows8.push(back);
 
-const botCol = `<p class="first">${q4}</p><p>${q5}</p>`
+const statusBook = L.statusBar({ style: 'Plain', words: '1,960 words', pages: 'book p. ~151/248', review: '12 to review' })
+  .replace(`<span class="sb m">${L.icons.view}`, `<span class="sb m act">${L.icons.view}`);
+const viewMenu = `<div class="menu" style="left:954px;bottom:6px;width:172px"><div class="mhd">On the page</div>`
+  + `<div class="mi"><span>Whole book</span><span class="r">✓</span></div><div class="mi hov"><span>By chapter</span></div></div>`;
+
+const topCol = `<p class="first">${q4}</p><p>${q5}</p>`
   + `<div class="chdiv"><div class="chap"><div class="num">CHAPTER 8</div><h1>Closing time</h1></div></div>`
   + `<p class="first"><span class="cursor"></span>${c1}</p><p>${c2}</p><p>${c3}</p>`;
 
-const bottom = L.win({
+const top = L.win({
   mode: 'Write',
   crumbs: { chapter: 'Chapter 8 · Closing time', scene: 'Lena locks the back room' },
   left: L.navigator({ rows: rows8 }),
-  page: L.pageCol(botCol, { paddingTop: 16 }),
-  status: { style: 'Plain', words: '1,960 words', pages: 'book p. ~151/248', fixes: '1 fix', view: 'Whole book' },
+  page: L.pageCol(topCol, { paddingTop: 16 }),
+  strip: { reviewCount: 12 },
+  status: statusBook,
+  content: viewMenu,
   ask: 'normal',
-  extra: L.ann(4, 'Whole book: every chapter on one long page, each heading a divider. When the part changes, its name sits small above the number', 1080, 300, { w: 300 })
-    + L.ann(5, 'The list follows the scroll and highlights where you are; a double click on a row scrolls there', 20, 770, { w: 236 })
-    + L.ann(6, 'The status bar still counts the chapter under the cursor; marks, notes and the Reference panel behave the same', 300, 800, { w: 330 }),
+  extra: L.ann(1, 'Whole book, the default: every chapter on one long page, each heading a divider. When the part changes, its name sits small above the number', 1080, 300, { w: 300 })
+    + L.ann(2, 'The list follows the scroll and highlights where you are; a double click on a row scrolls there', 20, 700, { w: 270 })
+    + L.ann(3, 'The status bar counts the chapter under the cursor (1,960 words in chapter 8)', 330, 800, { w: 270 })
+    + L.ann(4, 'The switch: “Whole book ▾” at the right of the status bar; remembered per project', 650, 716, { w: 290 }),
+});
+
+// ---- bottom frame: By chapter ----
+const rows7 = L.sample.navRows.map(noteOnly).map((r) => (r.type === 'scene' ? { ...r, here: r.title === 'Vega leaves without paying' } : r)).concat([back]);
+
+const botCol = `<p class="first">${q0}</p><p>${q1}</p><p>${q2}</p><p>${q3}</p><p>${q4}</p><p>${q5}<span class="cursor"></span></p>`
+  + `<div class="nextln">Next · 8 Closing time ↓</div>`;
+
+const bottom = L.win({
+  mode: 'Write',
+  crumbs: { chapter: 'Chapter 7 · Lena’s warning', scene: 'Vega leaves without paying' },
+  left: L.navigator({ rows: rows7 }),
+  page: L.pageCol(botCol, { paddingTop: 16 }),
+  strip: { reviewCount: 12 },
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review', view: 'By chapter' },
+  ask: 'normal',
+  extra: L.ann(5, 'By chapter: one chapter on the page. At its end a gray line goes to the next (at the top, “Previous · 6 The back room ↑”); the down arrow on the last line, or Page Down at the end, crosses too', 1080, 520, { w: 300 })
+    + L.ann(6, 'Ctrl+Page Down / Ctrl+Page Up jump a whole chapter from anywhere; Back returns from any jump. Marks, notes and the Reference panel behave the same either way', 640, 740, { w: 330 }),
 });
 
 module.exports = {
   id: 'S32',
   file: 's32-chapter-or-book',
-  title: 'By chapter, or the whole book',
+  title: 'The whole book, or by chapter',
   width: 1440,
   height: 1816,
   html: css + `<div class="frames s32">${top}${bottom}</div>`,
   caption: L.caption({
-    id: 'S32', title: 'By chapter, or the whole book',
-    scene: 'Two frames. Top: Write, By chapter, chapter 7 scrolled to its end: the last paragraph, the cursor after its last word, and the gray line “Next · 8 Closing time ↓”; the writer opened the “By chapter ▾” item at the right of the status bar. Bottom: the same place in Whole book: the end of chapter 7, the chapter 8 divider, its first paragraphs with the cursor on the first line, and the chapter list highlighting chapter 8.',
-    on: 'top: the chapter list with chapter 7 open and “Vega leaves without paying” marked, the last six paragraphs of chapter 7 with the cursor at the end, “Next · 8 Closing time ↓”, the status bar with By chapter ▾ active and its menu (On the page: By chapter ✓ · Whole book), the Ask button; bottom: the list with chapter 7 plain and chapter 8 bold with its three scenes, the end of chapter 7, the divider (a soft rule, CHAPTER 8, Closing time), the first three paragraphs of chapter 8, the breadcrumb “Chapter 8 · Closing time › Lena locks the back room”, the status bar “1,960 words · book p. ~151/248 · ✓ 1 fix · Whole book ▾”, the Ask button',
+    id: 'S32', title: 'The whole book, or by chapter',
+    scene: 'Two frames. Top: Write in Whole book, the default: the end of chapter 7, the chapter 8 divider and its first paragraphs on one long page, the cursor on the first line of chapter 8, the chapter list highlighting chapter 8; the writer opened the “Whole book ▾” item at the right of the status bar. Bottom: the same place By chapter: chapter 7 scrolled to its end, the cursor after its last word, and the gray line “Next · 8 Closing time ↓”.',
+    on: 'top: the list with chapter 8 bold and its three scenes, the end of chapter 7, the divider (a soft rule, CHAPTER 8, Closing time), the first three paragraphs of chapter 8, the breadcrumb “Chapter 8 · Closing time › Lena locks the back room”, the status bar “1,960 words · book p. ~151/248 · 12 to review” with Whole book ▾ active and its menu (On the page: Whole book ✓ · By chapter), the Review tab with 12, the Ask button; bottom: the list with chapter 7 open and “Vega leaves without paying” marked, the last six paragraphs of chapter 7 with the cursor at the end, “Next · 8 Closing time ↓”, the status bar with By chapter ▾, the Ask button',
     off: 'the “Previous · 6 The back room ↑” line at the top of the chapter, a part line above the divider (chapter 8 stays in Part One), gutter marks, the Reference panel, the Next line in Whole book',
   }),
 };

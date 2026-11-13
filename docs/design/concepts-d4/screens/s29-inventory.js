@@ -21,56 +21,77 @@ const styleMenu = menu('left:10px;bottom:6px', `<div class="mhd">What is this te
   + `<div class="filter" style="margin:4px 4px 6px;height:26px;padding:0 8px;font-size:12px">${L.icons.magnifier}<span>Filter styles</span></div>`
   + styles.map(([t, st]) => `<div class="mi${t === 'Thought' ? ' hov' : ''}"><span style="${st}">${t}</span></div>`).join(''), 220);
 const wordsMenu = menu('left:240px;bottom:6px', `<div class="mhd">Words</div>` + mi('Chapter', '2,418') + mi('Book', '86,240') + sep + mi('Statistics…'), 200);
-const fixRow = (a, b) => `<div class="mi"><span>“${a}” → “${b}”</span><span class="r" style="color:var(--fix)">✓ keep</span><span class="r" style="padding-left:10px;color:var(--ink2)">✕ undo</span></div>`;
-const fixesMenu = menu('left:450px;bottom:6px', `<div class="mhd">3 fixes in this chapter</div>` + fixRow('teh', 'the') + fixRow('dont', 'don’t') + fixRow('nine ', 'nine, ') + sep + mi('Undo all three') + mi('Review on Fixes'), 280);
-const hl = [['People', 'var(--accent)', true], ['Places', 'var(--place)', true], ['Things', 'var(--thing)', false], ['Motifs', '#8a7a4a', false], ['Styles', '#b98a1c', true],
-  ['Notes', 'var(--note)', true, 'note'], ['Tasks', 'var(--task)', true, 'task'], ['Fixes', 'var(--fix)', true, 'fix'], ['AI-written', '#5d7f6e', false]];
-const hlMenu = menu('left:740px;bottom:6px', `<div class="mhd">Highlights</div>` + hl.map(([t, c, on, ic]) => `<div class="mi">${ck(on)}${ic ? `<span class="gm ${ic}" style="width:14px;height:14px">${L.icons[ic]}</span>` : ''}<span>${t}</span>${sw(c)}</div>`).join(''), 190);
-const histMenu = menu('left:940px;bottom:6px', `<div class="mhd">History</div>`
-  + mi('<span class="lk">Today 9:12–10:40 · Write</span>', '+912 words') + mi('<span class="lk">Yesterday 21:05–22:30 · Review</span>', '14 tasks') + mi('<span class="lk">Yesterday 17:40–18:15 · Research</span>', '3 topics')
-  + sep + mi('Open History'), 290);
-const zoomPop = `<div class="pop" style="right:10px;bottom:184px">${['80', '90', '100', '110', '125'].map((z) => `<span${z === '100' ? ' class="hov"' : ''}>${z}</span>`).join('')}<span style="color:var(--ink4);padding:4px 2px">·</span><span>Fit width</span></div>`;
+const keyRow = (t, k) => `<div class="mi"><span>${t}</span><span class="r"><kbd>${k}</kbd></span></div>`;
+const keysMenu = menu('left:500px;bottom:6px', `<div class="mhd">Keys here · in the text</div>`
+  + keyRow('Mark card', 'Ctrl+.') + keyRow('Next mark', 'F8') + keyRow('Previous mark', 'Shift+F8') + keyRow('New chapter', 'Ctrl+Enter') + keyRow('Scene break', 'Ctrl+Shift+Enter')
+  + keyRow('Emphasis', 'Ctrl+I') + keyRow('Ask', 'Ctrl+K') + keyRow('Reveal', 'Ctrl+Shift+A') + sep + mi('All keys…', 'Settings ▸ Keys'), 300);
+const viewMenu = menu('left:830px;bottom:6px', `<div class="mhd">View</div>`
+  + `<div class="mi on"><span>Whole book<span class="ex">every chapter, one after another</span></span></div>`
+  + `<div class="mi"><span>By chapter<span class="ex">one chapter at a time</span></span></div>`, 210);
+const ul = (c, dash) => `<span style="margin-left:auto;width:16px;border-bottom:2px ${dash ? 'dashed' : 'dotted'} ${c}"></span>`;
+const shows = [['Underlines', true, `<span style="margin-left:auto;display:flex;gap:3px">${['var(--spell)', 'var(--gram)', 'var(--fix)'].map((c) => `<span style="width:9px;border-bottom:2px dotted ${c};height:7px"></span>`).join('')}</span>`],
+  ['People', true, sw('var(--accent)')], ['Places', true, sw('var(--place)')], ['Things', false, sw('var(--thing)')], ['Motifs', false, sw('#8a7a4a')],
+  ['Styles', false, sw('#b98a1c')], ['Notes', true, `<span class="gm note" style="position:static;width:14px;height:14px;margin-left:auto">${L.icons.note}</span>`], ['AI-written text', false, sw('#5d7f6e')]];
+const showMenu = menu('left:1050px;bottom:6px', `<div class="mhd">Show</div>` + shows.map(([t, on, mk]) => `<div class="mi">${ck(on)}<span>${t}</span>${mk}</div>`).join(''), 196);
+const histMenu = menu('left:960px;bottom:330px', `<div class="mhd">History</div>`
+  + mi('<span class="lk">Today 9:12–10:40 · Write</span>', '+912 words') + mi('<span class="lk">Yesterday 21:05–22:30 · Review</span>', '14 closed') + mi('<span class="lk">Yesterday 17:40–18:15 · Research</span>', '3 topics')
+  + mi('<span class="lk">Nov 10, 20:10–21:00 · Plan</span>', '2 moves') + sep + mi('Open History'), 330);
+const zoomMenu = menu('left:1262px;bottom:6px', `<div class="mhd">Zoom</div>` + ['50', '67', '75', '90', '100', '110', '125', '150', '200'].map((z) => mi(z + ' %', '', { hov: z === '100' })).join(''), 96);
 
 const top = L.win({
   mode: 'Write',
   crumbs: L.sample.crumbs7,
+  strip: { reviewCount: 12 },
   page: dimPage,
-  content: styleMenu + wordsMenu + fixesMenu + hlMenu + histMenu + zoomPop,
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' },
+  content: styleMenu + wordsMenu + keysMenu + viewMenu + showMenu + histMenu + zoomMenu,
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
   ask: 'normal',
-  extra: L.ann(1, 'Every status bar item opens a menu: the palette has a filter, Highlights lists the nine kinds, zoom has Fit width', 20, 130, { w: 340 }),
+  extra: L.ann(1, 'Every status bar item opens a menu; the style palette shows each row in its own look', 20, 340, { w: 260 })
+    + L.ann(2, 'The ⌨ button lists the keys that work where you are', 500, 548, { w: 260 })
+    + L.ann(3, 'Show: underlines, people, places, things, motifs, styles, notes, AI-written text', 806, 630, { w: 196, r: true })
+    + L.ann(4, 'History rows are links; zoom goes from 50 to 200 %, 100 % in the middle, no Fit width', 960, 300, { w: 330 }),
 });
 
-// ---- bottom frame: the seven menus ----
-const MW = 240;
-const fileM = menu(`left:8px;top:4px`, `<div class="mhd">File</div>` + mi('New book', 'Ctrl+N') + mi('Open…', 'Ctrl+O') + mi('Open recent', '▸') + sep + mi('Import Word…') + mi('Share…') + mi('Export', '▸') + sep + mi('Settings…') + mi('Close', 'Ctrl+W'), MW);
-const editM = menu(`left:189px;top:330px`, `<div class="mhd">Edit</div>` + mi('Undo', 'Ctrl+Z') + mi('Redo', 'Ctrl+Y') + sep + mi('Cut', 'Ctrl+X') + mi('Copy', 'Ctrl+C') + mi('Paste', 'Ctrl+V') + mi('Paste as plain text', 'Ctrl+Alt+V') + sep + mi('Find', 'Ctrl+F') + mi('Replace', 'Ctrl+H') + sep + mi('Add note', 'Ctrl+Shift+M'), MW);
-const viewM = menu(`left:370px;top:4px`, `<div class="mhd">View</div>` + mi('Chapters', 'Ctrl+Shift+L') + mi('Reference', 'Ctrl+Shift+R') + mi('Panels', 'Ctrl+Shift+H') + mi('Focus', 'F11') + sep + mi('Reveal', 'Ctrl+Shift+A') + mi('Highlights', '▸') + mi('Zoom', '▸', { hov: true }) + sep + mi('History') + mi('Statistics'), MW)
-  + menu(`left:612px;top:222px`, ['80%', '90%', '100%', '110%', '125%'].map((z) => mi(z, z === '100%' ? '✓' : '')).join('') + sep + mi('Fit width') + mi('Reset', 'Ctrl+0'), 170);
-const insertM = menu(`left:551px;top:470px`, `<div class="mhd">Insert</div>` + mi('New chapter', 'Ctrl+Enter') + mi('New part') + mi('Scene break', 'Ctrl+Shift+Enter') + sep + mi('Picture…') + mi('Note', 'Ctrl+Shift+M') + sep + mi('Research topic'), MW);
-const formatM = menu(`left:732px;top:4px`, `<div class="mhd">Format</div>` + mi('Style as', '▸ &nbsp;Ctrl+T') + sep + mi('Emphasis', 'Ctrl+I') + mi('Strong', 'Ctrl+B') + mi('Thought', 'Ctrl+Shift+I') + sep + mi('Plain', 'Ctrl+Shift+P'), MW);
-const aiM = menu(`left:913px;top:330px`, `<div class="mhd">AI</div>` + mi('Ask', 'Ctrl+K') + sep + mi('Review this chapter') + mi('Update Codex') + sep + mi('Level', '▸') + mi('Connect…') + mi('What the AI wrote'), MW);
-const helpM = menu(`left:1094px;top:4px`, `<div class="mhd">Help</div>` + mi('Help window', 'F1') + mi('Tutorials', '▸') + mi('Shortcuts') + sep + mi('About'), MW);
+// ---- bottom frame: the ☰ menu and its seven menus, opened together ----
+const ex = (t) => `<span class="ex">${t}</span>`;
+const item = (t, r = '', sub = '') => `<div class="mi"><span>${t}${sub ? ex(sub) : ''}</span>${r ? `<span class="r">${r}</span>` : ''}</div>`;
+const SEVEN = ['File', 'Edit', 'Insert', 'Format', 'View', 'Reports', 'Help'];
+const rootM = menu('left:8px;top:4px', SEVEN.map((m) => mi(m, '▸')).join(''), 150);
+const fileM = menu('left:180px;top:4px', `<div class="mhd">File</div>` + item('New project', 'Ctrl+N') + item('Open…', 'Ctrl+O') + item('Recent', '▸') + sep
+  + item('Import a Word file…') + item('Share', '▸', 'Send a copy… · Receive a copy…') + item('Export', '▸', 'PDF · Word · EPUB') + sep + item('Project settings…'), 250);
+const editM = menu('left:446px;top:4px', `<div class="mhd">Edit</div>` + item('Undo', 'Ctrl+Z') + item('Redo', 'Ctrl+Y') + sep + item('Cut', 'Ctrl+X') + item('Copy', 'Ctrl+C') + item('Paste', 'Ctrl+V') + sep
+  + item('Find', 'Ctrl+F') + item('Replace', 'Ctrl+H') + item('Rename everywhere…'), 230);
+const insertM = menu('left:692px;top:4px', `<div class="mhd">Insert</div>` + item('Scene break', 'Ctrl+Shift+Enter') + item('New chapter here', 'Ctrl+Enter') + item('Start a new part at this chapter') + sep
+  + item('Picture…') + item('Footnote') + sep + item('Front matter', '▸') + item('Back matter', '▸'), 290);
+const formatM = menu('left:998px;top:4px', `<div class="mhd">Format</div>` + item('Emphasis', 'Ctrl+I') + item('Strong', 'Ctrl+B') + sep + item('Style as', '▸') + item('Styles…'), 210);
+const viewM = menu('left:180px;top:356px', `<div class="mhd">View</div>` + item('Chapters') + item('Reference panel') + item('Panels', 'Ctrl+Shift+H') + item('Focus', 'F11') + sep
+  + `<div class="mi on"><span>Whole book</span></div><div class="mi"><span>By chapter</span></div>` + item('Show', '▸') + item('Reveal', 'Ctrl+Shift+A') + sep
+  + item('Zoom in', 'Ctrl++') + item('Zoom out', 'Ctrl+−') + item('Zoom 100 %', 'Ctrl+0'), 250);
+const reportsM = menu('left:446px;top:356px', `<div class="mhd">Reports</div>` + item('Statistics') + item('What the AI wrote') + item('AI log') + item('History'), 210);
+const helpM = menu('left:672px;top:356px', `<div class="mhd">Help</div>` + item('Help', 'F1') + item('Tips') + item('Tutorials') + sep + item('About'), 190);
 
-let bottom = L.win({
+const bottom = `<div class="f2">` + L.win({
   mode: 'Write',
   crumbs: L.sample.crumbs7,
+  strip: { reviewCount: 12 },
   page: dimPage,
-  content: fileM + editM + viewM + insertM + formatM + aiM + helpM,
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' },
+  content: rootM + fileM + editM + insertM + formatM + viewM + reportsM + helpM,
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
   ask: 'normal',
-  extra: L.ann(2, 'Focus, Panels and Statistics live in View; Share… in File; Ctrl+0 resets zoom', 420, 790, { w: 340 })
-    + L.ann(3, 'Every key is a letter, digit, F-key or Enter with Ctrl, Shift and Alt: no brackets, slashes or backslashes', 790, 790, { w: 400 }),
-});
-// all seven menu titles open at once
-for (const m of ['File', 'Edit', 'View', 'Insert', 'Format', 'AI', 'Help']) bottom = bottom.replace(`<span>${m}</span>`, `<span class="open">${m}</span>`);
-bottom = bottom.replace('<div class="strip">', '<div class="strip dimmed">');
+  extra: L.ann(5, 'The ☰ button holds the seven menus; there is no menu bar row', 20, 300, { w: 140 })
+    + L.ann(6, 'The AI is set in Settings ▸ AI; its reports live in Reports. No AI menu, no Fit width, no Highlights', 1070, 470, { w: 300 }),
+}) + `</div>`;
 
 const css = `<style>
 .frames{display:flex;flex-direction:column;gap:16px;background:#d9d9d6}
-.frames .menu .mi{padding:4px 10px}
+.frames .menu{min-width:0}
+.frames .menu .mi{padding:4px 10px;align-items:baseline}
+.frames .menu .mi.on:before{content:"✓";color:var(--accent);font-weight:600;width:12px;margin-right:-2px}
+.frames .menu .mi .ex{display:block;color:var(--ink3);font-size:11.5px}
+.frames .menu kbd{font-size:11px}
 .frames .status{z-index:8}
-.gm.note,.gm.task,.gm.fix{flex:none}
+.frames .f2 .strip .ib.mn{background:#e2e2df;border-radius:6px}
+.gm.note{flex:none}
 </style>`;
 
 module.exports = {
@@ -82,8 +103,8 @@ module.exports = {
   html: css + `<div class="frames">${top}${bottom}</div>`,
   caption: L.caption({
     id: 'S29', title: 'Everything in the status bar and the menus',
-    scene: 'Not a moment. Top: Write mode with every status bar menu open at once. Bottom: the seven menus of the menu bar opened together, to see what lives where after the changes.',
-    on: 'top: the style palette (“What is this text?”, a filter, every style in its own look), the words menu (Chapter, Book, Statistics…), the fixes list (each with keep and undo), Highlights (People, Places, Things, Motifs, Styles, Notes, Tasks, Fixes, AI-written with swatches and the mark icons), History (three sessions as rows, Open History), the zoom menu (80 90 100 110 125 · Fit width), the Ask button; bottom: File, Edit, View (with the Zoom submenu and Reset Ctrl+0), Insert, Format, AI and Help',
-    off: 'a provider icon or AI menu in the status bar, a Search &amp; ask box, a Chat item, bracket or slash shortcuts',
+    scene: 'Not a moment. Top: Write mode with every status bar menu open at once. Bottom: the ☰ button’s seven menus opened together, to see what lives where.',
+    on: 'top: the style palette (“What is this text?”, a filter, every style in its own look), the words menu, the ⌨ keys for where you are, Whole book / By chapter, Show (underlines, people, places, things, motifs, styles, notes, AI-written text), History (sessions as links, Open History), zoom 50 to 200 % with 100 % in the middle, the Ask button; bottom: the ☰ list and File, Edit, Insert, Format, View, Reports, Help with their items',
+    off: 'a menu bar row, an AI menu (Connect, level: those are in Settings ▸ AI), Fit width, a Highlights menu, a provider icon in the status bar, bracket or slash shortcuts',
   }),
 };

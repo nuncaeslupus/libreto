@@ -3,7 +3,7 @@ const L = require('../lib');
 const P = L.sample.chapter7Plain;
 
 // the same marks as S12: a note on the third paragraph, a task on the fifth
-const marks = { 2: L.gm('note', L.lineTop(0)), 4: L.gm('task', L.lineTop(0)) };
+const marks = { 2: L.gm('note', L.lineTop(0)) };
 const withMarks = `<div class="chap"><div class="num">CHAPTER 7</div><h1>Lena’s warning</h1></div>`
   + P.map((p, i) => {
     const para = `<p${i === 0 ? ' class="first"' : ''}>${p}</p>`;
@@ -19,7 +19,7 @@ const top = L.win({
   mode: 'Write',
   crumbs: L.sample.crumbs7,
   page: L.pageCol(withMarks, { paddingTop: 40 }),
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
   ask: 'normal',
   extra: L.tip('Show the chapters', { x: 10, y: 128, key: 'Ctrl+Shift+L' })
     + L.ann(1, 'One key, Ctrl+Shift+H, hid both columns and quieted the highlights; the same key brings back what was open', 40, 300, { w: 300 })
@@ -47,7 +47,7 @@ module.exports = {
   caption: L.caption({
     id: 'S13', title: 'One key back to the page, and Focus',
     scene: 'Top: the writer pressed Ctrl+Shift+H on the S12 layout: both columns closed, highlights off, the two marks still in the gutter, the mouse on the left toggle. Bottom: F11. Focus leaves only the page; the mouse just moved, so a faded “Exit focus · F11” shows at the top right.',
-    on: 'top: the strip with both toggles off and the tooltip “Show the chapters · Ctrl+Shift+L”, the page with the note and task marks, the Ask button, the status bar with Highlights inactive; bottom: the page alone on the paper and the faded “Exit focus · F11”',
+    on: 'top: the strip with both toggles off and the tooltip “Show the chapters · Ctrl+Shift+L”, the page with the note mark, the Ask button, the status bar with Show inactive; bottom: the page alone on the paper and the faded “Exit focus · F11”',
     off: 'top: navigator, Reference panel, highlights; bottom: title bar, menu bar, strip, status bar, Ask button, marks, Search &amp; ask box, provider icon in the status bar',
   }),
 };

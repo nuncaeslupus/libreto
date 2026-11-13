@@ -1,73 +1,83 @@
-// S22: A reader's copy, compared. The Compare sheet: the manuscript today in one column, blocks under the paragraphs that differ.
+// S22: A reader's copy, compared. The Compare sheet: the manuscript today in one column, Marta's version
+// in a box under each paragraph she changed, wavy lines for what is folded, decided rows folded to one line.
 const L = require('../lib');
 
+const wave = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cpath d='M0 3 Q3 0 6 3 T12 3' fill='none' stroke='%23b9b9b4' stroke-width='1.2'/%3E%3C/svg%3E")`;
+
 const css = `<style>
+.strip .modes{opacity:.35}
 .cmp{position:absolute;left:50%;transform:translateX(-50%);width:660px;top:0;bottom:0;padding:14px 20px 0;font:16px/1.55 var(--text);color:var(--ink)}
-.cmpbar{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:6px 8px 6px 12px;font:12.5px var(--ui);color:var(--ink2);margin-bottom:12px}
-.cmpbar .sp{flex:1}
-.fold{display:flex;align-items:center;gap:10px;color:var(--ink3);font:11.5px var(--ui);margin:8px 0}
-.fold:before,.fold:after{content:"";flex:1;border-top:1px dashed var(--line)}
-.cmp p{margin:0;text-indent:1.5em;position:relative}
-.cmp .card{margin:8px 0 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);overflow:hidden}
-.cmp .card .lab{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:8px 12px 0}
-.cmp .card .tx{padding:3px 12px 9px;font-size:15px;line-height:1.5}
-.cmp .card .acts{display:flex;gap:8px;padding:7px 12px;border-top:1px solid var(--line2);background:var(--soft);font-family:var(--ui)}
-.cmp .two{display:flex;gap:10px;margin:8px 0 8px}
-.cmp .two .card{flex:1;margin:0}
-.cmp .two .card .tx{font-size:14px}
-.cmp .btns{display:flex;gap:8px;margin:0 0 8px;font-family:var(--ui)}
-.cmp .choice{margin:0 0 12px;font-size:15px;line-height:1.5}
-.cmp .choice .cols>div{padding:8px 12px 10px}
-.cmp .choice .acts{padding:7px 12px}
-.ins{background:rgba(59,110,168,.16);border-radius:2px}
-.del{text-decoration:line-through;color:var(--ink3);text-decoration-color:var(--ink3)}
-.from{font:11.5px var(--ui);color:var(--ink3);margin:3px 0 4px 1.5em;display:flex;gap:6px;align-items:center}
-.from i{width:7px;height:7px;border-radius:50%;background:var(--ink4);display:inline-block}
-.mnote{position:absolute;left:calc(50% + 350px);width:250px;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font:12.5px/1.45 var(--ui);box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.mnote .nh2{display:flex;gap:6px;align-items:center;margin-bottom:4px;font-size:11px;color:var(--ink3)}
-.mnote .nh2 svg{width:13px;height:13px;color:var(--note)}
-.mnote:before{content:"";position:absolute;left:-30px;top:16px;width:30px;border-top:1px solid var(--line)}
+.fold{display:flex;align-items:center;gap:10px;color:var(--ink3);font:12px var(--ui);margin:10px 0}
+.fold:before,.fold:after{content:"";flex:1;height:6px;background:${wave} repeat-x center}
+.fold b{font-weight:400;font-size:14px;color:var(--ink4)}
+.cmp p{margin:0;text-indent:1.5em}
+.cmp .mk{background:rgba(59,110,168,.16);border-radius:2px}
+.cmp .gone{text-decoration:line-through;color:var(--ink3)}
+.cmp .box{margin:8px 0 6px;border:1px solid var(--line);border-left:3px solid var(--task);border-radius:8px;background:#fff;overflow:hidden}
+.cmp .box .lab{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:7px 12px 0}
+.cmp .box .tx{padding:2px 12px 8px;font-size:15px;line-height:1.5}
+.cmp .box.mine{border-left-color:var(--ink4)}
+.cmp .acts{display:flex;gap:8px;align-items:center;margin:0 0 6px;font-family:var(--ui)}
+.cmp .acts .btn svg{width:13px;height:13px}
+.cmp .acts .e{min-width:28px;justify-content:center;padding:0 8px}
+.cmp .acts small{color:var(--ink3);font-size:11.5px;margin-left:4px}
+.cmp .decided{display:flex;align-items:center;gap:10px;font:12.5px var(--ui);color:var(--ink2);background:var(--soft);border:1px solid var(--line2);border-radius:7px;padding:6px 12px;margin:6px 0}
+.cmp .decided svg{width:14px;height:14px;color:var(--fix)}
+.cmp .decided .q{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:italic 14px var(--text);color:var(--ink3)}
+
+.hdone{white-space:nowrap;margin-left:10px;display:inline-flex;align-items:center;gap:8px}
+.hdone .btn.dis{color:var(--ink4);background:var(--soft);border-color:var(--line2)}
+.hdone small{color:var(--ink3);font-size:11.5px}
+.sheet-h .od{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.sheet-h .ttl b{font-weight:400;color:var(--ink2)}
 </style>`;
 
 const body = `<div class="cmp">
-  <div class="cmpbar"><span>Take all of Marta’s changes in paragraphs you did not touch (9)</span><span class="sp"></span><span class="btn" style="height:24px;padding:0 10px">Take all 9</span></div>
-  <div class="fold">2 paragraphs unchanged</div>
+  <div class="decided">${L.icons.fix}<span>Took Marta’s</span><span class="q">“You’re early,” Lena said without looking up. “Or late…”</span><span class="lk">Undo</span></div>
+  <div class="fold"><b>⌇</b>14 paragraphs unchanged</div>
   <p>“Kit who?” Lena set a glass down hard enough to make it ring. “Half the city’s called Kit.”</p>
-  <div class="card"><div class="lab">Marta’s</div><div class="tx">“Kit who?” Lena set a glass down <span class="del">hard enough to make it ring</span> <span class="ins">harder than she needed to</span>. “Half the city’s called Kit.”</div><div class="acts"><span class="btn pri">Take</span><span class="btn">Keep mine</span></div></div>
-  <div class="fold">1 paragraph unchanged</div>
+  <div class="box"><div class="lab">Marta’s</div><div class="tx">“Kit who?” Lena set a glass down <span class="mk">harder than she meant to</span>. “Half the city’s called Kit.”</div></div>
+  <div class="acts"><span class="btn pri">Take Marta’s</span><span class="btn">Keep mine</span><span class="btn e">E</span><small>edit the result first</small></div>
+  <div class="fold"><b>⌇</b>2 paragraphs unchanged</div>
   <p>Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p>
-  <div class="two">
-    <div class="card"><div class="lab">Yours since sending</div><div class="tx">Lena looked at the coin, then at the door behind her, <span class="ins">then at nothing at all</span>. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</div></div>
-    <div class="card"><div class="lab">Marta’s</div><div class="tx">Lena looked at the coin, then at the door behind her. “Nobody came in at nine. Nobody’s been in <span class="del">that room</span> <span class="ins">there</span> since Tuesday.”</div></div>
-  </div>
-  <div class="btns"><span class="btn">Keep mine</span><span class="btn">Take Marta’s</span><span class="btn">Keep both</span><span class="btn">Merge for me</span></div>
-  <div class="choice"><div class="cols"><div><div class="lab">Merged by the AI</div>Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. Nobody’s been in <span class="chg">there</span> since Tuesday.”</div></div><div class="acts"><span class="btn pri">Use this</span><small>A proposal; the paragraph changes only if you take it</small></div></div>
-  <div class="fold">1 paragraph unchanged</div>
-  <p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow. And don’t ask Kit what he saw.”</p>
-  <div class="from"><i></i>from Marta’s copy</div>
-</div>
-<div class="mnote" style="top:614px"><div class="nh2">${L.icons.note}<span style="color:var(--ink2);font-weight:500">Note</span><span>· Marta</span></div>Lemon again?</div>`;
+  <div class="box mine"><div class="lab">Yours since sending</div><div class="tx">Lena looked at the coin, then at the door behind her, <span class="mk">then at nothing at all</span>. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</div></div>
+  <div class="box"><div class="lab">Marta’s</div><div class="tx">Lena looked at the coin, then at the door behind her. “Nobody came in at nine. Nobody’s been in <span class="mk">there</span> since Tuesday.”</div></div>
+  <div class="acts"><span class="btn">Keep mine</span><span class="btn">Take Marta’s</span><span class="btn">Keep both</span><span class="btn">${L.icons.spark}Merge for me</span><span class="btn e">E</span></div>
+  <div class="fold"><b>⌇</b>1 paragraph unchanged</div>
+  <p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.”</p>
+  <div class="box"><div class="lab">Marta’s</div><div class="tx">“Lena,” she said <span class="mk">softly</span>, “if he’s in trouble, I’d rather hear it from you.”</div></div>
+  <div class="acts"><span class="btn pri">Take Marta’s</span><span class="btn">Keep mine</span><span class="btn e">E</span></div>
+  <div class="fold"><b>⌇</b>9 paragraphs unchanged</div>
+</div>`;
 
 const sheetHtml = L.sheet({
-  title: 'Compare: Marta’s copy (Nov 12)',
+  title: 'Compare · Marta’s copy · 4 of 18 decided',
   body,
-  actions: `<span style="color:var(--ink2)">4 of 18 decided</span><span style="display:inline-flex;align-items:center;gap:6px;margin-left:8px"><span class="cb on"></span>Only differences</span><span class="btn pri" style="margin-left:6px">Done</span>`,
+  actions: `<span class="od"><span class="cb on"></span>Only differences</span><span class="hdone"><small>when all 18 are decided</small><span class="btn dis">Done</span></span>`,
 });
 
-const html = L.win({
-  mode: 'Write',
+// her comment: a blue pending card in the margin, with her name
+const comment = L.markCard({
+  kind: 'pending', title: 'Pending · comment', sub: 'Marta', x: 1078, y: 368, w: 300,
+  text: '<span style="color:var(--ink);font:italic 14px var(--text)">“Lemon again? It was on her hands in ch. 2 too.”</span><br>Goes to Review with her name, whatever you decide about the text.',
+  acts: [['↩', 'Reply', ''], ['✓', 'Done', '']],
+});
+
+const html = css + L.win({
+  mode: 'Review',
   crumbs: L.sample.crumbs7,
+  strip: { reviewCount: 12 },
   page: L.pageCol(``, { paddingTop: 40 }),
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', fixes: '3 fixes' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
   ask: 'normal',
   content: sheetHtml,
-  extra: css
-    + L.ann(1, 'Sides are named by person: Marta’s, and yours since sending. The version you sent is used underneath and never shown', 24, 240, { w: 250 })
-    + L.ann(2, 'Only differences: the unchanged paragraphs fold away', 24, 150, { w: 250 })
-    + L.ann(3, 'Changed by both: two compact cards and four buttons, never more', 24, 450, { w: 250 })
-    + L.ann(4, 'Merge for me is a proposal from the AI; it enters only with Use this', 1072, 560, { w: 250 })
-    + L.ann(5, 'Nothing enters the text before Done; Back to the text leaves at any time', 1072, 130, { w: 250 })
-    + L.ann(6, 'Her comments skip the merge and become notes with her name', 1072, 680, { w: 250 }),
+  extra: comment
+    + L.ann(1, '“Done” appears when all 18 are decided and applies them as one step; Back to the text leaves at any time, and the sheet resumes', 1078, 112, { w: 330 })
+    + L.ann(2, 'A decided row folds to one line, with its choice and Undo', 40, 124, { w: 300 })
+    + L.ann(3, 'A wavy line says what is folded; “Only differences” is on by default', 40, 172, { w: 300 })
+    + L.ann(4, 'Only Marta changed it: her version in a box under yours, the changed words marked. E edits the result before taking it', 40, 252, { w: 300 })
+    + L.ann(5, 'Both changed it: sides named by person, never “theirs” and “mine”; the version you sent stays underneath. Merge for me is an AI proposal', 40, 470, { w: 300 })
+    + L.ann(6, 'Her comments become blue cards in Review, with her name', 1078, 520, { w: 300 }),
 });
 
 module.exports = {
@@ -79,8 +89,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S22', title: 'A reader’s copy, compared',
-    scene: 'Receiving Marta’s copy opened Compare as a sheet over the window. The manuscript as it is today runs down one column; only the paragraphs that differ carry a block: one Marta alone changed, one changed by both (with the AI’s merge proposed), one already decided. Her note sits in the margin.',
-    on: 'the sheet header (Back to the text, the title, 4 of 18 decided, Only differences, Done), the Take-all bar, folded unchanged paragraphs, Marta’s card with Take and Keep mine, two cards side by side with four buttons and the merged proposal, a decided paragraph marked “from Marta’s copy”, Marta’s margin note, the Ask button',
-    off: 'the version as sent, “theirs” and “mine”, a third column, red banners, any change in the text before Done',
+    scene: 'Marta’s copy came back and Compare opened as a sheet over the window, the mode tabs dimmed behind it. The manuscript as it is today runs down one column; under each paragraph Marta changed, her version sits in a box. One row is already decided and folded; one paragraph only she changed; one both of you changed. Her comment waits in the margin as a blue card.',
+    on: 'the sheet header (Back to the text, “Compare · Marta’s copy · 4 of 18 decided”, Only differences checked, a gray Done with “when all 18 are decided”), the folded decided row “Took Marta’s · Undo”, wavy lines “⌇ 14 / 2 / 1 / 9 paragraphs unchanged”, a paragraph with Marta’s box and Take Marta’s · Keep mine · E, a paragraph with “Yours since sending” and “Marta’s” boxes and Keep mine · Take Marta’s · Keep both · Merge for me (spark) · E, another Marta-only paragraph, her comment as a blue Pending card with her name, the dimmed mode tabs, the Ask button',
+    off: 'the version as sent, “theirs” and “mine”, a third column, any change to the text before Done',
   }),
 };

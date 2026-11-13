@@ -1,5 +1,5 @@
-// S01: Start. No book open: the New book card on the left (title with its cover tile, the kind of text as
-// named structure levels, the location and the full path it will be stored in), Recent on the right.
+// S01: Start. No project open: the New project card on the left (title, the line about the optional structure
+// levels, the tile as a color row, three plain images or the initial, the location and the full path), Recent projects on the right.
 const L = require('../lib');
 
 const titlebar = `<div class="titlebar"><span class="appic"></span><div class="wtitle">Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`
@@ -12,18 +12,25 @@ const css = `<style>
 .s01 .start{position:absolute;left:260px;top:0;width:1040px;padding-top:84px;display:flex;gap:40px;align-items:flex-start}
 .s01 .card{width:680px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:22px 24px 20px}
 .s01 .card h2{margin:0 0 16px;font:600 16px var(--ui)}
-.s01 .trow{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
-.s01 .tilecol{flex:none;width:56px}
-.s01 .tile{width:56px;height:56px;border-radius:8px;background:#4f6d9a;color:#fff;display:flex;align-items:center;justify-content:center;font:400 30px/1 var(--text)}
-.s01 .tilecap{margin-top:5px;white-space:nowrap;font:11.5px/1.35 var(--ui);color:var(--ink3)}
-.s01 .tilecap small{display:block;font-size:10.5px;color:var(--ink4)}
-.s01 .trow .field{flex:1;margin:0}
-.s01 .kinds{display:flex;justify-content:space-between;gap:6px}
-.s01 .kd{padding:6px 8px 5px;border-radius:7px;border:1px solid transparent;white-space:nowrap}
-.s01 .kd b{display:block;font:500 12.5px/1.3 var(--ui);color:var(--ink)}
-.s01 .kd small{display:block;font:10.5px/1.3 var(--ui);color:var(--ink3);margin-top:2px}
-.s01 .kd.on{border-color:var(--accent);background:var(--accent-tint);box-shadow:inset 0 0 0 1px var(--accent)}
-.s01 .kd.on b{font-weight:600}
+.s01 .card .field{margin-bottom:14px}
+.s01 .hint{font:12px/1.4 var(--ui);color:var(--ink3);margin-top:1px}
+.s01 .tilerow{display:flex;gap:16px;align-items:center}
+.s01 .tile{flex:none;width:64px;height:64px;border-radius:9px;background:#4f6d9a;color:#fff;display:flex;align-items:center;justify-content:center;font:400 34px/1 var(--text)}
+.s01 .tileopts{display:flex;flex-direction:column;gap:9px}
+.s01 .swrow{display:flex;gap:8px}
+.s01 .swc{width:22px;height:22px;border-radius:50%;display:inline-block}
+.s01 .swc.on{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent)}
+.s01 .imrow{display:flex;gap:12px}
+.s01 .imo{display:flex;flex-direction:column;align-items:center;gap:3px}
+.s01 .imo small{font:11px var(--ui);color:var(--ink3)}
+.s01 .imo.on small{color:var(--ink);font-weight:600}
+.s01 .img{width:44px;height:30px;border-radius:5px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.s01 .imo.on .img{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent)}
+.s01 .img.init{background:#4f6d9a;color:#fff;font:400 17px/1 var(--text);border-color:#4f6d9a}
+.s01 .img.paper{background:radial-gradient(circle at 30% 30%,#fbf8ef,#efe8d6)}
+.s01 .img.linen{background:repeating-linear-gradient(0deg,rgba(120,110,90,.18) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(120,110,90,.18) 0 1px,transparent 1px 3px),#e9e3d3}
+.s01 .img.night{background:linear-gradient(#1d2840,#2c3a58);position:relative}
+.s01 .img.night:after{content:"";width:9px;height:12px;background:#e8c56a;border-radius:1px;box-shadow:13px 0 0 #3c4a68}
 .s01 .loc{display:flex;gap:10px;align-items:center}
 .s01 .loc .inp{flex:1}
 .s01 .loc .inp small{color:var(--ink3);font-size:12px;margin-left:6px}
@@ -44,43 +51,42 @@ const css = `<style>
 .s01 .rr .b div+div{color:var(--ink3);font-size:12px}
 .s01 .rr .when{color:var(--ink3);font-size:12px;flex:none}
 .s01 .rbtns{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.s01 .wnote{font:12px/1.4 var(--ui);color:var(--ink3);margin-top:-2px;width:300px}
 </style>`;
 
-const kinds = [
-  ['Novel', 'parts · chapters · scenes', true],
-  ['Novel without parts', 'chapters · scenes'],
-  ['Short story', 'scenes'],
-  ['Play', 'acts · scenes'],
-  ['Essay', 'sections'],
-  ['Plain text', 'no structure'],
-].map(([n, lv, on]) => `<div class="kd${on ? ' on' : ''}"><b>${n}</b><small>${lv}</small></div>`).join('');
+// the tile: a short color row, three plain images, or the title's initial on the color (no AI anywhere)
+const swatches = ['#4f6d9a', '#7b8a5a', '#b08a3c', '#8c5c6e', '#5f8f8b', '#6b6b70']
+  .map((c, i) => `<span class="swc${i === 0 ? ' on' : ''}" style="background:${c}"></span>`).join('');
+const images = [['paper', 'Paper'], ['linen', 'Linen'], ['night', 'Night window']]
+  .map(([k, t]) => `<span class="imo"><span class="img ${k}"></span><small>${t}</small></span>`).join('');
 
-const card = `<div class="card"><h2>New book</h2>`
-  + `<div class="trow"><div class="tilecol"><div class="tile">B</div><div class="tilecap">Sketch a cover<small>needs an AI</small></div></div>`
-  + `<div class="field"><label>Title</label><div class="inp foc">The Blue Lamp?<span class="cursor" style="height:15px;vertical-align:-2px"></span></div></div></div>`
-  + `<div class="field"><label>Kind of text</label><div class="kinds">${kinds}</div></div>`
+const card = `<div class="card"><h2>New project</h2>`
+  + `<div class="field"><label>Title</label><div class="inp foc">The Blue Lamp?<span class="cursor" style="height:15px;vertical-align:-2px"></span></div>`
+  + `<div class="hint">Parts, chapters and scenes are there when you need them · Rename them in Project settings</div></div>`
+  + `<div class="field"><label>Tile</label><div class="tilerow"><div class="tile">B</div>`
+  + `<div class="tileopts"><div class="swrow">${swatches}</div><div class="imrow"><span class="imo on"><span class="img init">B</span><small>Initial</small></span>${images}</div></div></div></div>`
   + `<div class="field"><label>Location</label><div class="loc"><div class="inp">Documents/Libreto<small>(recommended)</small></div><span class="btn">Change…</span></div></div>`
   + `<div class="stored"><div class="lb">Will be stored in</div><div class="path">/home/vega/Documents/Libreto/<span class="der">The Blue Lamp</span>/</div></div>`
-  + `<div class="cardf"><div class="disk">One folder per book: the text as Markdown files, one per chapter, readable anywhere; notes, research and history in their own subfolders.</div><span class="btn pri">Create</span></div>`
+  + `<div class="cardf"><div class="disk">One folder per project: the text as Markdown files, one per chapter, readable anywhere; notes, research and history in their own subfolders.</div><span class="btn pri">Create</span></div>`
   + `</div>`;
 
 const recentRow = (color, initial, title, when) => `<div class="rr"><div class="tl" style="background:${color}">${initial}</div><div class="b"><div>${title}</div><div>Documents/Libreto</div></div><div class="when">${when}</div></div>`;
-const recent = `<div class="recent"><div class="nh">Recent</div><div class="rlist">`
+const recent = `<div class="recent"><div class="nh">Recent projects</div><div class="rlist">`
   + recentRow('#7b8a5a', 'H', 'Harbor stories', 'Oct 12')
   + recentRow('#b08a3c', 'F', 'Field notes', 'Sep 3')
   + recentRow('#8c5c6e', 'A', 'A long winter', 'Jun 20')
-  + `</div><div class="rbtns"><span class="btn">Open another…</span><span class="btn">Import a Word file…</span></div></div>`;
+  + `</div><div class="rbtns"><span class="btn">Open another…</span><span class="btn">Import a Word file…</span><div class="wnote">Without headings, one chapter; an AI can propose where chapters start</div></div></div>`;
 
 const html = css + `<div class="win s01" style="width:1440px;height:900px">${titlebar}`
   + L.strip({ mode: 'none', back: false, forward: false, undo: false, redo: false })
   + `<div class="content"><div class="start">${card}${recent}</div></div>`
   + `<div class="status"></div>`
-  + L.ann(1, 'A label and the full path on one line, growing as you type the title; nothing to parse. “Change…” picks another place and the path updates', 262, 622, { w: 300 })
-  + L.ann(2, 'The folder name is derived from the title as you type: a character a folder cannot hold (the “?”) is dropped from the folder, the title keeps it', 610, 622, { w: 300 })
-  + L.ann(3, 'The kind of text is only the names of up to three structure levels, used everywhere afterwards; a book can gain or lose a level later from the Insert menu', 4, 330, { w: 200, r: true })
-  + L.ann(4, 'Cover tile: the title’s initial on a color by default, a picture if you drop one, a sketch from the AI when one is connected', 262, 104, { w: 320 })
-  + L.ann(5, 'Recent books open with one click, each with its tile; “Import a Word file” turns a manuscript’s headings into chapters', 982, 486, { w: 300 })
-  + L.ann(6, 'No book open: the strip is inactive, the status bar is empty, and there is no Ask button', 560, 818, { w: 320 })
+  + L.ann(1, 'A label and the full path on one line, growing as you type the title; nothing to parse. “Change…” picks another place and the path updates', 262, 612, { w: 300 })
+  + L.ann(2, 'The folder name is derived from the title as you type: a character a folder cannot hold (the “?”) is dropped from the folder, the title keeps it', 610, 612, { w: 300 })
+  + L.ann(3, 'No kind of text to choose: every project has Part, Chapter and Scene, all optional, and only the ones you use show. Renamed in Project settings (acts and scenes for a play), then used everywhere', 4, 214, { w: 210, r: true })
+  + L.ann(4, 'The tile: a color from the row, one of three plain images, or the title’s initial on the color. No AI; a real cover replaces it in Book', 4, 340, { w: 210, r: true })
+  + L.ann(5, 'Recent projects open with one click. A Word file’s headings become chapters; without headings it is one chapter, and a connected AI proposes where chapters start, as blue marks', 982, 486, { w: 300 })
+  + L.ann(6, 'No project open: the strip is inactive, the status bar is empty, and there is no Ask button', 560, 818, { w: 320 })
   + `</div>`;
 
 module.exports = {
@@ -92,8 +98,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S01', title: 'Start',
-    scene: 'Libreto opened with no book. The writer typed “The Blue Lamp?” as the title, left the kind of text on Novel and the recommended location as it is; under the location, “Will be stored in” shows the full path with the folder name derived from the title, without the “?”. Three recent books wait on the right.',
-    on: 'the empty strip and status bar, the New book card (the cover tile “B” with “Sketch a cover · needs an AI”, Title, Kind of text as six choices with their levels under them and Novel selected, Location with “(recommended)” and “Change…”, WILL BE STORED IN with the path /home/vega/Documents/Libreto/The Blue Lamp/, the storage line about one folder per book and Markdown files, Create), Recent with three books (tile, title, folder, date), “Open another…” and “Import a Word file…”',
-    off: 'templates, sync, accounts, an author or language field, the Ask button (no book is open), a dropdown for the kind, a picture or an AI sketch in the tile, the Spanish “Documentos/Libreto” default',
+    scene: 'Libreto opened with no project. The writer typed “The Blue Lamp?” as the title and left the tile and the recommended location as they are; under the location, “Will be stored in” shows the full path with the folder name derived from the title, without the “?”. Three recent projects wait on the right.',
+    on: 'the inactive strip (☰, toggles, tabs grayed) and the empty status bar, the New project card (Title with the gray line “Parts, chapters and scenes are there when you need them · Rename them in Project settings”, Tile with the preview “B”, a row of six colors with the first selected and the options Initial (selected), Paper, Linen, Night window, Location with “(recommended)” and “Change…”, WILL BE STORED IN with the path /home/vega/Documents/Libreto/The Blue Lamp/, the line about one folder per project and Markdown files, Create), Recent projects with three rows (tile, title, folder, date), “Open another…”, “Import a Word file…” and its gray note',
+    off: 'a kind of text to choose, templates, sync, accounts, an author or language field, an AI cover sketch, the Ask button (no project is open), Project settings where the level names change, the Spanish “Documentos/Libreto” default',
   }),
 };

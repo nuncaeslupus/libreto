@@ -1,6 +1,6 @@
 # Libreto concept, draft 2: the window, the Desk, the chat
 
-> **Draft 4 and 5 note (November 8).** The current description of the product is `walkthrough.md`
+> **Drafts 4 to 6 note (November 8 and 13).** The current description of the product is `walkthrough.md`
 > (concept draft 4) and its screens in `concepts-d4/`. Where this document and the walkthrough
 > differ, the walkthrough wins. Superseded here: the Desk and its tabs (§2), the chat in the
 > column (§2.3), Search & ask (§6.2), the Codex window (§2.2), the status-bar AI icon (§13),

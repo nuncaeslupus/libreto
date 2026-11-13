@@ -36,14 +36,23 @@ const icons = {
   'history-list': S('<circle cx="5" cy="5" r="3.2"/><path d="M5 3.4V5l1 .7"/><path d="M10 4h4M10 8h4M3 12h11"/>', { w: 15, vb: '0 0 16 16', sw: 1.4 }),
   collapse: S('<path d="M3.5 12h9"/>', { w: 14, vb: '0 0 16 16', sw: 1.6 }),
   send: S('<path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/>', { w: 12, vb: '0 0 16 16', sw: 2 }),
-  logo: '<svg class="logo" width="13" height="13" viewBox="0 0 20 20"><g stroke="#c4673f" stroke-width="2.3" stroke-linecap="round"><path d="M10 2.2v15.6M2.2 10h15.6M4.5 4.5l11 11M15.5 4.5l-11 11"/></g></svg>',
+  // the Ask glyph: a four-point spark, Libreto's own and no provider's; blue like everything pending
+  logo: '<svg class="logo" width="13" height="13" viewBox="0 0 20 20"><g stroke="#3b6ea8" stroke-width="1.8" stroke-linejoin="round" fill="rgba(59,110,168,.16)"><path d="M10 2.4 12.1 7.9 17.6 10l-5.5 2.1L10 17.6l-2.1-5.5L2.4 10l5.5-2.1z"/></g></svg>',
   style: S('<path d="M3 13 7 3h2l4 10M5 9h6"/>', { w: 13, vb: '0 0 16 16' }),
+  // draft 6
+  menu: S('<path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>', { sw: 1.5 }),
+  bell: S('<path d="M4 11.2V7.6a4 4 0 0 1 8 0v3.6l1 1.4H3z"/><path d="M6.6 14a1.6 1.6 0 0 0 2.8 0"/>', { sw: 1.4 }),
+  keys: S('<rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/>', { sw: 1.3 }),
+  spark: S('<path d="M8 2.2 9.4 6.6 13.8 8 9.4 9.4 8 13.8 6.6 9.4 2.2 8l4.4-1.4z"/>', { sw: 1.3 }),
+  pending: S('<circle cx="8" cy="8" r="6.3"/><circle cx="5.2" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="8" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="10.8" cy="8" r=".95" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
+  unknown: S('<circle cx="8" cy="8" r="6.3"/><path d="M6.3 6.5a1.8 1.8 0 1 1 2.6 1.6c-.6.4-.9.8-.9 1.5"/><circle cx="8" cy="11.5" r=".75" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
+  info: S('<circle cx="8" cy="8" r="6.3"/><path d="M8 7.3v4"/><circle cx="8" cy="5.1" r=".8" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
   'arrow-out': S('<path d="M6 3H3v10h10v-3M9 3h4v4M13 3 7.5 8.5"/>', { w: 12, vb: '0 0 16 16', sw: 1.6 }),
 };
 const ib = (icon, cls = '', title = '') => `<span class="ib ${cls}"${title ? ` title="${attr(title)}"` : ''}>${icons[icon] || icon}</span>`;
 
 // ---------- chrome ----------
-const MODES = ['Write', 'Plan', 'Research', 'Review', 'Book'];
+const MODES = ['Write', 'Plan', 'Research', 'Codex', 'Review', 'Book'];
 
 // crumbs: {chapter:"Chapter 7 · Lena’s warning", scene:"Lena lies about the back room"} or raw HTML
 function crumbsHtml(c) {
@@ -58,21 +67,25 @@ function crumbsHtml(c) {
 function strip(o = {}) {
   const mode = o.mode || 'Write';
   const on = (v, d) => (v === undefined ? d : v);
+  const tab = (m) => `<span${m === mode ? ' class="on"' : ''}>${m}${m === 'Review' && o.reviewCount ? `<i class="n">${esc(o.reviewCount)}</i>` : ''}</span>`;
   return `<div class="strip">`
+    + (o.menu === false ? '' : ib('menu', 'mn', 'Menu'))
     + ib(o.leftOn ? 'sidebar-left-on' : 'sidebar-left', 'tog' + (o.leftOn ? ' on' : ''))
     + `<span class="gap"></span>`
     + ib('back', on(o.back, true) ? '' : 'off') + ib('forward', on(o.forward, false) ? '' : 'off')
     + `<span class="gap"></span>`
     + ib('undo', on(o.undo, true) ? '' : 'off') + ib('redo', on(o.redo, false) ? '' : 'off')
     + `<span class="gap"></span>`
-    + crumbsHtml(o.crumbs)
-    + `<span class="right"><span class="modes">${MODES.map((m) => `<span${m === mode ? ' class="on"' : ''}>${m}</span>`).join('')}</span>`
+    + (o.crumbs === false ? '<span class="crumbs"></span>' : crumbsHtml(o.crumbs))
+    + `<span class="right"><span class="modes">${MODES.map(tab).join('')}</span><span class="gap"></span>`
+    + (o.find === false ? '' : ib('magnifier', 'fnd', 'Find · Ctrl+F'))
+    + (o.bell === false ? '' : ib('bell', 'bel' + (o.bell === 'dot' ? ' unread' : ''), 'Notices'))
     + ib(o.rightOn ? 'sidebar-right-on' : 'sidebar-right', 'tog' + (o.rightOn ? ' on' : '')) + `</span>`
     + `</div>`;
 }
 
-const titlebar = () => `<div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`
-  + `<div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>AI</span><span>Help</span></div>`;
+// draft 6: no menu bar row; the ☰ button in the strip holds the menus (macOS keeps its system bar)
+const titlebar = () => `<div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`;
 
 // win({mode, crumbs, left, right, page, status, ask, extra, content, width, height})
 //   left/right: panel HTML (navigator(), reference()) or falsy = closed; the toggles follow.
@@ -112,11 +125,13 @@ function statusBar(o = {}) {
   if (o.words) h += `<span class="sb m"><span class="dd">${esc(o.words)}</span></span>`;
   if (o.pages) h += `<span class="sb m"><span class="dd">${esc(o.pages)}</span></span>`;
   if (o.fixes) h += `<span class="sb m cnt">${icons.fix}<span class="dd">${esc(o.fixes)}</span></span>`;
+  if (o.review) h += `<span class="sb m rev">${icons.pending}<span class="dd">${esc(o.review)}</span></span>`;
   if (o.left) h += o.left;
   h += `<span class="sp"></span>`;
   if (o.right) h += o.right;
-  if (o.view !== false) h += `<span class="sb m">${icons.view}<span class="dd">${esc(o.view || 'By chapter')}</span></span>`;
-  h += `<span class="sb m${o.highlightsOn ? ' act' : ''}">${icons.pen}<span class="dd">Highlights</span></span>`;
+  if (o.keys !== false) h += `<span class="sb ic kb" title="Keys for where you are">${icons.keys}</span>`;
+  if (o.view !== false) h += `<span class="sb m">${icons.view}<span class="dd">${esc(o.view || 'Whole book')}</span></span>`;
+  h += `<span class="sb m${o.highlightsOn ? ' act' : ''}">${icons.pen}<span class="dd">${esc(o.show || 'Show')}</span></span>`;
   h += `<span class="sb m">${icons.clock}<span class="dd">History</span></span>`;
   h += `<span class="vsep"></span>`;
   h += `<span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:${knob}%"></span></span><span>+</span><span class="pct">${zoom}%</span></span>`;
@@ -152,7 +167,7 @@ function askPanel(o = {}) {
 }
 
 // ---------- panels ----------
-const cntIcon = (kind) => ({ note: icons.note, task: icons.task, fix: icons.fix })[kind];
+const cntIcon = (kind) => ({ note: icons.note, task: icons.pending, pending: icons.pending, prop: icons.pending, fix: icons.fix, done: icons.fix, unknown: icons.unknown, spell: icons.unknown })[kind];
 const cap99 = (n) => (n > 99 ? '99+' : String(n));
 function counts(r) {
   const parts = [];
@@ -200,7 +215,7 @@ function reference(o = {}) {
   return `<div class="ref"><div class="refhead">`
     + ib('back', o.backOn === false ? 'off' : '') + ib('forward', o.forwardOn ? '' : 'off')
     + `<span class="kind">${esc(o.kind || 'Person')}</span><span class="name">${esc(o.name || '')}</span><span class="sp"></span>`
-    + ib('magnifier', '', 'Ask about this') + `<span class="lk">Open in Research ↗</span>`
+    + ib('spark', '', 'Ask about this') + `<span class="lk">${esc(o.open || 'Open in Codex ↗')}</span>`
     + `</div><div class="refbody">${o.body || ''}</div></div>`;
 }
 
@@ -251,26 +266,29 @@ function tip(text, o = {}) {
 //   the buttons decide. Window coordinates by default.
 function markCard(o = {}) {
   const pos = o.right !== undefined ? `right:${o.right}px` : `left:${o.x || 0}px`;
-  const acts = o.acts || (o.kind === 'fix'
+  const k = o.kind || 'fix';
+  const acts = o.acts || (k === 'fix' || k === 'done'
     ? [['✓', 'Keep', 'Enter'], ['✗', 'Undo', 'Delete']]
+    : k === 'note' ? [['↩', 'Reply', ''], ['✓', 'Done', 'Enter']]
+    : k === 'spell' || k === 'unknown' ? [['+', 'Add to dictionary', ''], ['◉', 'Make a Codex entry', '']]
     : [['✓', 'Apply', 'Enter'], ['✗', 'Skip', 'Delete']]);
-  const ico = o.kind === 'fix' ? icons.fix : o.kind === 'note' ? icons.note : o.kind === 'task' ? icons.task : (icons.prop || icons.fix);
+  const ico = ({ fix: icons.fix, done: icons.fix, note: icons.note, task: icons.pending, pending: icons.pending, prop: icons.pending, gram: icons.pending, spell: icons.unknown, unknown: icons.unknown })[k] || icons.pending;
   let body = '';
   if (o.before !== undefined || o.after !== undefined) {
     body = `<div class="mc-ba"><span class="mc-l">Was</span><span class="mc-t">${o.before || ''}</span><span class="mc-l">Now</span><span class="mc-t">${o.after || ''}</span></div>`;
   }
   if (o.text) body += `<div class="mc-x">${o.text}</div>`;
   return `<div class="mc ${o.kind || 'fix'}" style="${pos};top:${o.y || 0}px${o.w ? `;width:${o.w}px` : ''}">`
-    + `<div class="mc-h">${ico}<b>${esc(o.title || 'Fixed')}</b>${o.sub ? `<span class="mc-s">${esc(o.sub)}</span>` : ''}</div>`
+    + `<div class="mc-h">${ico}<b>${esc(o.title || 'Done')}</b>${o.sub ? `<span class="mc-s">${esc(o.sub)}</span>` : ''}</div>`
     + body
     + `<div class="mc-a">${acts.map(([g, t, k]) => `<span class="mc-b"><i>${g}</i>${esc(t)}${k ? `<kbd>${esc(k)}</kbd>` : ''}</span>`).join('')}</div>`
     + `</div>`;
 }
 // notice(text, {kind:'fix'|'info', undo:true, place}) — the one notice card: bottom center of the page,
-//   never on a timer; folds when the writer moves on and stays in Changes (status bar) and History.
+//   never on a timer; stays until Got it and stays in Changes (status bar) and History.
 function notice(text, o = {}) {
-  const ico = o.kind === 'fix' ? icons.fix : (icons.info || icons.note);
-  return `<div class="notice ${o.kind || 'info'}"${o.style ? ` style="${o.style}"` : ''}>${ico}<span class="ntx">${text}</span>${o.undo === false ? '' : `<span class="lk">Undo<kbd>Ctrl+Z</kbd></span>`}<span class="nx">✕</span></div>`;
+  const ico = o.kind === 'fix' ? icons.fix : icons.info;
+  return `<div class="notice ${o.kind || 'info'}"${o.style ? ` style="${o.style}"` : ''}>${ico}<span class="ntx">${text}</span>${o.undo === false ? '' : `<span class="lk">Undo<kbd>Ctrl+Z</kbd></span>`}<span class="got">${esc(o.got || 'Got it')}</span></div>`;
 }
 
 // ---------- annotations and captions ----------
