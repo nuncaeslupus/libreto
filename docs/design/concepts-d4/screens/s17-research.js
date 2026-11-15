@@ -1,25 +1,25 @@
 // S17: Research. The library (Codex and Research) on the left, a topic as a document in the middle, what it links to on the right.
 const L = require('../lib');
 
-// the left column: Inbox, topics in one level of folders, files. No Codex here: it has its own tab.
-const lrow = (t, c, o = {}) => `<div class="lrow${o.cur ? ' cur' : ''}${o.in ? ' in' : ''}"><span class="cv">${o.coll ? L.icons['chevron-right'] : o.open ? L.icons.chevron : ''}</span>${o.ic ? `<span class="ic ${o.ic}"></span>` : ''}<span class="t">${t}</span>${c ? `<span class="c">${c}</span>` : ''}</div>`;
-const library = `<div class="nav lib"><div class="navtop"><div class="filter">${L.icons.magnifier}<span>Filter topics and files</span></div></div><div class="libbody">`
+// the left column: Inbox, topics in one level of folders, files; the column's + menu open at its foot.
+const lrow = (t, c, o = {}) => `<div class="lrow${o.cur ? ' cur' : ''}${o.in ? ' in' : ''}${o.fold ? ' fold' : ''}"><span class="cv">${o.coll ? L.icons['chevron-right'] : o.open ? L.icons.chevron : ''}</span>${o.ic ? `<span class="ic ${o.ic}"></span>` : ''}<span class="t">${t}</span>${c ? `<span class="c">${c}</span>` : ''}</div>`;
+const library = `<div class="nav lib"><div class="navtop"><div class="filter">${L.icons.magnifier}<span>Filter (titles and text)</span></div></div><div class="libbody">`
   + `<div class="nh">Inbox <span class="nc">3</span></div>`
   + lrow('jazz-clubs-harbor.html', 'link', { ic: 'k-lnk' }) + lrow('Photo · station steps, 1951', 'photo', { ic: 'k-img' }) + lrow('“Licensing hours in the port…”', 'pasted', { ic: 'k-txt' })
   + `<div class="nh">Topics</div>`
-  + lrow('Bars', '', { open: true }) + lrow('The Blue Lamp', '', { in: true }) + lrow('Bars in the 1950s', '', { in: true, cur: true })
-  + lrow('Jazz', '', { open: true }) + lrow('Jazz records', '', { in: true }) + lrow('Clubs on Harbor Street', '', { in: true })
-  + lrow('Police procedure') + lrow('Harbor district, 1950')
+  + lrow('Bars of the 1950s', '', { open: true, fold: true }) + lrow('Licensing hours', '', { in: true, cur: true }) + lrow('The Blue Lamp’s history', '', { in: true })
+  + lrow('Jazz records') + lrow('Police procedure') + lrow('Harbor district, 1950')
   + `<div class="nh">Files <span class="nc">6</span></div>`
   + lrow('Bars, 1952.pdf', '14 p.', { ic: 'k-pdf' }) + lrow('counter.jpg', '', { ic: 'k-img' }) + lrow('street.jpg', '', { ic: 'k-img' }) + lrow('3 more', '', { coll: true })
-  + `</div><div class="navfoot"><span class="btn q">+ New topic</span></div></div>`;
+  + `</div><div class="navfoot lf"><span class="ib plusb">${L.icons.plus}</span></div>`
+  + `<div class="menu" style="left:12px;bottom:44px;min-width:170px"><div class="mi hov">New topic</div><div class="mi">New folder</div></div></div>`;
 
 // the topic document
 const chipLk = (t) => `<span class="chip lk">${t}</span>`;
 const att = (label, cls) => `<div class="att"><div class="pic sm ${cls}"></div><small>${label}</small></div>`;
 const topic = `<div class="topic">`
-  + `<h1 class="ttl">Bars in the 1950s</h1>`
-  + `<div class="linked"><span class="k">Linked to:</span>${chipLk('the Blue Lamp')}${chipLk('Lena')}${chipLk('ch. 2')}${chipLk('ch. 7')}<span class="chip q">+ Link to…</span></div>`
+  + `<h1 class="ttl">Licensing hours</h1>`
+  + `<div class="linked"><span class="k">Linked to:</span>${chipLk('the Blue Lamp')}${chipLk('Lena')}<span class="chip q">+ Link to a person or place…</span></div>`
   + `<div class="atts">${att('Bars, 1952.pdf', 'pdf')}${att('counter.jpg', '')}${att('street.jpg', 'st')}${att('link · jazz clubs', 'lnk')}</div>`
   + `<p class="first">Most of the bars on Harbor Street kept the same hours and the same furniture: a long counter, a brass rail, a jukebox that nobody fed after ten. The back room was for cards, or for whoever the owner owed a favor.</p>`
   + `<h2>Hours and the law</h2>`
@@ -27,23 +27,30 @@ const topic = `<div class="topic">`
   + `<figure><div class="pic big"></div><figcaption>Bar counter, harbor district, about 1950 · counter.jpg</figcaption></figure>`
   + `<blockquote>“Nobody closed on time, and nobody was ever open late.” <span class="who">— a retired bartender, interviewed 1978</span></blockquote>`
   + `<p class="first">Lemon was the smell of a bar that had been cleaned; the owner’s bar smelled of beer. Lena would have carried the lemon home on her hands.</p>`
-  + `</div>`
-  // the selection's small toolbar, and its "Pin as fact of…" submenu
-  + `<div class="pop seltb" style="left:150px;top:374px"><span><b>B</b></span><span><i>I</i></span><span class="sep"></span><span>Link to…</span><span class="hov">Pin as fact of… ▸</span><span>Move to a new topic</span><span class="sep"></span><span class="spk">${L.icons.spark}</span></div>`
-  + `<div class="menu" style="left:286px;top:410px;min-width:220px"><div class="mh">Codex entries in this topic</div><div class="mi hov">Lena<span class="r">person</span></div><div class="mi">The Blue Lamp<span class="r">place</span></div><div class="msep"></div><div class="mi">Another entry…</div></div>`;
+  + `</div>`;
 
-// the Reference panel: what this topic links to
+// the right-click menu on the selection (content coordinates: window y − 92), and its submenu
+const mi = (t, o = {}) => `<div class="mi${o.hov ? ' hov' : ''}${o.dis ? ' dis' : ''}">${t}${o.r ? `<span class="r">${o.r}</span>` : ''}</div>`;
+const SEP = '<div class="msep"></div>';
+const menus = `<div class="menu" style="left:620px;top:356px;min-width:268px">`
+  + mi('Emphasis', { r: 'Ctrl+I' }) + mi('Strong', { r: 'Ctrl+B' }) + mi('Style as', { r: '▸' }) + SEP
+  + mi('Add to the Codex as a fact of', { r: '▸', hov: true }) + mi('Link to a person or place…') + mi('Send to the Inbox', { dis: true }) + SEP
+  + mi(`<span class="spk">${L.icons.spark}</span>Ask the AI about this`) + SEP
+  + mi('Cut', { r: 'Ctrl+X' }) + mi('Copy', { r: 'Ctrl+C' }) + mi('Paste', { r: 'Ctrl+V' }) + `</div>`
+  + `<div class="menu" style="left:884px;top:452px;min-width:150px">`
+  + mi('Lena', { hov: true, r: 'person' }) + mi('Kit', { r: 'person' }) + mi('the Blue Lamp', { r: 'place' }) + `</div>`;
+
+// the Reference panel: what this topic links to (we are in Research: no "Edit in Research" foot)
 const lrefrow = (kind, t, o = {}) => `<div class="lkrow${o.cur ? ' cur' : ''}"><span class="k">${kind}</span><span class="lk">${t}</span>${o.m ? `<span class="m">${o.m}</span>` : ''}</div>`;
 const ref = L.reference({
-  kind: 'Place', name: 'The Blue Lamp', backOn: false, open: 'Open in Codex ↗',
-  body: `<div class="nh">This topic links to</div>`
-    + lrefrow('Place', 'The Blue Lamp', { cur: true, m: 'Codex' }) + lrefrow('Person', 'Lena', { m: 'Codex' }) + lrefrow('Chapter', 'ch. 2 · The bartender') + lrefrow('Chapter', 'ch. 7 · Lena’s warning')
-    + `<div class="tcard" style="margin-top:12px"><div style="display:flex;gap:12px;align-items:center;margin-bottom:8px"><div class="pic" style="width:48px;height:48px"></div><div><div class="pk-kind" style="margin:0">Place</div><div class="pk-title" style="margin:0;font-size:15px">The Blue Lamp</div></div></div>`
-    + `<div style="color:var(--ink2)">Bar on Harbor Street; Lena’s bar. The back-room door is behind the till.</div>`
-    + `<div class="nh">Chapters that mention it</div>`
-    + `<div class="chs">${[['ch. 1', 'Rain on the glass', 9], ['ch. 2', 'The bartender', 12], ['ch. 5', 'Kit’s ledger', 3], ['ch. 6', 'The back room', 7], ['ch. 7', 'Lena’s warning', 11]].map(([c, t, n]) => `<div><span class="lk">${c} · ${t}</span><span class="m">${n}</span></div>`).join('')}</div>`
-    + `<div class="nh">Other topics linked to it</div><div><span class="lk">The Blue Lamp</span> <span style="color:var(--ink3)">· in Bars</span></div>`
-    + `</div>`,
+  kind: 'Topic', name: 'Licensing hours', backOn: false, foot: false,
+  body: `<div class="nh">Linked to</div>`
+    + lrefrow('Person', 'Lena', { m: 'typed in the topic' }) + lrefrow('Place', 'the Blue Lamp', { m: 'typed in the topic' }) + lrefrow('Place', 'Harbor Street', { m: 'linked by hand' })
+    + `<div class="nh">Chapters that mention them</div>`
+    + `<div class="chs">${[['ch. 1', 'Rain on the glass', 9], ['ch. 2', 'The bartender', 12], ['ch. 6', 'The back room', 7], ['ch. 7', 'Lena’s warning', 11], ['ch. 8', 'Closing time', 6]].map(([c, t, n]) => `<div><span class="lk">${c} · ${t}</span><span class="m">${n}</span></div>`).join('')}</div>`
+    + `<div class="nh">Facts sent to the Codex</div>`
+    + `<div class="fct">Closes at two; bottles locked at half past one<small>fact of <span class="lk">the Blue Lamp</span></small></div>`
+    + `<div class="nh">Files</div><div class="chs"><div><span class="lk">Bars, 1952.pdf</span><span class="m">14 p.</span></div><div><span class="lk">counter.jpg</span></div></div>`,
 });
 
 const css = `<style>
@@ -55,17 +62,14 @@ const css = `<style>
 .lrow .ic.k-pdf{border-color:#e0b4a8;background:#fbefeb}
 .lrow .ic.k-lnk{border-color:#b9cbe2;background:#eef3fa}
 .lrow .ic.k-txt{background:repeating-linear-gradient(#fff 0 3px,#cfcfcb 3px 4px)}
-.seltb{align-items:center}
-.seltb .sep{width:1px;height:16px;background:var(--line);padding:0;margin:0 2px}
-.seltb .spk{display:inline-flex;color:var(--ink2);padding:4px 6px}
-.seltb .spk svg{width:14px;height:14px}
-.page .menu{font-family:var(--ui)}
-.refhead{padding:0 8px 0 4px}
-.refhead .ib{width:19px}
-.refhead{gap:1px}
-.refhead .kind{font-size:10px;margin-left:2px;white-space:nowrap}
-.refhead .name{font-size:12.5px}
-.refhead .lk{font-size:11.5px}
+.menu .spk{display:inline-flex;color:var(--accent)}.menu .spk svg{width:14px;height:14px}
+.menu .mi.dis{color:var(--ink4)}
+.lrow.fold{font-weight:500}
+.navfoot.lf{justify-content:flex-start}
+.navfoot .plusb{width:28px;height:28px;border:1px solid var(--line);border-radius:7px;background:#e6e6e3;color:var(--ink)}
+.lkrow .k{width:48px}
+.fct{font-size:12.5px;padding:2px 8px}.fct small{display:block;color:var(--ink3);font-size:11.5px}
+.refbody .chs{padding:0 8px}
 .menu .mh{font:600 10px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:4px 10px 3px}
 .menu .msep{height:1px;background:var(--line2);margin:4px 2px}
 .topic .sel{background:rgba(59,110,168,.22);border-radius:2px}
@@ -108,19 +112,22 @@ const css = `<style>
 
 const html = css + L.win({
   mode: 'Research',
-  crumbs: { chapter: 'Bars', scene: 'Bars in the 1950s' },
+  crumbs: false,
+  strip: { reviewCount: 12 },
   left: library,
   right: ref,
   page: L.pageCol(topic, { paddingTop: 36 }),
   status: { style: 'Plain', view: false, words: '1,140 words', left: `<span class="sb">4 files</span>` },
   ask: 'normal',
-  extra: L.ann(1, 'Anything dropped or pasted in, sorted later', 86, 108)
-    + L.ann(2, 'Topics, in one level of folders', 96, 210)
-    + L.ann(3, 'No Codex in this column: it has its own tab', 20, 640, { w: 260 })
+  content: menus,
+  extra: L.ann(1, 'The Inbox, three ways in: drop a file, a picture or a link on the window; Edit ▸ Paste into the Inbox; right-click ▸ Send to the Inbox', 16, 560, { w: 250 })
+    + L.ann(2, 'No browser inside Libreto in version 1: a web page comes as a link or a pasted passage', 16, 676, { w: 250 })
+    + L.ann(3, 'The column’s +: New topic, New folder (one level of folders)', 196, 800, { w: 200 })
     + L.ann(4, 'A topic is a document like a chapter: title, styles, pictures inline, files attached', 640, 104, { w: 330 })
-    + L.ann(5, 'Codex names typed here are recognized; “Link to…” adds the rest', 772, 182, { w: 250 })
-    + L.ann(6, 'Select a passage, “Pin as fact of…”: the fact lands on the entry with its source and a link back', 410, 500, { w: 222 })
-    + L.ann(7, 'What the topic links to: Codex entries, and the chapters that mention them', 1136, 640, { w: 250 }),
+    + L.ann(5, 'Codex names typed here are linked at once; “Link to a person or place…” adds the rest by hand', 806, 182, { w: 250 })
+    + L.ann(6, 'Select, right-click ▸ Add to the Codex as a fact of ▸ Lena: the fact lands on her entry with this topic as its source and a link back', 330, 620, { w: 262 })
+    + L.ann(7, 'Send to the Inbox is gray: this is already Research', 884, 664, { w: 180 })
+    + L.ann(8, 'What the topic links to: entries, and the chapters that mention them', 1150, 650, { w: 240 }),
 });
 
 module.exports = {
@@ -132,8 +139,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S17', title: 'Research',
-    scene: 'Research mode. The left column is the writer’s material: the Inbox, the topics in one level of folders, the files. The topic “Bars in the 1950s” is open in the middle as a document. The writer has selected a sentence; its small toolbar offers “Pin as fact of…”, and the submenu proposes the Codex entries the topic mentions, Lena first. On the right, the Reference panel shows what the topic links to, with the Blue Lamp open.',
-    on: 'the left column (filter, INBOX 3: a link, a photo, a pasted paragraph; TOPICS: Bars ▸ The Blue Lamp, Bars in the 1950s (current); Jazz ▸ Jazz records, Clubs on Harbor Street; two more topics; FILES with “3 more”; “+ New topic”), the topic (title, “Linked to” chips and “+ Link to…”, four attachments, text, a subheading, a picture, a block quote), the selected sentence with its toolbar (B, I, Link to…, Pin as fact of… ▸, Move to a new topic, spark) and the submenu (Lena hovered, The Blue Lamp, Another entry…), the Reference panel (PLACE · The Blue Lamp, Open in Codex ↗, “This topic links to” with two Codex entries and two chapters, the Blue Lamp card with the chapters that mention it), the Ask button',
-    off: 'the Codex in the left column, the chapter list, a Search &amp; ask box, a provider icon in the status bar',
+    scene: 'Research, its position pressed on the mode switch. The left column is the writer’s material: the Inbox, the topics in one level of folders, the files, with the column’s + menu open. The topic “Licensing hours” is open in the middle as a document. The writer has selected a sentence and right-clicked: “Add to the Codex as a fact of ▸” proposes Lena, Kit and the Blue Lamp. On the right, the Reference panel shows what the topic links to.',
+    on: 'the left column (filter, INBOX 3: a link, a photo, a pasted passage; TOPICS: the folder Bars of the 1950s ▸ Licensing hours (current), The Blue Lamp’s history; three more topics; FILES with “3 more”; the + at the foot with New topic · New folder), the topic (title, “Linked to” chips and “+ Link to a person or place…”, four attachments, text, a subheading, a picture, a block quote), the selected sentence and its right-click menu (Emphasis, Strong, Style as ▸, Add to the Codex as a fact of ▸ with Lena · Kit · the Blue Lamp, Link to a person or place…, Send to the Inbox in gray, Ask the AI about this, Cut · Copy · Paste), the Reference panel (TOPIC, Licensing hours, linked entries, the chapters that mention them, a fact already sent to the Codex, files; no foot), the Ask button',
+    off: 'the Codex in the left column (it has its own position), a browser, the chapter list, a breadcrumb, Edit in Research (we are in it)',
   }),
 };

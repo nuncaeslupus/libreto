@@ -1,5 +1,5 @@
 // S28: Statistics. A sheet with tabs Words · Sessions · Who appears where and a range (This week ·
-// This month · All); the Words tab: words per chapter and per day for the range; the mode tabs dimmed behind.
+// This month · All); the Words tab: words per chapter and per day for the range; the mode switch dimmed behind.
 const L = require('../lib');
 
 // written this month, per chapter (sums to 14,860) and per day, Nov 1–13 (same sum)
@@ -48,14 +48,14 @@ const html = L.win({
   crumbs: L.sample.crumbs7,
   strip: { reviewCount: 12 },
   page: L.pageCol(``, { paddingTop: 40 }),
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'p. 146 of 248' },
   ask: 'normal',
   content: L.sheet({ title: 'Statistics', body }),
   extra: css
-    + L.ann(1, 'A sheet, from the word count or Reports ▸ Statistics; Back to the text (Esc) leaves', 100, 822, { w: 300 })
-    + L.ann(2, 'Words · Sessions (time and words) · Who appears where (people by chapter)', 50, 128, { r: true })
-    + L.ann(3, 'The range: this week, this month, all', 1040, 160)
-    + L.ann(4, 'The mode tabs stay, dimmed behind the sheet', 966, 72),
+    + L.ann(1, 'A sheet, from the word count or the page count in the status bar, or Reports ▸ Statistics; Back to the text (Esc) leaves', 100, 822, { w: 300 })
+    + L.ann(2, 'Words · Sessions (time and words) · Who appears where (people by chapter)', 40, 150, { r: true })
+    + L.ann(3, 'The range: this week, this month, all', 1010, 186)
+    + L.ann(4, 'The mode switch stays, dimmed behind the sheet', 1010, 100),
 });
 
 module.exports = {
@@ -67,8 +67,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S28', title: 'Statistics',
-    scene: 'Statistics from the word count in the status bar: a sheet over the window, on the Words tab, range This month. Words written per chapter and per day, in one quiet color; the mode tabs dimmed behind.',
-    on: 'the sheet header with Back to the text, the tabs Words · Sessions · Who appears where, the range This week · This month · All, words per chapter and per day with their totals, the dimmed mode tabs, the Ask button',
+    scene: 'Statistics from the word count in the status bar: a sheet over the window, on the Words tab, range This month. Words written per chapter and per day, in one quiet color; the mode switch dimmed behind.',
+    on: 'the sheet header with Back to the text, the tabs Words · Sessions · Who appears where, the range This week · This month · All, words per chapter and per day with their totals, the dimmed mode switch, the Ask button',
     off: 'the other two tabs’ contents (the sessions table, the grid of people by chapter), a palette of many colors, tiles',
   }),
 };

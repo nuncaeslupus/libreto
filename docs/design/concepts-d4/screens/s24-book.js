@@ -20,37 +20,48 @@ const css = `<style>
 .thumbs .pg.open:after{content:"";position:absolute;left:20px;right:20px;top:23px;height:4px;background:#cfcfcb;border-radius:1px}
 .thumbs .pg.short:before{bottom:44px}
 .thumbs .pg.blank:before{display:none}
-.spread{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;box-shadow:0 8px 28px rgba(0,0,0,.14)}
-.spread .pp{width:330px;height:495px;background:#fff;position:relative;padding:40px 40px 42px;font:10.4px/1.5 var(--text);color:var(--ink);overflow:hidden;text-align:justify;hyphens:auto}
+.spread{position:absolute;left:665px;top:50%;transform:translate(-50%,-50%);display:flex;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+.spread .pp{width:300px;height:450px;background:#fff;position:relative;padding:36px 34px 40px;font:9.5px/1.5 var(--text);color:var(--ink);overflow:hidden;text-align:justify;hyphens:auto}
 .spread .pp+.pp{border-left:1px solid #ececea}
 .spread .pp p{margin:0;text-indent:1.4em}
 .spread .pp p.first{text-indent:0}
-.spread .rh{text-align:center;font-size:7.5px;letter-spacing:.22em;color:var(--ink2);margin-bottom:14px;text-transform:uppercase}
-.spread .pn{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:9.5px;color:var(--ink2)}
-.spread .cnum{margin-top:74px;text-align:center;font-size:9px;letter-spacing:.3em;color:var(--ink2)}
-.spread .ctl{text-align:center;font:italic 17px var(--text);margin:5px 0 22px}
-.lay{position:absolute;right:0;top:0;bottom:0;width:320px;background:var(--soft);border-left:1px solid var(--line);z-index:4;display:flex;flex-direction:column;font-size:12.5px}
-.lay .lh{height:40px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--line2);font-weight:600}
-.lay .lb{padding:6px 14px 0;flex:1}
-.lay .fr{display:flex;align-items:center;gap:8px;padding:7px 0;min-height:34px}
-.lay .fr .k{width:92px;flex:none;color:var(--ink2)}
-.lay .fr .inp{padding:4px 9px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.spread .rh{text-align:center;font-size:7px;letter-spacing:.22em;color:var(--ink2);margin-bottom:12px;text-transform:uppercase}
+.spread .pn{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:9px;color:var(--ink2)}
+.spread .cnum{margin-top:66px;text-align:center;font-size:8.5px;letter-spacing:.3em;color:var(--ink2)}
+.spread .ctl{text-align:center;font:italic 16px var(--text);margin:5px 0 20px}
+.lay{position:absolute;right:0;top:0;bottom:0;width:430px;background:var(--soft);border-left:1px solid var(--line);z-index:4;display:flex;flex-direction:column;font-size:12.5px}
+.lay .lb{padding:4px 16px 0;flex:1;min-height:0;overflow:hidden}
+.lay .gh{font:600 10.5px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin:12px 0 4px;display:flex;align-items:baseline;gap:8px}
+.lay .gh .ghs{text-transform:none;letter-spacing:0;font-weight:400;font-size:11.5px}
+.lay .fr{display:flex;align-items:center;gap:7px;padding:4px 0;min-height:32px}
+.lay .fr .k{width:66px;flex:none;color:var(--ink2)}
+.lay .fr .inp{padding:4px 9px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px;height:26px;box-sizing:border-box}
 .lay .fr .inp.dd:after{margin-left:auto}
-.lay .fr .inp.sm{width:44px;padding:4px 7px}
-.lay .seg span{padding:3px 8px;font-size:11.5px}
-.lay .ck{display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:6px 0;border:0;width:auto;height:auto;background:none;border-radius:0;font-size:12.5px}
-.lay .lf{flex:none;padding:10px 14px 12px;border-top:1px solid var(--line2);display:flex;align-items:center;gap:8px}
-.lay .menu{width:236px}
-.lay .menu .mi .r{padding-left:10px}
-.lay .menu .mi.on:before{content:"✓";color:var(--accent);font-weight:600;width:12px}
-.lay .menu .mi:before{content:"";width:12px;display:inline-block}
+.lay .fr .x{color:var(--ink3)}
+.lay .mg{display:flex;align-items:center;gap:7px}
+.lay .gr{color:var(--ink3);font-size:11.5px;width:40px;text-align:right}
+.lay .seg.unit{margin-left:6px}
+.lay .seg.unit span{padding:2px 7px;font-size:11px}
+.lay .ck{display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:5px 0 5px 73px;border:0;width:auto;height:auto;background:none;border-radius:0;font-size:12.5px;white-space:nowrap}
+.lay .psr{display:grid;grid-template-columns:106px 68px 30px 46px 44px 32px 1fr;align-items:center;gap:0 4px;padding:4px 6px;border-top:1px solid var(--line2);font-size:11.5px;color:var(--ink2);min-height:26px}
+.lay .psr .n{font:13px var(--text);color:var(--ink)}
+.lay .psr .act{text-align:right;color:var(--ink3);font-size:11px}
+.lay .psr .act .lk{font-size:11.5px}
+.lay .psr.ch{background:#fff}
+.lay .psr.hd{border-top:0;font:600 10px var(--ui);color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;min-height:0;padding-bottom:2px}
+.lay .psr.hd .n{font:inherit;color:inherit}
+.lay .psub{padding:0 6px 6px 114px;font-size:11.5px;color:var(--ink3);display:flex;align-items:center;gap:7px}
+.lay .psub .inp{padding:3px 8px;font-size:12px;display:inline-flex;align-items:center;height:24px;box-sizing:border-box;color:var(--ink)}
+.lay .rds{display:flex;gap:18px;padding:4px 0 2px;font-size:12.5px}
+.lay .rds>span{display:inline-flex;align-items:center;gap:7px}
+.lay .lf{flex:none;padding:6px 76px 14px 16px;border-top:1px solid var(--line2)}
 </style>`;
 
 // thumbnails in pairs, as the spreads print: 138|139 … 156|157; 146|147 current.
 // 146 ends chapter 6 (short), 147 opens chapter 7 on a right-hand page; 151 ends chapter 7 on a
 // right-hand page, so 152 is left blank and chapter 8 opens on 153.
 const pgCls = (n) => ({ 146: 'short', 147: 'open', 151: 'short', 152: 'blank', 153: 'open' })[n] || '';
-const thumbs = `<div class="thumbs"><div class="tt">Pages<span class="seg"><span>1</span><span class="on">2</span></span></div><div class="grid">${Array.from({ length: 10 }, (_, i) => {
+const thumbs = `<div class="thumbs"><div class="tt">Pages<span style="margin-left:auto;color:var(--ink3);font-size:11.5px">two-page spreads</span></div><div class="grid">${Array.from({ length: 10 }, (_, i) => {
   const a = 138 + i * 2, b = a + 1;
   return `<div class="sp2${a === 146 ? ' cur' : ''}"><div class="two"><div class="pg ${pgCls(a)}"></div><div class="pg ${pgCls(b)}"></div></div><span>${a}–${b}</span></div>`;
 }).join('')}</div></div>`;
@@ -66,41 +77,56 @@ const spread = `<div class="spread">
   <div class="pp"><div class="cnum">7</div><div class="ctl">Lena’s warning</div>${P.slice(0, 6).map((p, i) => `<p${i === 0 ? ' class="first"' : ''}>${p}</p>`).join('')}<div class="pn">147</div></div>
 </div>`;
 
-const fr = (k, v) => `<div class="fr"><span class="k">${k}</span>${v}</div>`;
+const fr = (k, v, st = '') => `<div class="fr"${st ? ` style="${st}"` : ''}><span class="k">${k}</span>${v}</div>`;
+const unit = '<span class="seg unit"><span class="on">cm</span><span>in</span></span>';
+const f = (v, w = 62) => `<span class="inp" style="width:${w}px">${v}</span>`;
+const g = (t) => `<span class="gr">${t}</span>`;
+// print styles: name in its own look · face · size · spacing · alignment · page break · Standard/Reset
+const ps = [
+  ['Plain', '', 'Charter', '11', '1.35', 'justify', '—', 0],
+  ['Thought', 'font-style:italic', 'Charter It.', '11', '1.35', 'justify', '—', 0],
+  ['Letter', '', 'Charter', '10.5', '1.25', 'left', '—', 1],
+  ['SIGN', 'font-variant:small-caps;letter-spacing:.06em', 'Charter SC', '10', '1.3', 'center', '—', 0],
+  ['Chapter heading', 'font-weight:600', 'Charter', '17', '—', 'center', 'page', 0],
+  ['Scene break', 'color:var(--ink2)', '* * *', '11', '2 lines', 'center', '—', 0],
+];
+const psRows = ps.map(([n, look, face, size, sp, al, br, changed]) => `<div class="psr${changed ? ' ch' : ''}"><span class="n" style="${look}">${n}</span><span>${face}</span><span>${size}</span><span>${sp}</span><span>${al}</span><span>${br}</span><span class="act">${changed ? '<span class="lk">Reset</span>' : 'Standard'}</span></div>`
+  + (n === 'Chapter heading' ? `<div class="psub">shows <span class="inp dd" style="width:150px"><span style="flex:1">number and title</span></span></div>` : '')).join('');
 const lay = `<div class="lay">
-  <div class="lh">Layout</div>
   <div class="lb">
-    ${fr('Template', '<span class="inp dd" style="width:176px"><span style="flex:1">Trade 6 × 9 in</span></span>')}
-    ${fr('Page size', '<span class="inp sm">15.24</span><span style="color:var(--ink3)">×</span><span class="inp sm">22.86</span><span style="color:var(--ink3)">cm</span>')}
-    ${fr('Margins', '<span style="display:flex;flex-direction:column;gap:5px"><span style="display:flex;gap:6px;align-items:center"><span class="inp sm">1.9</span><span style="color:var(--ink3);width:38px">inside</span><span class="inp sm">1.5</span><span style="color:var(--ink3)">outside</span></span><span style="display:flex;gap:6px;align-items:center"><span class="inp sm">1.8</span><span style="color:var(--ink3);width:38px">top</span><span class="inp sm">2.0</span><span style="color:var(--ink3)">bottom</span></span></span>')}
-    <div style="padding:0 0 4px 100px;color:var(--ink3);font-size:11.5px">cm · <span class="lk">change in Settings</span></div>
-    ${fr('Body font', '<span class="inp dd" style="width:112px"><span style="flex:1">Charter</span></span><span class="inp dd" style="width:68px"><span style="flex:1">11 pt</span></span>')}
-    <div class="fr" style="position:relative"><span class="k">Chapter head</span><span class="inp dd foc" style="width:176px"><span style="flex:1">Number and title</span></span>
-      <div class="menu" style="top:36px;left:30px"><div class="mi on">Number and title</div><div class="mi">Title only</div><div class="mi">Number only</div><div class="mi">Nothing (new page and space)</div></div>
-    </div>
-    <div class="ck" style="margin-top:132px"><span class="cb on"></span>Start chapters on a right-hand page</div>
-    <div class="ck"><span class="cb on"></span>Running heads</div>
-    <div class="fr" style="flex-wrap:wrap;row-gap:6px"><span class="k">Pictures</span><span style="color:var(--ink3);font-size:11.5px">as figures</span><span class="seg" style="margin-left:0"><span class="on">in the text</span><span>top of page</span><span>own page</span></span></div>
-    ${fr('Footnotes', '<span>at the foot of the page</span>')}
+    <div class="gh">Page</div>
+    ${fr('Template', '<span class="inp dd" style="width:200px"><span style="flex:1">Trade 6 × 9 in</span></span>')}
+    ${fr('Size', `${f('15.24')}<span class="x">×</span>${f('22.86')}${unit}`)}
+    ${fr('Margins', `<span class="mg">${g('inside')}${f('1.90', 54)}${g('outside')}${f('1.50', 54)}</span>`)}
+    ${fr('', `<span class="mg">${g('top')}${f('1.80', 54)}${g('bottom')}${f('2.00', 54)}</span>`, 'margin-top:-6px')}
+    <div class="ck"><span class="cb on"></span>Two-page spreads</div>
+    <div class="ck"><span class="cb on"></span>Chapters start on a right-hand page</div>
+    <div class="gh">Print styles <span class="ghs">filled with a good standard</span></div>
+    <div class="psr hd"><span class="n">Style</span><span>Face</span><span>Size</span><span>Spacing</span><span>Align</span><span>Break</span><span class="act"></span></div>
+    ${psRows}
+    <div class="gh">Pictures <span class="ghs">as figures</span></div>
+    <div class="rds"><span><span class="rd on"></span>In place</span><span><span class="rd"></span>Top of page</span><span><span class="rd"></span>Own page</span></div>
+    <div class="gh">Footnotes</div>
+    <div class="rds"><span>At the foot of their page</span><span style="color:var(--ink3);font-size:11.5px">in Write, after their paragraph</span></div>
   </div>
-  <div class="lf"><span style="color:var(--ink2)">Export ▸</span><span class="btn">PDF</span><span class="btn">Word</span><span class="btn">EPUB</span></div>
+  <div class="lf"><div class="gh" style="margin:0 0 8px">Export</div><div style="display:flex;align-items:center;gap:8px"><span class="btn">PDF</span><span class="btn">EPUB</span><span class="btn">Word</span><span class="ck" style="padding:0 0 0 8px"><span class="cb"></span>Include notes</span></div></div>
 </div>`;
 
 const html = L.win({
   mode: 'Book',
-  crumbs: { chapter: 'Chapter 7 · Lena’s warning' },
+  crumbs: false,
   left: thumbs,
   right: lay,
   page: `<div class="bookbg"></div>${spread}`,
   status: L.statusBar({ style: false, view: false, words: '86,240 words', pages: 'p. 146 of 248', left: '<span class="sb">laid out in 1.8 s</span>' }),
   ask: 'normal',
   extra: css
-    + L.ann(1, 'Pages in pairs, as the spreads print; the switch shows them one by one', 330, 76, { w: 270 })
-    + L.ann(2, 'A template to start from: paperback 5.5 × 8.5 in, trade 6 × 9 in, A5, manuscript, reading PDF', 780, 92, { w: 290 })
-    + L.ann(3, 'Sizes in the unit Settings chose (cm or in)', 880, 236, { w: 200 })
-    + L.ann(4, 'A chapter opens with number and title, title only, number only, or nothing but a new page and space', 770, 330, { w: 290, r: true })
-    + L.ann(5, 'Pictures as figures: in the text, at the top of the page, or on a page of their own; footnotes at the foot of their page', 1132, 690, { w: 250 })
-    + L.ann(6, 'Arrows and Page Up/Down turn pages; the whole book lays out in seconds and updates as you adjust', 340, 776, { w: 300 }),
+    + L.ann(1, 'Two-page spreads on: the thumbnails come in pairs, as the book prints, and “Chapters start on a right-hand page” can be ticked (grayed out otherwise, with the reason)', 330, 104, { w: 330 })
+    + L.ann(2, 'A template to start from: paperback 5.5 × 8.5 in, trade 6 × 9 in, A5, manuscript, reading PDF', 738, 104, { w: 230, r: true })
+    + L.ann(3, 'Wide fields, and the unit as a small selector beside them: cm or in', 738, 196, { w: 230, r: true })
+    + L.ann(4, 'Print styles: every style of yours with its print look, a good standard, Reset beside each; the Chapter heading says number and title, title only, number only, or nothing but a new page and space', 620, 712, { w: 350, r: true })
+    + L.ann(5, 'Export: PDF, EPUB, or Word with Include notes; File ▸ Print opens Book and prints the same pages', 690, 800, { w: 280, r: true })
+    + L.ann(6, 'Arrows and Page Up/Down turn pages; the whole book lays out in seconds and updates as you adjust', 330, 790, { w: 270 }),
 });
 
 module.exports = {
@@ -112,8 +138,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S24', title: 'Book',
-    scene: 'Book mode shows the book as it will print: page thumbnails in pairs on the left, as the spreads print, the spread 146–147 in the middle (chapter 6 ends on the left page, chapter 7 opens on the right-hand page), the layout on the right. The Chapter head menu is open.',
-    on: 'thumbnails in pairs with the 1 | 2 switch and 146–147 marked, the spread with running head and page numbers, the layout panel (Template, Page size and Margins in cm with “cm · change in Settings”, Body font, Chapter head with its four options, Start chapters on a right-hand page, Running heads, Pictures in the text · top of page · own page, Footnotes at the foot of the page, Export PDF · Word · EPUB), the status bar with p. 146 of 248 and “laid out in 1.8 s”, no Whole book / By chapter item, the Ask button',
-    off: 'a Book layout dialog, a units switch in the layout (units are a Setting), a “~” in the page number, fine typography settings, a Return to text button in the strip',
+    scene: 'Book mode shows the book as it will print: page thumbnails in pairs on the left (Two-page spreads is on), the spread 146–147 in the middle (chapter 6 ends on the left page, chapter 7 opens on the right-hand page), the layout on the right in plain groups.',
+    on: 'thumbnails in pairs with 146–147 marked; the spread with running head and page numbers; Page (Template Trade 6 × 9 in, Size and Margins in wide fields with the cm | in selector, ☑ Two-page spreads, ☑ Chapters start on a right-hand page); Print styles (each style in its own look with face, size, spacing, alignment, page break, Standard or Reset; the Chapter heading showing “number and title ▾”); Pictures In place · Top of page · Own page; Footnotes at the foot of their page; Export PDF · EPUB · Word with ☐ Include notes; the status bar with p. 146 of 248 and “laid out in 1.8 s”; the Ask button',
+    off: 'a breadcrumb, a Book layout dialog, an arrow on Export, a Print button (File ▸ Print opens Book), fine typography settings, shared templates (later)',
   }),
 };

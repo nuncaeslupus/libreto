@@ -1,5 +1,5 @@
-// S33: Notices, Undo and tips. Not a moment: a board. The notice card at twice the size with its parts labeled,
-// the same card as a tip, the History sheet's Today list, the fixes menu of the status bar, and the one undo stack.
+// S33: Notices, Undo and tips. Not a moment: a board. A passing notice at twice the size with its parts labeled,
+// the bell list, a standing notice, the old-undo case, a tip, an Undo showing its place, and the one undo stack.
 const L = require('../lib');
 const I = L.icons;
 
@@ -44,49 +44,47 @@ const css = `<style>
 
 const crop = (label, w, inner, cls = '', after = '', h = '') => `<div class="crop" style="width:${w}px${h ? `;height:${h}px` : ''}"><div class="lbl">${label}</div><div class="z${cls ? ' ' + cls : ''}">${inner}</div>${after}</div>`;
 
-// (1) the notice card at twice the size, each part labeled under it
-const big = L.notice('Scene break removed in chapter 7', { kind: 'info' })
+// (1) a passing notice at twice the size, each part labeled under it
+const big = L.notice('Scene break removed in chapter 7', { kind: 'fix' })
   .replace(/(<svg[\s\S]*?<\/svg>)/, '<span class="pt" data-l="The icon">$1</span>')
   .replace('<span class="ntx">', '<span class="ntx pt" data-l="One line that names the place">')
   .replace('<span class="lk">Undo', '<span class="lk pt" data-l="Undo · Ctrl+Z">Undo')
-  .replace('<span class="got">', '<span class="got pt" data-l="Closes it">');
+  .replace('<span class="nx">', '<span class="nx pt" data-l="Closes it">');
 
-// (2) the bell at the top right, its menu open on today's notices
+// (2) the bell at the top right, its list open on today's notices
 const brow = (what, t, undo) => `<div class="mi brow"><span class="bw">${what}</span><span class="r">${t}</span>${undo}</div>`;
 const bell = `<div class="bstrip"><span class="ib">${I.magnifier}</span><span class="ib bel dot on">${I.bell}</span><span class="ib">${I['sidebar-right']}</span></div>`
   + `<div class="menu bmenu"><div class="mhd">Today</div>`
   + brow('Scene break removed in chapter 7', '21:12', '<span class="lk">Undo</span>')
+  + brow('Moved “Vega asks about Kit” · continuity', '21:11', '<span class="lk">Undo</span>')
   + brow('Fixed “teh” → “the” in chapter 7', '21:10', '<span class="lk">Undo</span>')
-  + brow('Scenes moved in Plan (3)', '20:58', '<span class="gr">Undo</span>')
-  + `<div class="bsub">changed since · <span class="lk">Restore this version</span></div>`
-  + `<div class="msep"></div><div class="mi"><span style="color:var(--ink2)">All of today in History ▸ Today</span></div></div>`;
+  + brow('Last session · Thursday 19:32', '20:40', '<span class="gr"></span>')
+  + brow('Scenes moved in Plan (3)', '20:28', '<span class="gr">Undo</span>')
+  + `<div class="bsub">changed since</div>`
+  + `<div class="msep"></div><div class="mi"><span class="lk" style="margin-left:auto">Clear</span></div></div>`;
 
-// (3) the same card as a tip
-const tipCard = L.notice('<b>Tip</b> · Undo a fix with <kbd>Ctrl+Z</kbd> or the ✗ on its card<span class="lk">Show me</span><span class="lk">Not this one again</span>', { kind: 'info', undo: false })
+// (3) a standing notice: a continuity warning
+const standing = L.notice('Moved “Vega asks about Kit” after chapter 8 · Kit finds the ledger only in chapter 9', { kind: 'info', standing: true, acts: '<span class="lk">Add to Review</span>' })
+  .replace('<span class="lk">Add to Review</span><span class="lk">Undo<kbd>Ctrl+Z</kbd></span>', '<span class="lk">Undo<kbd>Ctrl+Z</kbd></span><span class="lk">Add to Review</span>');
+
+// (4) the old Undo: something later touched the same place
+const oldUndo = L.notice('Something later changed this place', { kind: 'info', undo: false, acts: '<span class="lk">Bring back this version</span>' });
+
+// (5) a tip, the same card
+const tipCard = L.notice('<b>Tip</b> · Undo a fix with <kbd>Ctrl+Z</kbd> or the ✗ on its card', { kind: 'info', undo: false, acts: '<span class="lk">Show me</span><span class="lk">Not this one again</span>' })
   .replace(/<svg[\s\S]*?<\/svg>/, BULB);
 
-// (4) History ▸ Today
-const hrow = (t, what, where) => `<div class="hr"><span class="t">${t}</span><span class="w">${what}</span><span class="p">${where}</span><span class="lk">Undo</span></div>`;
-const today = `<div class="gh">Today</div>`
-  + hrow('21:12', 'Scene break removed', 'ch. 7')
-  + hrow('21:10', 'Fixed “teh” → “the”', 'ch. 7')
-  + hrow('21:04', 'AI change applied: Lena’s look, shorter', 'ch. 7')
-  + hrow('20:58', 'Scenes moved (3)', 'Plan');
-const history = L.sheet({ title: 'History', body: today });
+// (6) every Undo shows its place: the page scrolled there, the paragraph flashed, a small label
+const place = `<div class="inpage"><div class="pg"><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow.”</p>`
+  + `<div class="flash"><span class="undid">Undid: scene break removed</span><div class="srule"></div><p class="first">Outside, the rain had turned to the fine kind that does not fall so much as hang.<span class="cursor"></span></p></div></div></div>`;
 
 // (5) one undo list
 const steps = [['you · typing', '“Nobody came in at nine.”'], ['you · after a pause', '“Nobody’s been in that room…”'], ['Libreto · a fix', '“teh” → “the”'], ['you · Plan', 'applied 3 moves'], ['the AI', 'applied a change']];
 const SW = 236, STW = 5 * SW + 4 * 30;
 const stack = `<div class="stack">${steps.map(([who, what], i) => (i ? '<span class="cx"></span>' : '') + `<div class="step${i === steps.length - 1 ? ' now' : ''}" style="width:${SW}px"><small>${who}</small>${what}</div>`).join('')}</div>`
   + `<div class="walk"><svg width="${STW}" height="14" viewBox="0 0 ${STW} 14" fill="none" stroke="var(--ink3)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M${STW - 12} 7H10"/><path d="m16 2-6 5 6 5"/></svg>`
-  + `<span><kbd>Ctrl+Z</kbd>, the Undo on a notice and the ✗ on a card walk back through all of them, one step at a time, in this order · Redo brings them back</span></div>`
-  + `<div class="aside">Typing is grouped by pauses, so one <kbd>Ctrl+Z</kbd> takes back a phrase, not a letter. A fix you undid stays in the Done list, gray, so it is not proposed again.</div>`;
-
-// (6) the card in place, at the bottom center of the page, over the text
-const inPage = `<div class="inpage"><div class="pg"><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow.”</p>`
-  + `<p>Outside, the rain had turned to the fine kind<span class="cursor"></span></p></div>`
-  + L.notice('Scene break removed in chapter 7', { kind: 'info' }).replace('class="notice info"', 'class="notice info inpg"')
-  + `<div class="mst"><span>Plain</span><span>2,418 words</span><span style="color:var(--task)">12 to review</span></div></div>`;
+  + `<span><kbd>Ctrl+Z</kbd>, the Undo on a notice and the Undo on a card walk back through all of them, one step at a time, in this order · Redo brings them back</span></div>`
+  + `<div class="aside">Typing is grouped by pauses, so one <kbd>Ctrl+Z</kbd> takes back a phrase, not a letter. A fix you undid stays in History, gray, and is not proposed again.</div>`;
 
 const html = css + `<style>
 .s33 .row{display:flex;gap:20px;width:1384px}
@@ -106,31 +104,37 @@ const html = css + `<style>
 .s33 .aside{font:13px var(--ui);color:var(--ink2);margin-top:10px}
 .s33 .aside kbd{margin:0 2px}
 .s33 .crop .ann{z-index:5}
-.s33 .inpage{position:relative;height:250px;overflow:hidden;background:#fff}
-.s33 .inpage .pg{width:500px;margin:64px auto 0;font:16px/1.7 var(--text);color:var(--ink)}
+.s33 .inpage{position:relative;height:196px;overflow:hidden;background:#fff}
+.s33 .inpage .flash{position:relative;background:rgba(59,110,168,.10);box-shadow:0 0 0 6px rgba(59,110,168,.10);border-radius:3px;margin-top:34px}
+.s33 .inpage .flash .srule{margin:12px 80px 10px}
+.s33 .inpage .undid{position:absolute;right:-6px;top:-30px;font:600 11px var(--ui);color:#fff;background:var(--accent);border-radius:5px;padding:2px 8px;white-space:nowrap}
+.s33 .slide{position:absolute;right:14px;top:202px;display:flex;align-items:center;gap:8px;font:600 12.5px var(--ui);color:var(--ann)}
+.s33 .inpage .pg{width:560px;margin:22px auto 0;font:16px/1.7 var(--text);color:var(--ink)}
 .s33 .inpage .pg p{margin:0;text-indent:1.5em}
 .s33 .inpage .notice.inpg{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);box-shadow:0 8px 24px rgba(0,0,0,.14)}
 .s33 .inpage .mst{position:absolute;left:0;right:0;bottom:0;height:26px;border-top:1px solid var(--line);background:var(--chrome);display:flex;gap:16px;align-items:center;padding:0 12px;font:12px var(--ui);color:var(--ink2)}
 </style>` + `<div class="s33">`
-  + `<div class="row"><div style="display:flex;flex-direction:column;gap:20px">`
-  + crop('The notice card, at twice the size', 900, big, 'x2',
-    L.ann(1, 'Never on a timer, and typing does not dismiss it: it stays until Got it', 16, 196, { w: 380 })
-    + L.ann(2, 'One at a time: the others wait in the bell', 470, 196, { w: 300 }), 250)
-  + crop('The same card as a tip', 900, tipCard, '',
-    L.ann(4, 'Tips: one a day at most, only for a habit from a fixed list (retyping what a fix changed, removing detected breaks by hand, the mouse for something with a key). “Not this one again” is remembered; Help ▸ Tips lists them; Settings has the switch', 16, 96, { w: 560 }), 170)
-  + `</div>`
+  + `<div class="row">`
+  + crop('A passing notice, at twice the size (bottom center of the page)', 900, big, 'x2',
+    L.ann(1, 'Reports a small change you can undo: stays about twenty seconds, or until ✕, then slides visibly into the bell', 16, 196, { w: 470 })
+    + `<div class="slide">slides into the bell after ~20 s<svg width="60" height="14" viewBox="0 0 60 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h54M50 2l6 5-6 5"/></svg></div>`, 250)
   + crop('The bell, at the top right', 464, bell, 'nopad',
-    L.ann(3, 'An old Undo works while nothing later touched the same place; otherwise “Restore this version” opens History at the snapshot from before', 16, 290, { w: 400 }), 440)
+    L.ann(2, 'The day’s notices with their time and, where it still applies, their Undo; “Clear” empties it. The bell is not History', 16, 334, { w: 400 }), 410)
   + `</div>`
   + `<div class="row">`
-  + crop('History ▸ Today', 700, history, '',
-    L.ann(5, 'Every notice is also a line in History ▸ Today', 330, 90, { w: 330 }))
-  + crop('Where it sits: the bottom center of the page', 664, inPage, 'nopad2',
-    L.ann(7, 'The welcome-back card is one of these notices too', 16, 46, { w: 330 }))
+  + crop('A standing notice', 820, standing, '',
+    L.ann(3, 'Something to read or decide: it stays until ✕ or a button; one at a time, the others wait in the bell, which shows a dot', 16, 100, { w: 560 }), 170)
+  + crop('An old Undo, after something later changed the place', 544, oldUndo, '',
+    L.ann(4, 'Opens History at the snapshot from before, and keeps today’s text as a snapshot first', 16, 100, { w: 460 }), 170)
+  + `</div>`
+  + `<div class="row">`
+  + crop('A tip, the same card', 600, tipCard, '',
+    L.ann(5, 'One a day at most, only for a habit from a fixed list. “Show me” plays a ten-second demonstration on your own text; “Not this one again” is remembered; Settings ▸ Tips holds the switch', 16, 96, { w: 520 }), 240)
+  + crop('Every Undo shows its place', 764, place, 'nopad2',
+    L.ann(6, 'The page scrolls to the change and flashes it, with a small label saying what it was', 16, 196, { w: 330 }), 240)
   + `</div>`
   + crop('The stack, newest at the right', 1384, stack, '',
-    L.ann(6, 'One stack: typing grouped by pauses, a fix, a Plan apply, an AI change', 900, 8, { w: 460 }))
-  + `<div class="legend">One card at the bottom center of the page · one line in the bell and in History ▸ Today · one step on the stack</div>`
+    L.ann(7, 'Undo is one list: typing grouped by pauses, a fix, a Plan apply, an AI change', 800, 8, { w: 520 }))
   + `</div>`;
 
 module.exports = {
@@ -138,12 +142,12 @@ module.exports = {
   file: 's33-notices-and-undo',
   title: 'Notices, Undo and tips',
   width: 1440,
-  height: 1000,
+  height: 1180,
   html: html.replace('<div class="z nopad">', '<div class="z" style="padding:0">').replace('<div class="z nopad2">', '<div class="z" style="padding:0">'),
   caption: L.caption({
     id: 'S33', title: 'Notices, Undo and tips',
-    scene: 'Not a moment in the app: a board. The one way Libreto says something changed, and the one way back: the notice card at twice the size with its parts labeled, the same card as a tip, the bell at the top right with today’s notices, the Today list of History, the card in place at the bottom center of the page, and the single Undo stack.',
-    on: 'the notice “Scene break removed in chapter 7” with its icon, line, Undo Ctrl+Z and Got it labeled; the tip “Tip · Undo a fix with Ctrl+Z or the ✗ on its card · Show me · Not this one again · Got it”; the strip’s right end with the bell and its dot, its menu open on Today (21:12 Scene break removed in chapter 7 · Undo, 21:10 Fixed “teh” → “the” in chapter 7 · Undo, 20:58 Scenes moved in Plan (3) with Undo gray and “changed since · Restore this version”, All of today in History ▸ Today); History ▸ Today with four lines, each with Undo; the card at the bottom center of a page over the status bar; five steps on one stack (typing, typing after a pause, a fix, a Plan apply, an AI change) with the Ctrl+Z arrow under them',
-    off: 'a ✕ on the card, a timer or countdown, two notices at once, the status bar fixes menu, Redo as a button, Help ▸ Tips, the Settings switch',
+    scene: 'Not a moment in the app: a board. The one way Libreto tells you something, and the one way back: a passing notice at twice the size with its parts labeled, the bell with today’s notices, a standing notice, the old-undo case, a tip on the same card, an Undo showing its place, and the single Undo stack.',
+    on: 'the passing notice “Scene break removed in chapter 7” (✓ icon, line, Undo Ctrl+Z, ✕) with “slides into the bell after ~20 s”; the bell with its dot and its list (time and Undo per notice, a gray Undo where something changed since, Clear); the standing continuity notice (Undo · Add to Review · ✕); “Something later changed this place · Bring back this version · ✕”; the tip (Show me · Not this one again · ✕); a flashed paragraph labeled “Undid: scene break removed”; five steps on one stack with the Ctrl+Z arrow under them',
+    off: '“Got it”, a countdown, two standing notices at once, History (the bell is not History), Redo as a button, the Settings switch',
   }),
 };

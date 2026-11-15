@@ -25,7 +25,7 @@ const icons = {
   chevron: S('<path d="m3 6 5 5 5-5"/>', { sw: 2 }),
   'chevron-right': S('<path d="m6 3 5 5-5 5"/>', { sw: 2 }),
   // the mark family: note (sticky note), task (circle with a check), fix (small tick in a circle)
-  note: S('<path d="M2.5 2.5h11v6.5L9 13.5H2.5z"/><path d="M9 13.5V9h4.5"/><path d="M5 6h5M5 8.5h2.5"/>', { sw: 1.4 }),
+  note: S('<path d="M2.5 3h11v7.5H7.6L4.6 13.4v-2.9H2.5z"/>', { sw: 1.4 }),
   task: S('<circle cx="8" cy="8" r="6.3"/><path d="m5 8.2 2.1 2.1L11.2 6"/>', { sw: 1.5 }),
   fix: S('<circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/>', { sw: 1.6 }),
   pen: S('<path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/>', { w: 14, vb: '0 0 16 16' }),
@@ -45,7 +45,7 @@ const icons = {
   keys: S('<rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/>', { sw: 1.3 }),
   spark: S('<path d="M8 2.2 9.4 6.6 13.8 8 9.4 9.4 8 13.8 6.6 9.4 2.2 8l4.4-1.4z"/>', { sw: 1.3 }),
   pending: S('<circle cx="8" cy="8" r="6.3"/><circle cx="5.2" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="8" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="10.8" cy="8" r=".95" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
-  unknown: S('<circle cx="8" cy="8" r="6.3"/><path d="M6.3 6.5a1.8 1.8 0 1 1 2.6 1.6c-.6.4-.9.8-.9 1.5"/><circle cx="8" cy="11.5" r=".75" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
+  unknown: S('<circle cx="8" cy="8" r="6.3"/><text x="8" y="11.4" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="9.5" font-weight="700" fill="currentColor" stroke="none">?</text>', { sw: 1.5 }),
   info: S('<circle cx="8" cy="8" r="6.3"/><path d="M8 7.3v4"/><circle cx="8" cy="5.1" r=".8" fill="currentColor" stroke="none"/>', { sw: 1.5 }),
   'arrow-out': S('<path d="M6 3H3v10h10v-3M9 3h4v4M13 3 7.5 8.5"/>', { w: 12, vb: '0 0 16 16', sw: 1.6 }),
 };
@@ -69,7 +69,6 @@ function strip(o = {}) {
   const on = (v, d) => (v === undefined ? d : v);
   const tab = (m) => `<span${m === mode ? ' class="on"' : ''}>${m}${m === 'Review' && o.reviewCount ? `<i class="n">${esc(o.reviewCount)}</i>` : ''}</span>`;
   return `<div class="strip">`
-    + (o.menu === false ? '' : ib('menu', 'mn', 'Menu'))
     + ib(o.leftOn ? 'sidebar-left-on' : 'sidebar-left', 'tog' + (o.leftOn ? ' on' : ''))
     + `<span class="gap"></span>`
     + ib('back', on(o.back, true) ? '' : 'off') + ib('forward', on(o.forward, false) ? '' : 'off')
@@ -84,8 +83,9 @@ function strip(o = {}) {
     + `</div>`;
 }
 
-// draft 6: no menu bar row; the ☰ button in the strip holds the menus (macOS keeps its system bar)
-const titlebar = () => `<div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`;
+// draft 7: the menu bar is back (the owner chose the regular bar); no ☰ button
+const titlebar = () => `<div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`
+  + `<div class="menubar"><span>File</span><span>Edit</span><span>Insert</span><span>Format</span><span>View</span><span>Reports</span><span>Help</span></div>`;
 
 // win({mode, crumbs, left, right, page, status, ask, extra, content, width, height})
 //   left/right: panel HTML (navigator(), reference()) or falsy = closed; the toggles follow.
@@ -125,16 +125,16 @@ function statusBar(o = {}) {
   if (o.words) h += `<span class="sb m"><span class="dd">${esc(o.words)}</span></span>`;
   if (o.pages) h += `<span class="sb m"><span class="dd">${esc(o.pages)}</span></span>`;
   if (o.fixes) h += `<span class="sb m cnt">${icons.fix}<span class="dd">${esc(o.fixes)}</span></span>`;
-  if (o.review) h += `<span class="sb m rev">${icons.pending}<span class="dd">${esc(o.review)}</span></span>`;
+  if (o.saved !== false) h += `<span class="sb saved">${esc(o.saved || 'Saved 19:32')}</span>`;
   if (o.left) h += o.left;
   h += `<span class="sp"></span>`;
   if (o.right) h += o.right;
-  if (o.keys !== false) h += `<span class="sb ic kb" title="Keys for where you are">${icons.keys}</span>`;
   if (o.view !== false) h += `<span class="sb m">${icons.view}<span class="dd">${esc(o.view || 'Whole book')}</span></span>`;
   h += `<span class="sb m${o.highlightsOn ? ' act' : ''}">${icons.pen}<span class="dd">${esc(o.show || 'Show')}</span></span>`;
   h += `<span class="sb m">${icons.clock}<span class="dd">History</span></span>`;
   h += `<span class="vsep"></span>`;
   h += `<span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:${knob}%"></span></span><span>+</span><span class="pct">${zoom}%</span></span>`;
+  if (o.keys !== false) h += `<span class="sb ic kb" title="Keys for where you are · F1">${icons.keys}</span>`;
   return h + `</div>`;
 }
 
@@ -192,21 +192,21 @@ function navigator(o = {}) {
   }).join('');
   let review = '';
   if (o.review) {
-    const chips = o.chips || { All: 11, Notes: 5, Tasks: 3, Fixes: 3, Editor: 1, AI: 2 };
-    const onKey = o.chipOn || 'All';
-    review = `<div class="navrev"><div class="kf">${Object.entries(chips).map(([k, v]) => `<span${k === onKey ? ' class="on"' : ''}>${k}${v !== undefined && v !== null ? ` ${v}` : ''}</span>`).join('')}</div>`
-      + `<div><span class="btn pri">Review all ▶</span></div></div>`;
+    // draft 7: filters are toggles that stack, one row by kind and one by person ([label, on])
+    const tgl = (rows) => `<div class="tgl">${rows.map(([t, on]) => `<span${on === false ? '' : ' class="on"'}>${esc(t)}</span>`).join('')}</div>`;
+    review = `<div class="navrev">${tgl(o.kinds || [['Notes'], ['Pending'], ['Done'], ['Unknown']])}${tgl(o.people || [['You'], ['Marta'], ['AI']])}</div>`;
   }
   let menu = '';
   if (o.menuAt) {
-    const items = ['New chapter before', 'New chapter after', 'New part', 'Rename', 'Delete chapter…'];
-    menu = `<div class="menu" style="left:${o.menuAt.x}px;top:${o.menuAt.y}px">${items.map((t, i) => (i === 3 ? '<div class="msep"></div>' : '') + `<div class="mi${o.menuAt.hov === t ? ' hov' : ''}">${t}</div>`).join('')}</div>`;
+    // draft 7: menus per level; pass items:[…] (a '-' is a separator). Default = a chapter row.
+    const items = o.menuAt.items || ['Rename', 'Start a new part here', 'Join with the previous chapter', 'Move to Discarded', '-', 'Delete…'];
+    menu = `<div class="menu" style="left:${o.menuAt.x}px;top:${o.menuAt.y}px">${items.map((t) => (t === '-' ? '<div class="msep"></div>' : `<div class="mi${o.menuAt.hov === t ? ' hov' : ''}">${esc(t)}</div>`)).join('')}</div>`;
   }
   return `<div class="nav">`
-    + `<div class="navtop"><div class="filter">${icons.magnifier}<span>${esc(o.filterText || 'Filter chapters (titles and text)')}</span></div></div>`
+    + `<div class="navtop"><div class="filter${o.filterText ? ' act' : ''}">${icons.magnifier}<span>${esc(o.filterText || 'Filter (titles and text)')}</span>${o.filterText ? '<span class="fx">✕</span>' : ''}</div></div>`
     + review
     + `<div class="navbody">${rows}</div>`
-    + (o.footer === false ? '' : `<div class="navfoot"><span class="btn q">+ New chapter</span></div>`)
+    + (o.footer ? `<div class="navfoot">${o.footer}</div>` : '')
     + menu + `</div>`;
 }
 
@@ -214,16 +214,18 @@ function navigator(o = {}) {
 function reference(o = {}) {
   return `<div class="ref"><div class="refhead">`
     + ib('back', o.backOn === false ? 'off' : '') + ib('forward', o.forwardOn ? '' : 'off')
-    + `<span class="kind">${esc(o.kind || 'Person')}</span><span class="name">${esc(o.name || '')}</span><span class="sp"></span>`
-    + ib('spark', '', 'Ask about this') + `<span class="lk">${esc(o.open || 'Open in Codex ↗')}</span>`
-    + `</div><div class="refbody">${o.body || ''}</div></div>`;
+    + `<span class="kind">${esc(o.kind || 'Person')}</span><span class="sp"></span>`
+    + (o.close === false ? '' : `<span class="ib rx" title="Close · Ctrl+Shift+R">✕</span>`)
+    + `</div>${o.name ? `<div class="refname">${esc(o.name)}</div>` : ''}<div class="refbody">${o.body || ''}</div>`
+    + (o.foot === false ? '' : `<div class="reffoot"><span class="rb">${esc(o.open || 'Open in Codex')}</span><span class="rb ai">${icons.spark}Ask the AI</span></div>`)
+    + `</div>`;
 }
 
 // refCard({pic, initial, name, line, facts:[[dt, ddHtml]], textFacts:[{q, where}], researchFacts:[{t, src}], questions:[html], research:[{t, sub, pdf}], button})
 //   The Codex card body for the Reference panel.
 function refCard(o = {}) {
   const pic = o.pic === false ? `<div class="avatar" style="width:64px;height:64px;font-size:24px">${esc(o.initial || (o.name || '?')[0])}</div>` : `<div class="pic"></div>`;
-  let h = `<div class="tcard"><div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">${pic}<div style="min-width:0"><div class="pk-title" style="margin:0 0 3px;font-size:16px">${esc(o.name || '')}</div><div style="color:var(--ink2)">${o.line || ''}</div></div></div>`;
+  let h = `<div class="tcard"><div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">${pic}<div style="min-width:0">${o.name ? `<div class="pk-title" style="margin:0 0 3px;font-size:16px">${esc(o.name)}</div>` : ''}<div style="color:var(--ink2)">${o.line || ''}</div></div></div>`;
   if (o.facts) h += `<dl class="facts">${o.facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>`;
   if (o.textFacts) h += `<div class="nh">Facts from the text</div>` + o.textFacts.map((f) => `<div class="pk-ev">“${f.q}”<small><span class="lk">${esc(f.where)}</span></small></div>`).join('');
   if (o.researchFacts) h += `<div class="nh">Facts from research</div>` + o.researchFacts.map((f) => `<div class="pk-ev" style="font-style:normal;font-family:var(--ui);font-size:12.5px">${f.t}<small><span class="src">${esc(f.src)}</span></small></div>`).join('');
@@ -240,6 +242,8 @@ function gm(kind, top, o = {}) {
 }
 // gutter(kinds, top, {sel}) → several marks on one line: three at most, then "+N"
 function gutter(kinds, top, o = {}) {
+  // draft 7: several kinds on one line = one gray stack with the count; {expanded:true} opens it in color
+  if (kinds.length > 1 && !o.expanded) return `<span class="gm stack${o.sel ? ' sel' : ''}" style="top:${top}px">${kinds.length}</span>`;
   const shown = kinds.slice(0, 3), more = kinds.length - shown.length;
   return `<span class="gms" style="top:${top}px">${shown.map((k, i) => `<span class="gm ${k}${o.sel === i ? ' sel' : ''}">${cntIcon(k)}</span>`).join('')}${more > 0 ? `<span class="gm more">+${more}</span>` : ''}</span>`;
 }
@@ -264,31 +268,36 @@ function tip(text, o = {}) {
 // markCard({kind:'fix'|'prop'|'spell'|'gram'|'note', title, sub, before, after, acts:[['✓','Keep','Enter'],['✗','Undo','Delete']], x, y, w, right})
 //   One card for every mark, everywhere: the title says what happened, the body shows before → after,
 //   the buttons decide. Window coordinates by default.
+// who('M' | 'You' | 'ai') → the small round initial that says who a card is from (draft 7)
+const who = (w) => `<span class="who${w === 'ai' ? ' ai' : ''}" title="${w === 'ai' ? 'The AI' : attr(w)}">${w === 'ai' ? icons.spark : esc(w)}</span>`;
+// markCard({kind, title, sub, who:'M'|'You'|'ai', before, after, rows:[candidates], text, acts, foot:false|'text', x|right, y, w})
 function markCard(o = {}) {
   const pos = o.right !== undefined ? `right:${o.right}px` : `left:${o.x || 0}px`;
   const k = o.kind || 'fix';
   const acts = o.acts || (k === 'fix' || k === 'done'
     ? [['✓', 'Keep', 'Enter'], ['✗', 'Undo', 'Delete']]
-    : k === 'note' ? [['↩', 'Reply', ''], ['✓', 'Done', 'Enter']]
-    : k === 'spell' || k === 'unknown' ? [['+', 'Add to dictionary', ''], ['◉', 'Make a Codex entry', '']]
-    : [['✓', 'Apply', 'Enter'], ['✗', 'Skip', 'Delete']]);
+    : k === 'note' ? [['↩', 'Reply', ''], ['✓', 'Resolve', 'Enter']]
+    : k === 'spell' || k === 'unknown' ? [['–', 'Ignore here', 'Delete'], ['+', 'Add to dictionary', '']]
+    : [['✓', 'Apply', 'Enter'], ['✗', 'Dismiss', 'Delete']]);
   const ico = ({ fix: icons.fix, done: icons.fix, note: icons.note, task: icons.pending, pending: icons.pending, prop: icons.pending, gram: icons.pending, spell: icons.unknown, unknown: icons.unknown })[k] || icons.pending;
   let body = '';
   if (o.before !== undefined || o.after !== undefined) {
     body = `<div class="mc-ba"><span class="mc-l">Was</span><span class="mc-t">${o.before || ''}</span><span class="mc-l">Now</span><span class="mc-t">${o.after || ''}</span></div>`;
   }
+  if (o.rows) body += `<div class="mc-rows">${o.rows.map((r, i) => `<span class="mc-r${i === 0 ? ' sel' : ''}">${esc(r)}${i === 0 && o.keys !== false ? '<kbd>Enter</kbd>' : ''}</span>`).join('')}</div>`;
   if (o.text) body += `<div class="mc-x">${o.text}</div>`;
+  const foot = o.foot === false ? '' : `<div class="mc-f">${esc(o.foot || 'Ctrl+. opens · F8 next · Shift+F8 previous')}</div>`;
   return `<div class="mc ${o.kind || 'fix'}" style="${pos};top:${o.y || 0}px${o.w ? `;width:${o.w}px` : ''}">`
-    + `<div class="mc-h">${ico}<b>${esc(o.title || 'Done')}</b>${o.sub ? `<span class="mc-s">${esc(o.sub)}</span>` : ''}</div>`
+    + `<div class="mc-h">${ico}<b>${esc(o.title || 'Done')}</b>${o.sub ? `<span class="mc-s">${esc(o.sub)}</span>` : ''}${o.who ? who(o.who) : ''}</div>`
     + body
     + `<div class="mc-a">${acts.map(([g, t, k]) => `<span class="mc-b"><i>${g}</i>${esc(t)}${k ? `<kbd>${esc(k)}</kbd>` : ''}</span>`).join('')}</div>`
-    + `</div>`;
+    + foot + `</div>`;
 }
 // notice(text, {kind:'fix'|'info', undo:true, place}) — the one notice card: bottom center of the page,
 //   never on a timer; stays until Got it and stays in Changes (status bar) and History.
 function notice(text, o = {}) {
   const ico = o.kind === 'fix' ? icons.fix : icons.info;
-  return `<div class="notice ${o.kind || 'info'}"${o.style ? ` style="${o.style}"` : ''}>${ico}<span class="ntx">${text}</span>${o.undo === false ? '' : `<span class="lk">Undo<kbd>Ctrl+Z</kbd></span>`}<span class="got">${esc(o.got || 'Got it')}</span></div>`;
+  return `<div class="notice ${o.kind || 'info'}${o.standing ? ' standing' : ''}"${o.style ? ` style="${o.style}"` : ''}>${ico}<span class="ntx">${text}</span>${o.acts || ''}${o.undo === false ? '' : `<span class="lk">Undo<kbd>Ctrl+Z</kbd></span>`}<span class="nx">✕</span></div>`;
 }
 
 // ---------- annotations and captions ----------
@@ -363,7 +372,7 @@ const lena = {
 
 const sample = { chapter7Paragraphs, chapter7Plain, chapter1Paragraphs, navRows, crumbs7, lena };
 
-module.exports = {
+module.exports = { who,
   markCard, notice,
   esc, attr, sty, icons, ib, win, strip, navigator, reference, refCard, askButton, askPanel, statusBar,
   pageCol, page, gm, gutter, lineTop, sheet, toast, tip, caption, ann, sample, MODES,

@@ -17,7 +17,9 @@ const library = `<div class="nav lib"><div class="navtop"><div class="filter">${
   + `</div><div class="navfoot"><span class="btn q">+ New entry</span></div></div>`;
 
 const pencil = `<span class="pen" title="Edit">${L.icons.pen}</span>`;
-const fromText = (t) => `<div class="ft"><span class="nh">${t}</span><span class="tag">from the text</span></div>`;
+const fromText = (t) => `<div class="ft">${/AI/.test(t) ? `<span class="fspk">${L.icons.spark}</span>` : ''}<span class="nh">${t}</span><span class="tag">from the text</span></div>`;
+// when the AI reads: a small card beside the entry
+const aiw = `<div class="aiw" style="left:1100px;top:640px"><b>${L.icons.spark}When the AI reads</b><div>· at the start of a session: what changed since its last pass</div><div>· Proactive level: also after a pause while you write, within the monthly budget</div><div>· whenever you ask (“Read the book again”)</div><div class="no">· never when you close the app</div></div>`;
 const ev = (q, where, sel) => `<div class="pk-ev${sel ? ' selq' : ''}">“${q}”<small><span class="lk">${where}</span></small></div>`;
 
 const entry = `<div class="entry">`
@@ -27,6 +29,7 @@ const entry = `<div class="entry">`
   + `<div class="alias"><span>Lena</span><span>Lena Roig</span><span>the woman in red</span><span class="add">+ alias</span></div>`
   + `<div class="line">Bartender at the Blue Lamp. Covers for Kit; knows more than she says.</div>`
   + `<div class="notes"><b>Notes</b> Older than she looks? Decide before chapter 8.</div>`
+  + `<div class="notes"><b>Your facts</b> Drives a green Fiat. Lives above the pawnshop. <span class="add">+ fact</span></div>`
   + `</div></div>`
   // what Libreto computes
   + `<div class="grid">`
@@ -35,11 +38,11 @@ const entry = `<div class="entry">`
     .map(([c, t]) => `<div><b>${c}</b><span class="lk">${t}</span></div>`).join('')
   + `<div><b></b><span class="lk">9 more</span></div></div></div>`
   + `<div>${fromText('With')}<div class="with"><span class="lk">Kit</span><i>6 scenes</i><span class="lk">Vega</span><i>4 scenes</i><span class="lk">the man in the gray coat</span><i>1</i></div>`
-  + `${fromText('Facts from the text')}`
+  + `${fromText('Facts the AI quoted')}`
   + ev('Nobody’s been in that room since Tuesday.', 'ch. 7, Lena’s warning', true)
   + ev('the lemon on her hands', 'ch. 2, The bartender')
   + `</div></div>`
-  + `${fromText('Open questions')}<div class="oq"><div class="oqh">How old is she? <span class="rule">found by a rule · no AI</span></div>`
+  + `${fromText('Open questions')}<div class="oq"><div class="oqh">How old is she? <span class="rule"><span class="spk">${L.icons.spark}</span>two facts disagree · found by the AI</span></div>`
   + `<div class="sides"><div>“about fifty” <span class="w">ch. 2</span><span class="lk fx">Fix in the text →</span></div><div>“not yet forty” <span class="w">ch. 8</span><span class="lk fx">Fix in the text →</span></div></div></div>`
   + `<div class="ft"><span class="nh">Pinned from Research</span></div>`
   + `<div class="pin">A bartender who poured after hours lost the license, not the owner<br><span class="src" style="margin-left:0">Bars, 1952 · p. 21</span> <span class="lk">Bars in the 1950s</span></div>`
@@ -49,12 +52,11 @@ const entry = `<div class="entry">`
   + `<div><span class="q">Who is in the back room in chapter 7?</span><span class="lk">Lena, Kit · 1 scene</span></div>`
   + `<div><span class="q">Which scenes has Lena alone?</span><span class="lk">2 scenes</span></div>`
   + `</div>`
-  + `<div class="ai">${L.icons.spark}<span>AI · last read: end of yesterday’s session · nothing written on this entry</span></div>`
   + `</div>`;
 
 // the Reference panel: the paragraph the selected fact points to
 const ref = L.reference({
-  kind: 'Text', name: 'Chapter 7', backOn: false, open: 'Go to the text ↗',
+  kind: 'Text', name: 'Chapter 7 · Lena’s warning', backOn: false, open: 'Go to the text',
   body: `<div class="ctx">“Mine. Thin, nervous, writes everything down in a little green ledger.” Vega slid a coin across the counter and left her hand on it. “He said he’d meet me here at nine.”</div>`
     + `<div class="ctx here">Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. <mark>Nobody’s been in that room since Tuesday.</mark>”</div>`
     + `<div class="ctx">It was a good lie. Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</div>`
@@ -105,33 +107,33 @@ const css = `<style>
 .entry .pin .src{margin:0 4px}.entry .pin .lk{white-space:nowrap}
 .entry .qa>div{display:flex;gap:10px;padding:3px 0;border-bottom:1px solid var(--line2)}
 .entry .qa .q{flex:1}
-.entry .ai{display:flex;gap:7px;align-items:center;margin-top:10px;color:var(--ink3);font-size:12px}
-.entry .ai svg{width:13px;height:13px}
+.entry .notes .add{border:1px dashed var(--line);border-radius:9px;padding:0 8px;color:var(--ink3);font-size:12px;margin-left:4px}
+.entry .rule .spk{display:inline-flex;vertical-align:-2px;color:var(--accent);margin-right:3px}.entry .rule .spk svg{width:12px;height:12px}
+.ft .fspk{display:inline-flex;color:var(--accent)}.ft .fspk svg{width:12px;height:12px}
+.aiw{position:absolute;z-index:30;width:300px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:9px;box-shadow:0 6px 20px rgba(0,0,0,.08);padding:9px 12px;font:12.5px/1.45 var(--ui);color:var(--ink)}
+.aiw b{display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:4px}.aiw b svg{width:13px;height:13px;color:var(--accent)}
+.aiw div{padding-left:10px;text-indent:-10px}.aiw .no{color:var(--ink3)}
 .refbody .ctx{font:14px/1.55 var(--text);color:var(--ink3);margin-bottom:10px}
 .refbody .ctx.here{color:var(--ink)}
 .refbody .ctx mark{background:var(--accent-soft);color:inherit;border-radius:2px}
 .refbody .refmeta{font-size:11.5px;color:var(--ink3)}
-.refhead{padding:0 8px 0 4px;gap:1px}
-.refhead .ib{width:19px}
-.refhead .kind{font-size:10px;margin-left:2px;white-space:nowrap}
-.refhead .name{font-size:12.5px}
-.refhead .lk{font-size:11.5px}
 </style>`;
 
 const html = css + L.win({
   mode: 'Codex',
-  crumbs: { chapter: 'People', scene: 'Lena' },
+  crumbs: false,
+  strip: { reviewCount: 12 },
   left: library,
   right: ref,
-  page: L.pageCol(entry, { paddingTop: 50 }),
-  status: { style: false, view: false, left: `<span class="sb">27 mentions · 14 scenes</span><span class="sb">indexed as you type</span>` },
+  page: L.pageCol(entry, { paddingTop: 62 }),
+  status: { style: false, view: false, left: `<span class="sb">27 mentions · 14 scenes</span><span class="sb">indexed as you type, without an AI</span>` },
   ask: 'normal',
-  extra: L.ann(1, 'People, Places, Things, Motifs, each with a count; filtered as you type', 20, 700, { w: 260 })
-    + L.ann(2, 'Yours to edit: name, aliases, kind, picture, a line, notes. Renaming here renames everywhere', 404, 72)
-    + L.ann(3, 'Marked “from the text”: computed from the book as you type, read-only; the scenes are links', 404, 784)
-    + L.ann(4, 'Found by a rule, no AI; “Fix in the text →” on each side of the contradiction', 1040, 508, { w: 260 })
-    + L.ann(5, 'Answered from the index, without an AI: each answer is a list of scenes', 1040, 664, { w: 260 })
-    + L.ann(6, 'The paragraph the selected fact comes from', 1104, 456),
+  extra: aiw + L.ann(1, 'People, Places, Things, Motifs, each with a count; filtered as you type', 20, 700, { w: 260 })
+    + L.ann(2, 'Yours to edit: name, aliases (you confirm them), kind, picture, a line, notes, your facts. Renaming here renames everywhere', 404, 98, { w: 560 })
+    + L.ann(3, 'Marked “from the text”: computed by the index as you type, without an AI, read-only; the scenes are links', 404, 790)
+    + L.ann(6, 'The paragraph the selected fact comes from', 1104, 494, { w: 250 })
+    + L.ann(4, 'Two facts that disagree, found by the AI; “Fix in the text →” on each side', 1104, 538, { w: 250 })
+    + L.ann(5, 'Answered from the index alone: each answer is a list of scenes', 1104, 590, { w: 250 }),
 });
 
 module.exports = {
@@ -143,8 +145,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S18', title: 'The Codex',
-    scene: 'The Codex tab, with Lena chosen in the navigator. Her entry fills the middle: at the top what the writer edits, below it what Libreto computes from the text, read-only. The fact “Nobody’s been in that room since Tuesday” is selected, and the Reference panel shows the paragraph it comes from.',
-    on: 'the navigator (filter, PEOPLE 8 with Lena current, PLACES 5, THINGS 3, MOTIFS 2, counts of mentions, “+ New entry”), the editable zone with a pencil (picture, Lena, kind “Person ▾”, aliases “Lena · Lena Roig · the woman in red · + alias”, the line, notes), the computed blocks marked “from the text” (Appears in · 14 scenes as links, With: Kit 6 · Vega 4, Facts from the text with chapters, the open question “How old is she?” with “about fifty · ch. 2” and “not yet forty · ch. 8”, each with “Fix in the text →”), Pinned from Research with its source and topic, Questions the Codex answers marked “no AI” with three rows, the gray “AI · last read” line, the Reference panel with the paragraph in chapter 7, the Ask button',
+    scene: 'The Codex position of the mode switch, with Lena chosen in the navigator. Her entry fills the middle: at the top what the writer edits, below it what Libreto computes from the text, read-only. The fact “Nobody’s been in that room since Tuesday” is selected, and the Reference panel shows the paragraph it comes from.',
+    on: 'the navigator (filter, PEOPLE 8 with Lena current, PLACES 5, THINGS 3, MOTIFS 2, counts of mentions, “+ New entry”), the editable zone with a pencil (picture, Lena, kind “Person ▾”, aliases “Lena · Lena Roig · the woman in red · + alias”, the line, notes, your facts with “+ fact”), the computed blocks marked “from the text” (Appears in · 14 scenes as links, With: Kit 6 · Vega 4, Facts the AI quoted with chapters, the open question “How old is she?” marked “two facts disagree · found by the AI” with “about fifty · ch. 2” and “not yet forty · ch. 8”, each with “Fix in the text →”), Pinned from Research with its source and topic, Questions the Codex answers marked “no AI” with three rows, the card “When the AI reads” (start of a session, Proactive after a pause within the budget, on request, never at close), the Reference panel with the paragraph in chapter 7, the Ask button',
     off: 'Research topics in the left column, any editing of the computed blocks, an AI summary (none was asked for), a Search &amp; ask box',
   }),
 };

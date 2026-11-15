@@ -13,6 +13,7 @@ const q4 = 'At the corner of Harbor Street she stopped under the awning of the p
 const q5 = 'She did not go back in. She stood there long enough for the light to go out, and then a little longer, in case it came on again.';
 const c1 = 'The Blue Lamp emptied the way it always did, all at once and for no reason anyone could name. By half past one Lena had locked the bottles away, counted the till twice, and still not looked at the back-room door.';
 const c2 = 'She had locked the back room herself on Tuesday night. That part was true, and she held on to it the way Vega had held on to her coin: the one thing on the counter that could not be argued with.';
+const c4 = 'Kit found the ledger under the till drawer, wrapped in a bar towel, exactly where Lena had said it would not be.';
 const c3 = 'The green Fiat was where she had left it, under the only lamp on Harbor Street that still worked. She sat in it with the engine off and watched the window above the pawnshop until the light went out.';
 
 const css = `<style>
@@ -22,6 +23,11 @@ const css = `<style>
 .s32 .chdiv{margin-top:40px;padding-top:38px;background:linear-gradient(90deg,transparent,#c9c9c4 12%,#c9c9c4 88%,transparent) top/100% 1.5px no-repeat}
 .s32 .chdiv .chap{margin-bottom:26px}
 .s32 .menu .mi{padding:4px 10px}
+.s32 .menu .mi.rad:before{content:"";flex:none;width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink4)}
+.s32 .menu .mi.rad.on:before{background:var(--accent);border-color:var(--accent)}
+.s32 .snr{position:relative;height:1.5px;margin:30px 150px 30px 80px;background:linear-gradient(90deg,transparent,#b4b4af 25%,#b4b4af 75%,transparent)}
+.s32 .snr span,.s32 .snt{position:absolute;right:-150px;top:-8px;font:11.5px var(--ui);color:var(--ink3);white-space:nowrap}
+.s32 .snt{position:static;display:block;text-align:right;margin:-18px 0 10px}
 </style>`;
 
 // in Write the chapter list counts only your notes
@@ -38,14 +44,16 @@ for (const r of L.sample.navRows.map(noteOnly)) {
 }
 rows8.push(back);
 
-const statusBook = L.statusBar({ style: 'Plain', words: '1,960 words', pages: 'book p. ~151/248', review: '12 to review' })
+const statusBook = L.statusBar({ style: 'Plain', words: '1,960 words', pages: 'p. 151 of 248', highlightsOn: true })
   .replace(`<span class="sb m">${L.icons.view}`, `<span class="sb m act">${L.icons.view}`);
-const viewMenu = `<div class="menu" style="left:954px;bottom:6px;width:172px"><div class="mhd">On the page</div>`
-  + `<div class="mi"><span>Whole book</span><span class="r">✓</span></div><div class="mi hov"><span>By chapter</span></div></div>`;
+const viewMenu = `<div class="menu" style="left:954px;bottom:6px;width:190px"><div class="mhd">On the page</div>`
+  + `<div class="mi rad on"><span>Whole book</span></div><div class="mi rad hov"><span>By chapter</span></div></div>`;
 
 const topCol = `<p class="first">${q4}</p><p>${q5}</p>`
   + `<div class="chdiv"><div class="chap"><div class="num">CHAPTER 8</div><h1>Closing time</h1></div></div>`
-  + `<p class="first"><span class="cursor"></span>${c1}</p><p>${c2}</p><p>${c3}</p>`;
+  + `<span class="snt">Lena locks the back room</span>`
+  + `<p class="first"><span class="cursor"></span>${c1}</p><p>${c2}</p>`
+  + `<div class="snr"><span>Kit finds the ledger</span></div><p class="first">${c4}</p>`;
 
 const top = L.win({
   mode: 'Write',
@@ -56,10 +64,10 @@ const top = L.win({
   status: statusBook,
   content: viewMenu,
   ask: 'normal',
-  extra: L.ann(1, 'Whole book, the default: every chapter on one long page, each heading a divider. When the part changes, its name sits small above the number', 1080, 300, { w: 300 })
+  extra: L.ann(1, 'Whole book, the default: every chapter on one long page, each heading a divider (its part above it when the part changes). With Show ▸ Scene names on, each scene’s name in small gray at its rule', 1080, 250, { w: 300 })
     + L.ann(2, 'The list follows the scroll and highlights where you are; a double click on a row scrolls there', 20, 700, { w: 270 })
     + L.ann(3, 'The status bar counts the chapter under the cursor (1,960 words in chapter 8)', 330, 800, { w: 270 })
-    + L.ann(4, 'The switch: “Whole book ▾” at the right of the status bar; remembered per project', 650, 716, { w: 290 }),
+    + L.ann(4, 'The switch: “Whole book ▾” in the status bar, two exclusive rows; remembered per project', 640, 740, { w: 290 }),
 });
 
 // ---- bottom frame: By chapter ----
@@ -74,10 +82,10 @@ const bottom = L.win({
   left: L.navigator({ rows: rows7 }),
   page: L.pageCol(botCol, { paddingTop: 16 }),
   strip: { reviewCount: 12 },
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review', view: 'By chapter' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'p. 146 of 248', view: 'By chapter' },
   ask: 'normal',
   extra: L.ann(5, 'By chapter: one chapter on the page. At its end a gray line goes to the next (at the top, “Previous · 6 The back room ↑”); the down arrow on the last line, or Page Down at the end, crosses too', 1080, 520, { w: 300 })
-    + L.ann(6, 'Ctrl+Page Down / Ctrl+Page Up jump a whole chapter from anywhere; Back returns from any jump. Marks, notes and the Reference panel behave the same either way', 640, 740, { w: 330 }),
+    + L.ann(6, 'Ctrl+Page Down / Ctrl+Page Up jump a whole chapter from anywhere; Back returns from any jump. Every control is checked in both views', 600, 560, { w: 330 }),
 });
 
 module.exports = {
@@ -90,7 +98,7 @@ module.exports = {
   caption: L.caption({
     id: 'S32', title: 'The whole book, or by chapter',
     scene: 'Two frames. Top: Write in Whole book, the default: the end of chapter 7, the chapter 8 divider and its first paragraphs on one long page, the cursor on the first line of chapter 8, the chapter list highlighting chapter 8; the writer opened the “Whole book ▾” item at the right of the status bar. Bottom: the same place By chapter: chapter 7 scrolled to its end, the cursor after its last word, and the gray line “Next · 8 Closing time ↓”.',
-    on: 'top: the list with chapter 8 bold and its three scenes, the end of chapter 7, the divider (a soft rule, CHAPTER 8, Closing time), the first three paragraphs of chapter 8, the breadcrumb “Chapter 8 · Closing time › Lena locks the back room”, the status bar “1,960 words · book p. ~151/248 · 12 to review” with Whole book ▾ active and its menu (On the page: Whole book ✓ · By chapter), the Review tab with 12, the Ask button; bottom: the list with chapter 7 open and “Vega leaves without paying” marked, the last six paragraphs of chapter 7 with the cursor at the end, “Next · 8 Closing time ↓”, the status bar with By chapter ▾, the Ask button',
+    on: 'top: the list with chapter 8 bold and its three scenes, the end of chapter 7, the divider (a soft rule, CHAPTER 8, Closing time), the scene names “Lena locks the back room” (top of the chapter) and “Kit finds the ledger” (at its rule) in small gray, the first paragraphs of chapter 8, the breadcrumb “Chapter 8 · Closing time › Lena locks the back room”, the status bar “1,960 words · p. 151 of 248” with Whole book ▾ active and its menu (On the page: Whole book ● · By chapter ○), the Review tab with 12, the Ask button; bottom: the list with chapter 7 open and “Vega leaves without paying” marked, the last six paragraphs of chapter 7 with the cursor at the end, “Next · 8 Closing time ↓”, the status bar with By chapter ▾, the Ask button',
     off: 'the “Previous · 6 The back room ↑” line at the top of the chapter, a part line above the divider (chapter 8 stays in Part One), gutter marks, the Reference panel, the Next line in Whole book',
   }),
 };

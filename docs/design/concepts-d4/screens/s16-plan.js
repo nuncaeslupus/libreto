@@ -1,117 +1,144 @@
-// S16: Plan. The book as cards in lanes, one lane per chapter, side by side, a long shelf that scrolls sideways;
-// a card being dragged with its lane lit and the warning; moves and issues at the top right; the Reference panel
-// shows the selected card's scene.
+// S16: Plan, as rows. One row per chapter, its scenes left to right, the board scrolling down like the chapter
+// list; a part is a thin band between rows. Above the board one line: + New card, Color by ▾, and the moves
+// with their menu open (moves and the continuity issues in one list). A card is being dragged into a lit row;
+// the Reference panel shows the selected card's scene.
 const L = require('../lib');
 
 // Color by: point of view (hues outside the four mark colors)
 const POV = { Vega: '#7d5bbf', Kit: '#4f8a8b', Lena: '#b5577e' };
+const ST = { draft: 'Draft', working: 'Working', done: 'Done' };
 
-const LW = 220, GAP = 14, X0 = 16;
-const lx = (i) => X0 + i * (LW + GAP);
+const HX = 16, HW = 168, CW = 196, CG = 10;          // row header, card width and gap
+const cx = (i) => HX + HW + i * (CW + CG);
+const RH = 92;                                       // row height (card 74 + room)
 
-// card({n, t, pov, place, sel, ghost})
-const card = (c) => {
-  if (c.ghost) return `<div class="pcard ghost"></div>`;
-  if (c.drop) return `<div class="dropline"></div>`;
-  return `<div class="pcard${c.sel ? ' sel' : ''}"><i style="background:${POV[c.pov]}"></i>`
-    + `<div class="pn">${c.n}</div><div class="pt">${c.t}</div><div class="pl">${c.pov} · ${c.place}</div></div>`;
+// card({n, t, pov, place, st, line, sel, moved, ghost})
+const card = (c, i) => {
+  if (c.ghost) return `<div class="pcard ghost" style="left:${cx(i)}px"></div>`;
+  return `<div class="pcard${c.sel ? ' sel' : ''}${c.moved ? ' moved' : ''}" style="left:${cx(i)}px"><i style="background:${POV[c.pov]}"></i>`
+    + `<div class="pt"><span class="pn">${c.n}</span>${c.t}</div><div class="pl">${c.pov} · ${c.place}</div>`
+    + `<div class="pb"><span class="st ${c.st || 'draft'}"></span>${ST[c.st || 'draft']}${c.line ? `<span class="sl">${c.line}</span>` : ''}${c.moved ? '<span class="mv">moved</span>' : ''}</div></div>`;
 };
-// lane(i, num, title, sub, cards, {lit, gray})
-const lane = (i, num, title, sub, cards, o = {}) => `<div class="lane${o.lit ? ' lit' : ''}${o.gray ? ' gray' : ''}" style="left:${lx(i)}px">`
-  + `<div class="lh"><span class="grip">⋮⋮</span>${num ? `<span class="ln">${num}</span>` : ''}<span class="lt">${title}</span><small>${sub}</small></div>`
-  + cards.map(card).join('') + `</div>`;
+// row(y, num, title, sub, cards, {lit, gray, scroll})
+const row = (y, num, title, sub, cards, o = {}) => `<div class="prow${o.lit ? ' lit' : ''}${o.gray ? ' gray' : ''}" style="top:${y}px">`
+  + `<div class="rh"><span class="grip">⋮⋮</span>${num ? `<span class="ln">${num}</span>` : ''}<span class="lt">${title}</span><small>${sub}</small></div>`
+  + cards.map(card).join('') + (o.scroll ? `<div class="rscroll"><i></i></div>` : '') + (o.drop ? `<div class="dropline" style="left:${cx(o.drop) - CG / 2 - 1.5}px"></div>` : '') + `</div>`;
 
 const WARN = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#b5651d" stroke-width="1.5" stroke-linejoin="round"><path d="M8 2 14.5 13.5h-13z"/><path d="M8 6.5v3.2M8 11.6v.1" stroke-linecap="round"/></svg>`;
 
+// rows, in board coordinates (the board starts under the strip)
+const Y8 = 54, Y9 = Y8 + RH, YP = Y9 + RH, Y10 = YP + 24, Y11 = Y10 + RH, YS = Y11 + RH + 4, YU = YS + 10, YD = YU + RH;
+
+const moves = `<div class="movemenu" data-m="moves"><div class="mh">3 moves · nothing changes in the text until Apply</div>`
+  + `<div class="mvr"><span class="k">1</span><div><b>Vega reads the ledger</b> · from chapter 11, after “Kit finds the ledger” → to chapter 10, after “The confession”`
+  + `<div class="mw">${WARN}<span>Vega reads the ledger before Kit finds it (11.2)</span><span class="lk">Add as a task</span></div></div></div>`
+  + `<div class="mvr"><span class="k">2</span><div><b>A green Fiat outside</b> · from chapter 9, after “The pawnbroker remembers Kit” → to chapter 8, at the end</div></div>`
+  + `<div class="mvr"><span class="k">3</span><div><b>Kit’s sister visits</b> · from Discarded → to Unplaced</div></div>`
+  + `<div class="mf"><span class="lk">Undo the last move</span></div></div>`;
+
 const board = `<div class="board">`
-  // the moves, at the top right; the Issues popover open
-  + `<div class="pbar"><span class="sp"></span><span class="moves">3 moves</span><span class="dot">·</span>`
-  + `<span class="iss dd">${WARN}1 issue</span><span class="dot">·</span><span class="btn pri">Apply</span><span class="btn">Discard</span></div>`
-  + `<div class="issues"><div class="ih">Issues · read them before Apply</div>`
-  + `<div class="ir">${WARN}<div>Lena unlocks the back room after Kit is already inside it<small>move 2 · 11.1 after 11.2 · <span class="lk">Show the move</span></small></div></div></div>`
-  // the parts, as a thin band above their chapters
-  + `<div class="part" style="left:0;width:${lx(1) - GAP - 0}px">‹ Part One</div>`
-  + `<div class="part" style="left:${lx(1)}px;width:${2 * LW + GAP}px">Part Two · Spring</div>`
-  // the lanes
-  + lane(0, 9, 'The pawnshop', '', [
-    { n: '9.1', t: 'Under the pawnshop awning', pov: 'Vega', place: 'Harbor Street' },
-    { n: '9.2', t: 'The pawnbroker remembers Kit', pov: 'Vega', place: 'The pawnshop' },
-    { n: '9.3', t: 'A green Fiat outside', pov: 'Lena', place: 'Harbor Street' },
+  + `<div class="pbar"><span class="btn">+ New card</span><span class="btn dd">Color by: Point of view</span><span class="sp"></span>`
+  + `<span class="btn dd on" data-m="mvbtn">3 moves</span><span class="dot">·</span><span class="btn pri">Apply</span><span class="btn">Discard</span></div>`
+  + row(Y8, 8, 'Closing time', '5 scenes', [
+    { n: '8.1', t: 'Lena counts the till', pov: 'Lena', place: 'The Blue Lamp', st: 'done' },
+    { n: '8.2', t: 'Vega waits across the street', pov: 'Vega', place: 'Harbor Street', st: 'done', line: 'The ledger' },
+    { n: '8.3', t: 'A light in the back room', pov: 'Vega', place: 'Harbor Street', st: 'working', line: 'The ledger' },
+    { n: '8.4', t: 'Kit runs', pov: 'Kit', place: 'Harbor Street', st: 'draft' },
+    { n: '8.5', t: 'A green Fiat outside', pov: 'Lena', place: 'Harbor Street', st: 'draft', moved: true },
+  ], { scroll: true })
+  + row(Y9, 9, 'The pawnshop', '2 scenes', [
+    { n: '9.1', t: 'Under the pawnshop awning', pov: 'Vega', place: 'Harbor Street', st: 'working' },
+    { n: '9.2', t: 'The pawnbroker remembers Kit', pov: 'Vega', place: 'The pawnshop', st: 'draft', line: 'The ledger' },
   ])
-  + lane(1, 10, 'Station steps', '', [
-    { n: '10.1', t: 'Kit waits on the station steps', pov: 'Kit', place: 'The station steps' },
-    { n: '10.2', t: 'The confession', pov: 'Kit', place: 'The station steps' },
-    { drop: true },
-  ], { lit: true })
-  + lane(2, 11, 'The back room, finally', '', [
-    { n: '11.1', t: 'Lena unlocks the back room', pov: 'Lena', place: 'The Blue Lamp' },
-    { n: '11.2', t: 'Kit finds the ledger', pov: 'Kit', place: 'The back room' },
+  + `<div class="part" style="top:${YP}px" data-m="part">Part Two · Spring</div>`
+  + row(Y10, 10, 'Station steps', '3 scenes', [
+    { n: '10.1', t: 'Kit waits on the station steps', pov: 'Kit', place: 'The station steps', st: 'done' },
+    { n: '10.2', t: 'The confession', pov: 'Kit', place: 'The station steps', st: 'working', line: 'The ledger' },
+    { n: '10.3', t: 'Vega reads the ledger', pov: 'Vega', place: 'The back room', st: 'draft', line: 'The ledger', moved: true, sel: true },
+  ], { lit: true, drop: 1 })
+  + row(Y11, 11, 'The back room, finally', '4 scenes', [
     { ghost: true },
+    { n: '11.2', t: 'Kit finds the ledger', pov: 'Kit', place: 'The back room', st: 'draft', line: 'The ledger' },
+    { n: '11.3', t: 'Kit burns a page', pov: 'Kit', place: 'The back room', st: 'draft', line: 'The ledger' },
+    { n: '11.4', t: 'Vega and Lena, at closing', pov: 'Vega', place: 'The Blue Lamp', st: 'draft' },
   ])
-  + lane(3, '', 'Unplaced', 'not printed', [
-    { n: '—', t: 'Lena asks about the ledger', pov: 'Vega', place: 'The Blue Lamp' },
-    { n: '—', t: 'The pawnshop awning, at night', pov: 'Vega', place: 'Harbor Street' },
+  + `<div class="hr" style="top:${YS}px"></div>`
+  + row(YU, '', 'Unplaced', 'not printed', [
+    { n: '—', t: 'Lena asks about the ledger', pov: 'Vega', place: 'The Blue Lamp', st: 'draft' },
+    { n: '—', t: 'The pawnshop awning, at night', pov: 'Vega', place: 'Harbor Street', st: 'draft' },
+    { n: '—', t: 'Kit’s sister visits', pov: 'Kit', place: 'The Blue Lamp', st: 'draft', moved: true },
   ], { gray: true })
-  + lane(4, '', 'Discarded', 'kept', [
-    { n: '—', t: 'The dream about the harbor', pov: 'Vega', place: 'Harbor Street' },
-    { n: '—', t: 'Kit’s sister visits', pov: 'Kit', place: 'The Blue Lamp' },
+  + row(YD, '', 'Discarded', 'kept', [
+    { n: '—', t: 'The dream about the harbor', pov: 'Vega', place: 'Harbor Street', st: 'draft' },
   ], { gray: true })
-  // the dragged card under the pointer, and the warning before the drop
-  + `<div class="pcard drag sel" style="left:${lx(1) + 26}px;top:368px"><i style="background:${POV.Vega}"></i><div class="pn">11.3</div><div class="pt">Vega reads the ledger</div><div class="pl">Vega · The back room</div></div>`
-  + `<svg class="ptr" style="left:${lx(1) + 170}px;top:406px" width="16" height="22" viewBox="0 0 16 22"><path d="M1 1v17l4.5-4 3 6.5 3-1.4-3-6.3H14z" fill="#fff" stroke="#222" stroke-width="1.3" stroke-linejoin="round"/></svg>`
-  + `<div class="warn" style="left:${lx(1) + 10}px;top:458px">${WARN}<span>Vega reads the ledger before Kit finds it<small>ch. 10 → ch. 11 · it arrives in 11.2</small></span></div>`
-  // the shelf scrolls sideways
-  + `<div class="hscroll"><i></i></div>`
+  // the dragged card under the pointer, and what Libreto knows before the drop
+  + `<div class="pcard drag" style="left:${cx(1) - 70}px;top:${Y10 + 40}px" data-m="drag"><i style="background:${POV.Lena}"></i><div class="pt"><span class="pn">11.1</span>Lena unlocks the back room</div><div class="pl">Lena · The Blue Lamp</div><div class="pb"><span class="st draft"></span>Draft</div></div>`
+  + `<svg class="ptr" style="left:${cx(1) + 80}px;top:${Y10 + 80}px" width="16" height="22" viewBox="0 0 16 22"><path d="M1 1v17l4.5-4 3 6.5 3-1.4-3-6.3H14z" fill="#fff" stroke="#222" stroke-width="1.3" stroke-linejoin="round"/></svg>`
+  + `<div class="warn" style="left:${cx(1) + 106}px;top:${Y10 + 96}px" data-m="warn">${WARN}<span>Kit is inside the back room in 10.2, before Lena unlocks it<small>ch. 11 → ch. 10 · who is where, from the text</small></span></div>`
+  + moves
   // the legend
   + `<div class="legend">Color by: <span class="dd">Point of view</span><span class="sep">·</span>`
   + Object.entries(POV).map(([k, v]) => `<span class="lg"><i style="background:${v}"></i>${k}</span>`).join('<span class="sep">·</span>')
-  + `</div></div>`;
+  + `<span class="sep" style="margin-left:14px">|</span><span class="lg"><span class="st draft"></span>Draft</span><span class="lg"><span class="st working"></span>Working</span><span class="lg"><span class="st done"></span>Done</span>`
+  + `</div><div class="vscroll"><i></i></div></div>`;
 
 const css = `<style>
 .board{position:absolute;left:0;top:0;bottom:0;right:320px;z-index:1;background:var(--soft);font:13px var(--ui);color:var(--ink);overflow:hidden}
-.pbar{position:absolute;left:0;right:0;top:0;height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#fff;border-bottom:1px solid var(--line)}
+.pbar{position:absolute;left:0;right:0;top:0;height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#fff;border-bottom:1px solid var(--line);z-index:7}
 .pbar .sp{flex:1}
-.pbar .moves{font-weight:600}
 .pbar .dot{color:var(--ink4)}
-.pbar .iss{display:inline-flex;align-items:center;gap:6px;color:#9a5418;background:#fbf1e6;border-radius:6px;padding:4px 9px;box-shadow:0 0 0 1px #ecc9a5}
-.issues{position:absolute;right:96px;top:48px;width:330px;z-index:8;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:6px}
-.issues .ih{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:5px 8px 4px}
-.issues .ir{display:flex;gap:9px;align-items:flex-start;padding:6px 8px;border-radius:6px;background:#fdf6ef;line-height:1.4;font-size:12.5px}
-.issues .ir svg{flex:none;margin-top:2px}
-.issues small{display:block;color:var(--ink3);font-size:11.5px;margin-top:2px}
-.part{position:absolute;top:122px;height:18px;font:600 10.5px/18px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid #d8d8d4;white-space:nowrap;overflow:hidden;padding-left:2px}
-.lane{position:absolute;top:150px;width:${LW}px;height:540px;border-radius:10px;padding:0 8px;background:rgba(0,0,0,.025)}
-.lane.lit{background:var(--accent-tint);box-shadow:inset 0 0 0 1.5px var(--accent)}
-.lh{height:38px;display:flex;align-items:center;gap:6px;font-weight:600;padding:0 2px;white-space:nowrap}
-.lh .grip{color:var(--ink4);font-size:11px;letter-spacing:-2px;font-weight:400;margin-right:2px}
-.lh .ln{color:var(--ink3);font-weight:500}
-.lh .lt{overflow:hidden;text-overflow:ellipsis;min-width:0}
-.lh small{font-weight:400;color:var(--ink3);font-size:11.5px;margin-left:auto;flex:none}
-.lane.gray .lh{color:var(--ink3)}
-.lane.gray .lh .lt{color:var(--ink2)}
-.lane.gray .pcard{background:#fafaf9}
-.lane.gray .pcard .pt{color:var(--ink2)}
-.pcard{position:relative;height:72px;margin-bottom:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px 8px 18px}
+.pbar .btn.on{background:#e8e8e5;box-shadow:inset 0 0 0 1px var(--ink4)}
+.movemenu{position:absolute;right:96px;top:48px;width:420px;z-index:9;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.16);padding:6px;font-size:12.5px;line-height:1.45}
+.movemenu .mh{font:600 10.5px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:5px 8px 5px}
+.mvr{display:flex;gap:9px;padding:7px 8px;border-radius:6px}
+.mvr+.mvr{border-top:1px solid var(--line2)}
+.mvr .k{flex:none;width:18px;height:18px;border-radius:9px;background:var(--accent-tint);color:var(--accent);font:600 10.5px/18px var(--ui);text-align:center;margin-top:1px}
+.mvr b{font-weight:600}
+.mw{display:flex;align-items:flex-start;gap:7px;margin-top:6px;padding:6px 8px;border-radius:6px;background:#fdf3e8;color:#8a4a14;box-shadow:inset 0 0 0 1px #efcfae}
+.mw svg{flex:none;margin-top:2px}.mw .lk{margin-left:auto;white-space:nowrap;padding-left:8px}
+.movemenu .mf{border-top:1px solid var(--line2);padding:6px 8px 3px;font-size:12px}
+.part{position:absolute;left:0;right:0;height:18px;font:600 10.5px/18px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding-left:${HX + 4}px;background:#e9e9e6;border-top:1px solid #d8d8d4;border-bottom:1px solid #d8d8d4}
+.prow{position:absolute;left:0;right:0;height:${RH}px}
+.prow.lit{background:var(--accent-tint);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.rh{position:absolute;left:${HX}px;top:10px;width:${HW - 16}px;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px;font-weight:600;line-height:1.3}
+.rh .grip{color:var(--ink4);font-size:11px;letter-spacing:-2px;font-weight:400}
+.rh .ln{color:var(--ink3);font-weight:500}
+.rh .lt{min-width:0}
+.rh small{flex-basis:100%;font-weight:400;color:var(--ink3);font-size:11.5px;padding-left:16px}
+.prow.gray .rh{color:var(--ink2)}
+.prow.gray .pcard{background:#fafaf9}
+.prow.gray .pcard .pt{color:var(--ink2)}
+.pcard{position:absolute;top:9px;width:${CW}px;height:74px;box-sizing:border-box;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 7px 18px}
 .pcard i{position:absolute;left:7px;top:9px;bottom:9px;width:4px;border-radius:2px}
-.pcard .pn{font-size:11px;color:var(--ink3)}
-.pcard .pt{font:14px/1.3 var(--text);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pcard .pl{font-size:11px;color:var(--ink3);margin-top:4px}
+.pcard .pt{font:14px/1.3 var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard .pn{font:11px var(--ui);color:var(--ink3);margin-right:6px}
+.pcard .pl{font-size:11px;color:var(--ink3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard .pb{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink2);margin-top:4px;white-space:nowrap}
+.pcard .sl{border:1px solid var(--line);border-radius:9px;padding:0 6px;color:var(--ink2);margin-left:4px}
+.pcard .mv{margin-left:auto;color:var(--accent);font-size:10.5px}
+.st{display:inline-block;width:8px;height:8px;border-radius:50%;box-sizing:border-box;flex:none;border:1.5px solid #8d8f93}
+.st.working{background:linear-gradient(90deg,#8d8f93 50%,transparent 50%)}
+.st.done{background:#5d6065;border-color:#5d6065}
 .pcard.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.pcard.moved{border-style:dashed;border-color:var(--accent)}
+.pcard.moved.sel{border-style:solid}
 .pcard.ghost{border:1.5px dashed var(--ink4);background:none}
-.pcard.drag{position:absolute;width:${LW - 16}px;margin:0;z-index:5;transform:rotate(-2deg);box-shadow:0 0 0 3px var(--accent-tint),0 14px 30px rgba(0,0,0,.18)}
-.dropline{height:3px;border-radius:2px;background:var(--accent);margin:-4px 0 8px}
+.pcard.drag{z-index:5;transform:rotate(-2deg);box-shadow:0 0 0 3px var(--accent-tint),0 14px 30px rgba(0,0,0,.18);border-color:var(--accent)}
+.dropline{position:absolute;top:8px;width:3px;height:76px;border-radius:2px;background:var(--accent)}
+.rscroll{position:absolute;left:${HX + HW}px;right:24px;bottom:2px;height:4px;border-radius:2px;background:rgba(0,0,0,.05)}
+.rscroll i{position:absolute;top:0;bottom:0;left:0;width:82%;border-radius:2px;background:rgba(0,0,0,.2)}
+.hr{position:absolute;left:${HX}px;right:16px;height:0;border-top:1.5px solid #cfcfcb}
 .ptr{position:absolute;z-index:7}
-.warn{position:absolute;z-index:6;display:flex;align-items:flex-start;gap:8px;width:300px;background:#fff;border:1px solid #e8c6a6;border-radius:9px;padding:9px 12px;font-size:12.5px;line-height:1.4;color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.13)}
+.warn{position:absolute;z-index:6;display:flex;align-items:flex-start;gap:8px;width:290px;background:#fff;border:1px solid #e8c6a6;border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.4;color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.13)}
 .warn svg{flex:none;margin-top:2px}
 .warn small{display:block;color:var(--ink3);font-size:11.5px}
-.hscroll{position:absolute;left:12px;right:12px;bottom:46px;height:7px;border-radius:4px;background:rgba(0,0,0,.06)}
-.hscroll i{position:absolute;top:0;bottom:0;left:58%;width:34%;border-radius:4px;background:rgba(0,0,0,.24)}
-.legend{position:absolute;left:16px;bottom:14px;display:flex;align-items:center;gap:8px;color:var(--ink2)}
+.vscroll{position:absolute;right:3px;top:50px;bottom:44px;width:6px;border-radius:3px;background:rgba(0,0,0,.05)}
+.vscroll i{position:absolute;left:0;right:0;top:46%;height:30%;border-radius:3px;background:rgba(0,0,0,.22)}
+.legend{position:absolute;left:16px;right:16px;bottom:0;height:38px;display:flex;align-items:center;gap:8px;color:var(--ink2);border-top:1px solid var(--line);background:var(--soft)}
 .legend .sep{color:var(--ink4)}
 .legend .lg{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
 .legend .lg i{width:10px;height:10px;border-radius:50%}
-/* the scene in the Reference panel: every field editable; the kind label gives its room to the scene's name */
-.refhead .kind{display:none}
+/* the scene in the Reference panel: every field editable */
 .scn .fl{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:12px 0 4px}
 .scn .fl:first-child{margin-top:0}
 .scn .ed{background:#fff;border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12.5px;line-height:1.45;color:var(--ink)}
@@ -127,61 +154,60 @@ const css = `<style>
 .scn dd{margin:0;display:flex;align-items:center;gap:6px}
 .scn dd .v{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 8px}
 .scn dd small{color:var(--ink3);font-size:11px}
-.scn .nc{margin-top:16px}
-.scn .nc .btn{width:100%;justify-content:center}
-.scn .nc small{display:block;color:var(--ink3);font-size:11.5px;margin-top:5px;text-align:center}
+.scn .refbody,.ref .refbody{padding-bottom:20px}
 </style>`;
 
-const scene = `<div class="scn">`
+const scene = `<div class="scn" data-m="panel">`
   + `<div class="fl">The line</div><div class="ed txt">Vega reads Kit’s ledger by the stove and finds her own name in it.</div>`
   + `<div class="fl">Who · where</div><div class="chips"><span>Vega</span><span>Kit</span><span>The back room</span><span class="add">+</span></div>`
   + `<div class="fl">Relies on</div>`
   + `<div class="rel">${WARN}<span>Kit finds the ledger <span class="lk">(11.2)</span></span></div>`
   + `<div class="rel"><span class="ok">✓</span><span>The ledger is green <span class="lk">(ch. 5)</span></span></div>`
   + `<div class="rel"><span class="ok">✓</span><span>Lena keeps the back-room key <span class="lk">(ch. 6)</span></span></div>`
+  + `<div class="fl">Words</div><div style="font-size:12.5px">1,140 · about 4 pages</div>`
   + `<div class="fl">Labels</div><dl>`
   + `<dt>Point of view</dt><dd><span class="v">Vega</span><small>from the Codex</small></dd>`
   + `<dt>Place</dt><dd><span class="v">The back room</span><small>from the Codex</small></dd>`
   + `<dt>Status</dt><dd><span class="v dd">Draft</span></dd>`
   + `<dt>Storyline</dt><dd><span class="v dd">The ledger</span></dd>`
-  + `<dt>Timeline</dt><dd><span class="v dd">Day 6, night</span></dd>`
   + `<dt>My label</dt><dd><span class="v dd">Rewrite</span></dd></dl>`
-  + `<div class="fl">Words</div><div style="font-size:12.5px">1,140 · about 4 pages</div>`
-  + `<div class="nc"><span class="btn">+ New card</span><small>A scene that does not exist yet; it lands in Unplaced</small></div>`
   + `</div>`;
 
-const colorMenu = `<div class="below"><div class="crop" style="width:300px"><div class="lbl">The Color by menu</div>`
-  + `<div class="menu" style="position:static;box-shadow:none;border:0;border-radius:0;padding:6px 8px">`
-  + ['Point of view', 'Status', 'Storyline', 'Timeline', 'My labels'].map((t, i) => `<div class="mi${i === 0 ? ' hov' : ''}"><span style="width:14px;flex:none;text-align:center">${i === 0 ? '✓' : ''}</span><span>${t}</span></div>`).join('')
-  + `</div></div></div>`;
+const crop = (label, items, w) => `<div class="crop" style="width:${w}px"><div class="lbl">${label}</div>`
+  + `<div class="menu" style="position:static;box-shadow:none;border:0;border-radius:0;padding:6px 8px">${items}</div></div>`;
+const mi = (t, o = {}) => (t === '-' ? '<div class="msep"></div>' : `<div class="mi${o.hov ? ' hov' : ''}"><span style="width:14px;flex:none;text-align:center">${o.ok ? '✓' : ''}</span><span>${t}</span>${o.r ? `<span class="r">${o.r}</span>` : ''}</div>`);
+const below = `<div class="below">`
+  + crop('Right-click on a card', [mi('Open'), mi('Rename'), mi('-'), mi('Labels', { r: '▸' }), mi('Move to', { r: '▸', hov: true }), mi('-'), mi('Unplace'), mi('Move to Discarded'), mi('Delete…')].join(''), 240)
+  + crop('The Color by menu', ['Point of view', 'Place', 'Status', 'Storyline', 'My label'].map((t, i) => mi(t, { ok: i === 0, hov: i === 0 })).join(''), 240)
+  + `</div>`;
 
 const html = css + L.win({
   mode: 'Plan',
   crumbs: false,
-  right: L.reference({ kind: 'Scene', name: 'Vega reads the ledger', open: 'Open ↗', body: scene }),
+  right: L.reference({ kind: 'Scene', name: 'Vega reads the ledger', open: 'Open in Write', body: scene }),
   page: '',
   content: board,
-  status: { style: false, view: false, words: '86,240 words', pages: '11 chapters · 23 scenes' },
+  status: { style: false, view: false, words: '86,240 words', pages: '11 chapters · 31 scenes' },
   ask: 'normal',
-  extra: L.ann(1, 'Moves collect at the top right; Issues lists the warnings so you read them once before Apply; nothing changes in the text until then', 300, 76, { w: 300 })
-    + L.ann(2, 'Parts are a thin band above their chapters', 20, 160)
-    + L.ann(3, 'The lane under the pointer lights up; before the drop, what the move would break', 260, 640, { w: 210 })
-    + L.ann(4, 'Unplaced (not printed, not counted) and Discarded close the shelf; both are gray rows at the end of the chapter list in Write', 740, 640, { w: 260 })
-    + L.ann(5, 'One lane per chapter, side by side: a long book is a long shelf that scrolls sideways', 520, 770, { w: 300 })
-    + L.ann(6, 'The selected card’s scene, all editable; Point of view and Place fill themselves from the Codex', 1110, 690, { w: 270 }),
-}) + colorMenu;
+  extra: L.ann(1, 'Moves and the issues they raise: one list, read once before Apply', 812, 396, { w: 250 })
+    + L.ann(2, 'A part is a thin band between rows', 210, 336)
+    + L.ann(3, 'The row under the pointer lights up; before the drop, what Libreto knows the move breaks', 812, 572, { w: 250 })
+    + L.ann(4, 'Unplaced (not printed, not counted) and Discarded: the last two rows, under a line, gray', 400, 752, { w: 330 })
+    + L.ann(5, 'One row per chapter, scenes left to right, the board scrolls down; a long chapter scrolls a little sideways in its own row', 400, 664, { w: 330 })
+    + L.ann(6, 'The selected card’s scene, all editable; point of view and place fill themselves from the Codex', 1150, 700, { w: 250 }),
+}) + below;
 
 module.exports = {
   id: 'S16',
   file: 's16-plan',
-  title: 'Plan',
+  title: 'Plan, as rows',
   width: 1440,
   height: 900,
   html,
   caption: L.caption({
-    id: 'S16', title: 'Plan',
-    scene: 'The end of the shelf: chapter 9 of Part One, chapters 10 and 11 of Part Two, then Unplaced and Discarded. The writer drags “Vega reads the ledger” out of chapter 11 into chapter 10; the lane under the pointer lights up and, before the drop, the continuity warning shows. Two earlier moves are waiting at the top right with one issue, its list open. The dragged card is the selected one, and the Reference panel shows its scene.',
-    on: 'no breadcrumb, the left column closed; at the top right “3 moves · 1 issue ▾ · Apply · Discard” with the Issues popover (one warning); the part bands; five lanes (9, 10 lit, 11 with the ghost the card left, Unplaced and Discarded with gray headers, the last cut by the edge) and a horizontal scrollbar; cards with a color bar; the dragged card, the pointer, the drop line and the warning; the Reference panel with the scene (line, who and where, relies on, labels, words) and + New card; the legend “Color by: Point of view”; the Ask button; under the window, the Color by menu',
-    off: 'the text, the chapter list, the view item in the status bar, Write’s gray Unplaced and Discarded rows, the “leave with moves pending” question',
+    id: 'S16', title: 'Plan, as rows',
+    scene: 'The end of Part One and the start of Part Two, one row per chapter. Three moves wait for Apply, their menu open: the first one breaks continuity, and its warning sits under it with Add as a task. The writer now drags “Lena unlocks the back room” out of chapter 11 into chapter 10; the row lights up and, before the drop, the warning shows. The selected card, “Vega reads the ledger” (moved, pending), fills the Reference panel.',
+    on: 'no breadcrumb, the left column closed; the line above the board (+ New card, Color by: Point of view ▾, 3 moves ▾ · Apply · Discard) with the moves menu open (three moves in words, an orange warning with Add as a task under the first); rows 8 and 9 (8 cut at the right with its own small sideways scrollbar), the Part Two band, rows 10 (lit, with the drop line) and 11 (with the ghost the card left), a line, then Unplaced and Discarded in gray; cards with the point-of-view bar, place, status dot and storyline; moved cards dashed blue; the dragged card, the pointer and the warning; the legend at the bottom; the Reference panel (SCENE, the name large, line, who and where, relies on, words, labels; foot Open in Write · Ask the AI); the Ask button. Under the window: the right-click menu on a card, and the Color by menu',
+    off: 'the text, the chapter list, the view item in the status bar, the “leave with moves pending” question, Write’s gray Unplaced and Discarded rows',
   }),
 };

@@ -1,4 +1,4 @@
-// S27: Help. The Help window (search box, contents, a topic with a small drawing); a small tutorial bubble on "+ New chapter".
+// S27: Help. The Help window (search box, contents, a topic with a small drawing); a small tutorial bubble on the + between two rows of the chapter list.
 const L = require('../lib');
 const P = L.sample.chapter7Plain;
 
@@ -24,19 +24,23 @@ const css = `<style>
 .coach{width:236px;font-size:12.5px;padding:9px 12px}
 .coach:after{content:"";position:absolute;left:120px;bottom:-9px;border:9px solid transparent;border-bottom:0;border-top-color:#2b2c2f}
 .coach .st{color:#c7c8cc;font-size:11.5px;margin-bottom:4px}
+.coach.up:after{bottom:auto;top:-9px;left:226px;border:9px solid transparent;border-top:0;border-bottom-color:#2b2c2f}
+.plusr{position:absolute;z-index:43;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--accent);background:#fff;color:var(--accent);font:600 14px/15px var(--ui);text-align:center;box-sizing:border-box}
+.insl{position:absolute;z-index:42;height:2px;background:var(--accent);border-radius:1px}
 .ring{position:absolute;border-radius:8px;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent);z-index:44}
 </style>`;
 
-// a small line drawing of the control the topic talks about: the chapter list with “+ New chapter”
-const sketch = `<svg width="250" height="176" viewBox="0 0 250 176" fill="none" stroke="#8a8c90" stroke-width="1.3" stroke-linecap="round">
-  <rect x="1" y="1" width="248" height="174" rx="7"/>
+// a small line drawing of the control the topic talks about: the chapter list with the + between two rows and its menu
+const sketch = `<svg width="250" height="140" viewBox="0 0 250 140" fill="none" stroke="#8a8c90" stroke-width="1.3" stroke-linecap="round">
+  <rect x="1" y="1" width="248" height="138" rx="7"/>
   <rect x="12" y="11" width="226" height="20" rx="5"/><circle cx="23" cy="21" r="4"/><path d="m26 24 3 3"/><path d="M36 21h80" stroke="#c2c3c6"/>
-  <path d="M14 46h10M32 46h110" /><path d="M14 64h10M32 64h96"/>
-  <rect x="8" y="73" width="234" height="20" rx="4" fill="#eef3fa" stroke="none"/><path d="M14 83h10M32 83h120" stroke="#3a3c40" stroke-width="2"/>
-  <path d="M40 101v34" stroke="#c2c3c6"/><path d="M48 104h88M48 119h104M48 133h70" stroke="#b0b2b6"/>
-  <path d="M1 146h248" stroke="#d6d7d9"/>
-  <rect x="62" y="152" width="126" height="18" rx="5" stroke="#2f6fb3" stroke-width="1.6"/>
-  <text x="125" y="165" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#2f6fb3" stroke="none">+ New chapter</text>
+  <path d="M14 46h10M32 46h110"/>
+  <path d="M14 58h196" stroke="#2f6fb3" stroke-width="1.6"/><circle cx="224" cy="58" r="8" stroke="#2f6fb3" stroke-width="1.6" fill="#fff"/><path d="M224 54v8M220 58h8" stroke="#2f6fb3" stroke-width="1.6"/>
+  <path d="M14 70h10M32 70h96"/>
+  <rect x="8" y="80" width="150" height="20" rx="4" fill="#eef3fa" stroke="none"/><path d="M14 90h10M32 90h100" stroke="#3a3c40" stroke-width="2"/>
+  <path d="M40 108v24" stroke="#c2c3c6"/><path d="M48 112h70M48 126h84" stroke="#b0b2b6"/>
+  <rect x="166" y="70" width="74" height="62" rx="5" fill="#fff" stroke="#b0b2b6"/>
+  <g font-family="Inter, sans-serif" font-size="10.5" fill="#3a3c40" stroke="none"><text x="176" y="88">Scene</text><text x="176" y="106" fill="#2f6fb3" font-weight="600">Chapter</text><text x="176" y="124">Part</text></g>
 </svg>`;
 
 const toc = [
@@ -49,7 +53,7 @@ const fwin = `<div class="fwin" style="left:560px;top:96px;width:850px;height:59
     <div class="toc">${toc.map(([t, c]) => `<div${c ? ` class="${c}"` : ''}>${t}</div>`).join('')}</div>
     <div class="topic">
       <h2>Add a chapter</h2>
-      <p>Click <b>+ New chapter</b> at the bottom of the chapter list: the new chapter comes after the current one, with the cursor in its heading.</p>
+      <p>In the chapter list, hover between two rows and click the <b>+</b> that appears at the right; choose <b>Chapter</b>. The new chapter starts there, with the cursor in its heading.</p>
       <div class="fig">${sketch}</div>
       <p>Or type <b>Chapter 8</b> on its own line, and accept the heading Libreto proposes. <kbd>Ctrl+Enter</kbd> starts a new chapter at the cursor; Undo puts it back.</p>
       <p class="rel">Related: <span class="lk">Parts</span> · <span class="lk">Scene breaks</span> · <span class="lk">Tutorial: chapters</span></p>
@@ -57,22 +61,23 @@ const fwin = `<div class="fwin" style="left:560px;top:96px;width:850px;height:59
   </div>
 </div>`;
 
-const coach = `<div class="ring" style="left:10px;top:830px;width:300px;height:32px"></div>
-<div class="coach" style="left:22px;top:748px"><div class="st">Tutorial · step 2 of 4</div>This adds a chapter after the current one. <span style="color:#c7c8cc">Esc leaves</span></div>`;
+const coach = `<div class="ring" style="left:274px;top:500px;width:22px;height:22px;border-radius:50%"></div>
+<span class="plusr" style="left:276px;top:502px">+</span><div class="insl" style="left:14px;top:510px;width:256px"></div>
+<div class="coach up" style="left:40px;top:540px"><div class="st">Tutorial · step 2 of 4</div>Click the + to add a chapter between 8 and 9. <span style="color:#c7c8cc">Esc leaves</span></div>`;
 
 const html = L.win({
   mode: 'Write',
   crumbs: L.sample.crumbs7,
-  left: L.navigator({ rows: L.sample.navRows }),
+  left: L.navigator({ rows: L.sample.navRows.map((r) => ({ ...r, notes: 0, tasks: 0, fixes: 0 })) }),
   page: L.pageCol(col, { paddingTop: 40 }),
   strip: { reviewCount: 12 },
-  status: { style: 'Plain', words: '2,418 words', pages: 'book p. ~146/248', review: '12 to review' },
+  status: { style: 'Plain', words: '2,418 words', pages: 'p. 146 of 248' },
   ask: 'normal',
   extra: css + fwin + coach
-    + L.ann(1, 'F1 opens Help at the topic of what has focus; the search box finds the rest', 640, 69)
+    + L.ann(1, 'F1 opens Help at the topic of what has focus; the search box finds the rest', 960, 100, { w: 330 })
     + L.ann(2, 'Each topic is a short text with a small drawing of the control it talks about', 1100, 300, { w: 230 })
     + L.ann(3, 'Help ▸ Tips lists the tips Libreto can give', 566, 528, { w: 160 })
-    + L.ann(4, 'A tutorial runs in your own project, its bubble on the real control; Esc leaves it at any step; never required', 14, 640, { w: 260 })
+    + L.ann(4, 'A tutorial runs in your own project, its bubble on the real control; Esc leaves it at any step; never required', 14, 640, { w: 270 })
     + L.ann(5, '“How do I add a chapter?” typed in Ask answers from the same help, with a link', 1040, 806, { w: 230, r: true }),
 });
 
@@ -85,8 +90,8 @@ module.exports = {
   html,
   caption: L.caption({
     id: 'S27', title: 'Help',
-    scene: 'F1 with the chapter list focused opened the Help window at “Add a chapter”, floating over the page. The chapters tutorial is running: its small bubble points at the real “+ New chapter” button at the bottom of the open chapter list.',
-    on: 'the chapter list (chapter 7 open), the page, the Help window with its search box, the contents at the left (with Tutorials and Tips), the topic text with a line drawing of the chapter list and its + New chapter button, the tutorial bubble “step 2 of 4” with a ring around “+ New chapter”, the Ask button, the status bar',
+    scene: 'F1 with the chapter list focused opened the Help window at “Add a chapter”, floating over the page. The chapters tutorial is running: its small bubble points at the real + between chapters 8 and 9 of the open chapter list.',
+    on: 'the chapter list (chapter 7 open), the page, the Help window with its search box, the contents at the left (with Tutorials and Tips), the topic text with a line drawing of the chapter list, the + between two rows and its Scene · Chapter · Part menu, the tutorial bubble “step 2 of 4” with a ring around the + between chapters 8 and 9, the Ask button, the status bar',
     off: 'a Help column, a required tutorial, the Reference panel',
   }),
 };

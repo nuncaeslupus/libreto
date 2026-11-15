@@ -612,3 +612,47 @@ mark{background:none;color:inherit;font-weight:600}
 .refhead .kind{white-space:nowrap;flex:none}
 /* a detected (pending) scene break is blue and dashed, like every pending structure mark */
 .srule.det{border-top:2px dashed var(--gram);opacity:1}
+/* ---------- draft 7 ---------- */
+/* the menu bar is back; the mode switch is one control of six, exclusive, at the right of the strip */
+.menubar{display:flex}
+.modes{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px;height:auto;align-items:center;margin:0 6px 0 0}
+.modes span{display:inline-flex;align-items:center;padding:3px 10px;border-radius:6px;border-bottom:0;color:var(--ink2);font-size:12.5px}
+.modes .on{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.1);border-bottom:0}
+.strip .ib.mn{display:none}
+/* status bar: the autosave word, the keys button after the zoom */
+.status .sb.saved{color:var(--ink3);padding-left:4px}
+.status .sb.kb{margin-left:2px}
+/* the Reference panel: kind row, the name on its own, the two actions at the foot; room above the Ask button */
+.refhead{height:32px;padding:0 6px 0 4px;border-bottom:0}
+.refhead .kind:after{content:""}
+.refhead .rx{width:22px;height:22px;font-size:12px;color:var(--ink3)}
+.refname{font:600 16px/1.2 var(--ui);color:var(--ink);padding:2px 14px 10px;border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ref .refbody{flex:1;min-height:0;overflow:auto;padding-bottom:72px}
+.reffoot{flex:none;display:flex;gap:6px;padding:8px 10px;border-top:1px solid var(--line2);background:var(--soft)}
+.rb{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-size:12px;color:var(--ink);background:#fff}
+.rb.ai svg{width:13px;height:13px;color:var(--accent)}
+/* notices: ✕ closes; a standing notice (something to read or decide) has a stronger border */
+.notice.standing{border-left-width:4px}
+.notice .nx{border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--ink2);margin-left:6px}
+/* the four mark colors are reserved: people, places, things and motifs use other hues under the reveal */
+:root{--people:#6f4fc9;--place:#1a7f9c;--thing:#8b5a3c;--motif:#c23b8a}
+.rv-c{background:rgba(111,79,201,.13);box-shadow:inset 0 -2px 0 var(--people)}
+.rv-p{background:rgba(26,127,156,.13);box-shadow:inset 0 -2px 0 var(--place)}
+.rv-t{background:rgba(139,90,60,.13);box-shadow:inset 0 -2px 0 var(--thing)}
+.tic.ai{color:var(--accent);background:var(--accent-tint);border-color:var(--accent-soft)}
+
+/* draft 7, second pass: stacks, who chips, card rows and footer, filter toggles, motif hue */
+.gm.stack{width:auto;min-width:16px;height:16px;border-radius:8px;background:#dcdad4;color:var(--ink2);font:600 10px/16px var(--ui);padding:0 5px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.who{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.who.ai{background:rgba(59,110,168,.12);color:var(--accent)}.who.ai svg{width:12px;height:12px;display:block}
+.mc-h .who{margin-left:auto}
+.mc-rows{display:flex;flex-direction:column;gap:2px;margin:0 0 6px}
+.mc-r{display:flex;align-items:center;justify-content:space-between;padding:4px 8px;border-radius:5px;font:14px var(--serif);color:var(--ink)}
+.mc-r.sel{background:var(--soft)}.mc-r kbd{font:10px var(--ui);color:var(--ink3);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.mc-f{font:11px var(--ui);color:var(--ink4);padding:6px 0 0;margin-top:7px;border-top:1px solid var(--line2)}
+.tgl{display:flex;flex-wrap:wrap;gap:4px}
+.tgl span{border:1px solid var(--line);border-radius:14px;padding:2px 9px;font:11.5px var(--ui);color:var(--ink3);background:#fff}
+.tgl span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.navrev{display:flex;flex-direction:column;gap:5px;padding:0 0 10px}
+.filter .fx{margin-left:auto;color:var(--ink3);font-size:11px;padding:0 2px}.filter.act{color:var(--ink);border-color:var(--ink3)}
+.rv-m{background:rgba(194,59,138,.12);box-shadow:inset 0 -2px 0 var(--motif);border-radius:2px}
