@@ -1,5 +1,18 @@
 # Libreto concept, draft 2: the window, the Desk, the chat
 
+> **Drafts 4 to 6 note (November 8 and 13).** The current description of the product is `walkthrough.md`
+> (concept draft 4) and its screens in `concepts-d4/`. Where this document and the walkthrough
+> differ, the walkthrough wins. Superseded here: the Desk and its tabs (§2), the chat in the
+> column (§2.3), Search & ask (§6.2), the Codex window (§2.2), the status-bar AI icon (§13),
+> the session briefing dialog (§8.2, §23.1), the workspaces table (§23.2), and the shortcuts
+> `Ctrl+\`, `Ctrl+[`, `Ctrl+]`, `Alt+1…4` for panels (§1, §9.2). Draft 4 replaces them with
+> one AI door (Ask: `Ctrl+K` and the round button), a page that never moves, a Reference
+> panel without tabs, a library with the Codex and Research as two sections, Review as the
+> same page with the margin open, sheets instead of extra modes, one family of marks, and
+> keys that exist on every keyboard. The rest of this document (writing rules, auto-fixes,
+> entity detection and its cost, styles, History, Book, AI levels, ethics, help, sharing) still
+> stands.
+
 Status: **for annotation.** Draft 1 was never read on its own; the owner reviewed the 20 v2 screens built from it and wrote `concepts/review-notes-v2-2026-11-07.md`. This draft folds those notes in and restructures freely. Comment paragraph by paragraph; the numbered questions at the end can each be answered in one line. The screens will be redrawn as v3 from this draft (`screens-v3-brief.md`).
 
 The thesis has not changed: write first and fix later, never lose your place, AI that is present but silent. What changed is the right side of the window and a long list of details from the review.

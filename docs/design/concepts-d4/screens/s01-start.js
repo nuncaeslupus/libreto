@@ -1,0 +1,115 @@
+// S01: Start. No project open: New project (title, What are you writing? as three choices, where to keep it,
+// the look as a letter tile or a line drawing recolored by the chosen color), Recent projects and Import on the right.
+// No strip, no status bar, no Ask button.
+const L = require('../lib');
+
+const titlebar = `<div class="titlebar"><span class="appic"></span><div class="wtitle">Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div>`
+  + `<div class="menubar"><span>File</span><span>Edit</span><span>Insert</span><span>Format</span><span>View</span><span>Reports</span><span>Help</span></div>`;
+
+const css = `<style>
+.s01 .content{background:var(--soft)}
+.s01 .start{position:absolute;left:236px;top:0;width:1080px;padding-top:84px;display:flex;gap:36px;align-items:flex-start}
+.s01 .card{width:700px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:22px 24px 20px}
+.s01 .card h2{margin:0 0 16px;font:600 17px var(--ui)}
+.s01 .card .field{margin-bottom:16px}
+.s01 .sec{font:600 13px var(--ui);color:var(--ink);margin:0 0 8px}
+.s01 .hint{font:12px/1.4 var(--ui);color:var(--ink3);margin-top:7px}
+.s01 .kinds{display:flex;gap:10px}
+.s01 .kd{flex:1;border:1px solid var(--line);border-radius:10px;padding:11px 13px 12px;background:#fff}
+.s01 .kd b{display:block;font:600 15px var(--ui);margin-bottom:4px}
+.s01 .kd span{display:block;font:12px/1.4 var(--ui);color:var(--ink3)}
+.s01 .kd.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint);background:rgba(59,110,168,.03)}
+.s01 .kd.on b{color:var(--accent)}
+.s01 .loc{display:flex;gap:10px;align-items:center}
+.s01 .loc .inp{flex:1}
+.s01 .res{font:12.5px/1.4 var(--ui);color:var(--ink3);margin-top:7px}
+.s01 .look{display:flex;gap:18px;align-items:center}
+.s01 .prev{flex:none;width:74px;height:74px;border-radius:11px;background:#3b6ea8;color:#fff;display:flex;align-items:center;justify-content:center}
+.s01 .lopts{display:flex;flex-direction:column;gap:10px}
+.s01 .tiles{display:flex;gap:7px}
+.s01 .tl{width:38px;height:38px;border-radius:7px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#6b6e74;background:#fff}
+.s01 .tl.let{background:#3b6ea8;border-color:#3b6ea8;color:#fff;font:400 20px/1 var(--text)}
+.s01 .tl.on{background:#3b6ea8;border-color:#3b6ea8;color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 4px #3b6ea8}
+.s01 .tl.more{border-style:dashed;color:var(--ink3);font:12px var(--ui)}
+.s01 .dots{display:flex;gap:8px;align-items:center}
+.s01 .dot{width:20px;height:20px;border-radius:50%;display:inline-block}
+.s01 .dot.on{box-shadow:0 0 0 2px #fff,0 0 0 4px #555}
+.s01 .cardf{display:flex;justify-content:flex-end;border-top:1px solid var(--line2);padding-top:14px;margin-top:4px}
+.s01 .recent{width:320px;padding-top:2px}
+.s01 .recent .nh{margin:0 0 10px}
+.s01 .rlist{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.s01 .rr{display:flex;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--line2)}
+.s01 .rr:first-child{border-top:0}
+.s01 .rr .rt{width:34px;height:34px;border-radius:7px;color:#fff;display:flex;align-items:center;justify-content:center;font:400 18px/1 var(--text);flex:none}
+.s01 .rr .b{flex:1;min-width:0}
+.s01 .rr .b div:first-child{font-weight:600;font-size:13.5px}
+.s01 .rr .b div+div{color:var(--ink3);font-size:12px}
+.s01 .rr .when{color:var(--ink3);font-size:12px;flex:none}
+.s01 .rbtns{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+</style>`;
+
+// the line drawings: one tone, strokes only, recolored by the chosen color
+const D = (inner, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+const draw = {
+  hat: '<path d="M3 15c3 1.6 15 1.6 18 0"/><path d="M6.5 15.4 8 8.5c.3-1.3 7.7-1.3 8 0l1.5 6.9"/><path d="M7.4 11.5c3 .9 6.2.9 9.2 0"/><path d="M15 18.5c2.5.6 5 .2 6.5-1.5"/>',
+  masks: '<path d="M3 5h8v5a4 4 0 0 1-8 0z"/><path d="M5.3 8h.8M8 8h.8M5.5 11.3c.9.8 2.2.8 3.1 0"/><path d="M13 9h8v5a4 4 0 0 1-8 0z"/><path d="M15.3 12h.8M18 12h.8M15.5 16c.9-.8 2.2-.8 3.1 0"/>',
+  lighthouse: '<path d="M10 21 10.8 9h2.4L14 21"/><path d="M9.5 9h5M10.4 6h3.2v3h-3.2zM12 4.2V6"/><path d="M14.5 7.5 20 6M9.5 7.5 4 6"/><path d="M6 21h12"/><path d="M10.5 14h3"/>',
+  bicycle: '<circle cx="6" cy="16" r="3.6"/><circle cx="18" cy="16" r="3.6"/><path d="M6 16 10 9h6l2 7M10 9l3 7h-7M15 6.5h2.5"/>',
+  teacup: '<path d="M4 9h12v4a6 6 0 0 1-12 0z"/><path d="M16 10.5h1.8a2 2 0 0 1 0 4H15.6"/><path d="M3 20h14"/><path d="M8 3.5c-.8 1 .8 1.8 0 3M12 3.5c-.8 1 .8 1.8 0 3"/>',
+  train: '<rect x="6" y="3.5" width="12" height="13" rx="3"/><path d="M6 10h12M9 13.5h.2M15 13.5h.2"/><path d="M8.5 16.5 6.5 20.5M15.5 16.5l2 4M7.5 18.5h9"/>',
+  planet: '<circle cx="12" cy="12" r="5"/><path d="M5.5 14.5C2 17 3 18.6 7.5 17.3c3.3-.9 7.6-3.2 10.6-5.6C21.6 9 21.4 7.3 17.8 8.4"/>',
+  key: '<circle cx="7.5" cy="12" r="3.6"/><path d="M11.1 12H21M17 12v3.2M19.6 12v2.2"/>',
+  quill: '<path d="M19.5 3.5C11 5 6.8 11 5.5 19.5"/><path d="M19.5 3.5c.4 6-3.6 10.2-10.4 10.6"/><path d="M4.5 21l2-2"/>',
+  moon: '<path d="M16.5 4.2A8 8 0 1 0 19.8 15 6.4 6.4 0 0 1 16.5 4.2z"/>',
+};
+const order = ['hat', 'masks', 'lighthouse', 'bicycle', 'teacup', 'train', 'planet', 'key', 'quill', 'moon'];
+const tiles = `<span class="tl let">B</span>` + order.map((k) => `<span class="tl${k === 'lighthouse' ? ' on' : ''}">${D(draw[k])}</span>`).join('') + `<span class="tl more">+9</span>`;
+const dots = ['#3b6ea8', '#6f7f4f', '#a0763a', '#8c5c6e', '#4f8580', '#5d5f66', '#2f3a4f']
+  .map((c, i) => `<span class="dot${i === 0 ? ' on' : ''}" style="background:${c}"></span>`).join('');
+
+const kind = (t, line, on) => `<div class="kd${on ? ' on' : ''}"><b>${t}</b><span>${line}</span></div>`;
+
+const card = `<div class="card"><h2>New project</h2>`
+  + `<div class="field"><label>Title</label><div class="inp foc">The Blue Lamp<span class="cursor" style="height:15px;vertical-align:-2px"></span></div></div>`
+  + `<div class="field"><div class="sec">What are you writing?</div><div class="kinds">`
+  + kind('Book', 'A novel, short stories, a memoir, nonfiction: parts, chapters and scenes', true)
+  + kind('Play', 'A play or a screenplay: acts and scenes')
+  + kind('Paper', 'An essay, an article, a thesis: parts and sections, no scenes')
+  + `</div><div class="hint">The names of the levels can be changed later in Project settings.</div></div>`
+  + `<div class="field"><div class="sec">Where to keep it</div><div class="loc"><div class="inp">Documents/Libreto</div><span class="btn">Choose…</span></div>`
+  + `<div class="res">Documents/Libreto/The Blue Lamp</div></div>`
+  + `<div class="field"><div class="sec">The look</div><div class="look"><div class="prev">${D(draw.lighthouse, 46)}</div>`
+  + `<div class="lopts"><div class="tiles">${tiles}</div><div class="dots">${dots}</div></div></div></div>`
+  + `<div class="cardf"><span class="btn pri">Create</span></div>`
+  + `</div>`;
+
+const rt = (color, inner) => `<div class="rt" style="background:${color}">${inner}</div>`;
+const recentRow = (tile, title, when) => `<div class="rr">${tile}<div class="b"><div>${title}</div><div>Documents/Libreto</div></div><div class="when">${when}</div></div>`;
+const recent = `<div class="recent"><div class="nh">Recent projects</div><div class="rlist">`
+  + recentRow(rt('#6f7f4f', D(draw.train, 20)), 'Harbor stories', 'Oct 12')
+  + recentRow(rt('#a0763a', 'F'), 'Field notes', 'Sep 3')
+  + recentRow(rt('#8c5c6e', D(draw.teacup, 20)), 'A long winter', 'Jun 20')
+  + `</div><div class="rbtns"><span class="btn">Open another…</span><span class="btn">Import a Word file…</span></div></div>`;
+
+const html = css + `<div class="win s01" style="width:1440px;height:900px">${titlebar}`
+  + `<div class="content"><div class="start">${card}${recent}</div></div>`
+  + L.ann(1, 'What are you writing? Three choices, each saying what it covers; the choice only names the three levels, and only the levels you use ever show', 10, 268, { w: 190, r: true })
+  + L.ann(2, 'Where to keep it: a folder (Documents/Libreto by default) and Choose…; in gray, the folder the project gets inside it, so nobody types the title twice', 10, 428, { w: 190, r: true })
+  + L.ann(3, 'The look: a letter on a color, or one of about twenty line drawings in one tone, recolored by the color you pick. No AI; a real cover comes later, in Book', 10, 570, { w: 190, r: true })
+  + L.ann(4, 'Recent projects open with one click, each with its look; “Import a Word file” turns a manuscript’s headings into chapters', 972, 450, { w: 300 })
+  + `</div>`;
+
+module.exports = {
+  id: 'S01',
+  file: 's01-start',
+  title: 'Start',
+  width: 1440,
+  height: 900,
+  html,
+  caption: L.caption({
+    id: 'S01', title: 'Start',
+    scene: 'Libreto opened with no project. The writer typed “The Blue Lamp” as the title, kept Book, kept the default folder and picked the lighthouse on blue; under the folder, in gray, the folder the project will get. Three recent projects wait on the right.',
+    on: 'the menu bar, New project (Title; What are you writing? with Book selected, Play and Paper, each with its gray line, and “The names of the levels can be changed later in Project settings.”; Where to keep it with Documents/Libreto, Choose… and the gray Documents/Libreto/The Blue Lamp; The look with the preview, the letter tile, ten line drawings with the lighthouse selected, “+9” and a row of colors; Create), Recent projects with their looks, Open another…, Import a Word file…',
+    off: 'the strip, the status bar and the Ask button (no project is open), how files are stored (that is in Help), templates, accounts, an AI cover, the Spanish “Documentos/Libreto” default',
+  }),
+};

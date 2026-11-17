@@ -1,0 +1,400 @@
+# Libreto — Specification
+
+> Readable copy of `libreto-screens-d7-v1-2026-11-15-1931-reader.html`: the document and its screens, without notes. The HTML file is the annotatable version.
+
+## Preamble & scope
+
+**Revision**: 1
+
+Status: **for annotation.** One document, in the order a writer who has never seen Libreto would meet things. Before each screen, a short paragraph says how you get there, what it is for and what it lets you do; then the picture. Not a guide and not a specification. The pictures are in `concepts-d4/`; the review page puts a note field under each one.
+
+Draft 7 answers the 80 notes on draft 6 (`concepts/review-notes-d6-2026-11-15.md`). The note that weighs most is the general one: **the screens were getting crowded**. So this draft takes things away before it adds any: the ☰ button (the menu bar is back), the "to review" item in the status bar, "Make a Codex entry" on red words, the "Receive a copy" dialog and the Compare sheet (readers' notes now arrive in Review), the kinds of text as a row of six, the stacked underlines, the "+ New chapter" button. What changed, and why, is at the end, with the open questions and what moves to the specification.
+
+## Libreto in one minute
+
+Libreto is a writing app for long texts: novels first. Its window is a **page in the middle**, with two columns that can open beside it: on the **left**, a list of what you are working on (the chapters; in Research, your topics; in the Codex, the cast); on the **right**, the **Reference panel**, which shows one thing at a time: a person, a place, a topic. Both columns are 320 px wide; nothing to resize. The menu bar is the ordinary one. In the top strip, at the right, one control with six positions names the job you are doing: **Write, Plan, Research, Codex, Review, Book**; exactly one is pressed, and choosing another dresses the same window for that job. It never takes you somewhere you cannot come back from with one key.
+
+The AI has **one door**: the round **Ask** button at the bottom right of the window, or `Ctrl+K`. The same box finds a chapter, looks up a name, runs a command ("export PDF") and asks a question about the book; when the question needs the AI, the box becomes a conversation. The AI can do anything you can do in Libreto, but it never changes your text, your chapters or your cards without a button you click first. When no AI is connected, Ask still finds, looks up and runs commands, and its last row offers to connect one. Everything else in Libreto works without an AI; where the AI adds something, the screen says so.
+
+Five words are used the same way everywhere. A **note** is a remark you (or a reader, or the AI) attach to some words. A **card** is anything that sits in the margin and waits for you: a note, a pending change, a fix you can undo. A **notice** is Libreto telling you something, on a card at the bottom of the page that goes to the **bell** when it closes. **History** is the record of what changed and when. **Undo** is the way back, one step at a time, and it always shows you the place it is undoing.
+
+Seven rules hold everywhere:
+
+1. **The page stays put.** Columns open in the margins; the text stays centered. The one exception is a narrow window where a column needs the room: then the page moves aside, once, and stays there.
+2. **Four colors, one meaning each.** **Red**: a word Libreto does not know. **Blue**: pending, something proposed and not yet decided, whoever proposed it. **Green**: done by Libreto, undoable. **Amber**: a note. Nothing else in the app uses these four colors: people, places, things and motifs have their own hues, and those four cannot be picked for a style.
+3. **Write is for writing, Review is for deciding.** Write shows the underlines and your own notes; everything that waits for a decision waits in Review, and the Review position of the mode switch says how many.
+4. **One way back.** `Esc` closes the innermost thing that is open (a card, a peek, a menu) and nothing more; a sheet with decisions pending asks before it closes; `Back` (`Alt+←`) returns from any jump between places, across modes too; `Ctrl+Shift+H` hides both columns and brings them back.
+5. **Nothing replaces your words unasked.** Fixes while you type are small, green and undoable; everything else arrives blue, as a proposal with buttons.
+6. **Keys that exist on every keyboard**, shown in one style everywhere. Letters, digits, F-keys and Enter with `Ctrl`, `Shift` and `Alt`; no brackets, slashes or backslashes.
+7. **Undo shows its place.** `Ctrl+Z` scrolls to what it undoes and flashes it, with a word for what it was ("Undo: scene break removed"), so you always know where in the list you are.
+
+| Mode | Left | Center | Right | What it is for |
+| --- | --- | --- | --- | --- |
+| Write | chapters (optional) | the text, underlines, your notes | Reference (optional) | writing; the default |
+| Plan | none | one row of cards per chapter | the selected card's scene | seeing and reordering scenes |
+| Research | the Inbox, your topics, files | a topic, large | what it links to | gathering material |
+| Codex | people, places, things, motifs | one entry, read from the book | where it appears | what the book says, checked |
+| Review | chapters with counts, filters | the text with badges, the margin open | the cards, level with their lines | deciding; the second pass; readers' notes |
+| Book | page thumbnails | spreads | layout and print styles | printing and exporting |
+
+History, Statistics and Help are not modes: they open **over** the window as a sheet with "Back to the text" at the top left. Compare is not a sheet anymore: comparing is done in Review (S22) and in History (S23).
+
+## S01 · Start
+
+When Libreto opens with nothing open, it asks for three things under the words **New project**: a title, what you are writing, and where to keep it. **What are you writing?** has three choices, and each says what it covers: **Book** (a novel, short stories, a memoir, nonfiction: parts, chapters and scenes), **Play** (a play or a screenplay: acts and scenes), **Paper** (an essay, an article, a thesis: parts and sections, no scenes). The choice only sets the names of the three structure levels, and only the levels you use ever show; a line under the choices says that the names can be changed later in Project settings, with care, because a play is not shaped like a novel.
+
+**Where to keep it** is a folder you choose, "Documents/Libreto" by default (on a Spanish system "Documentos/Libreto"), with "Choose…" beside it; under it, in gray, the folder the project will get inside that place, so nobody types the title twice. Nothing on this screen explains how files are stored; that is in Help, for those who want it. **The look** of the project (shown in the recent list and on the Book title page until a real cover exists) is a letter on a color, or one of about twenty simple line drawings in the app's own style (a hat and a whip, two masks, a lighthouse, a bicycle, a teacup, a train, a planet, a key…), drawn in one tone and recolored by the color you pick, so any kind of book finds one. No AI is involved, and cover design is a different thing, later, in Book. Recent projects open with one click; "Import a Word file" turns a manuscript's headings into chapters.
+
+![Start](libreto-screens-d7-v1-2026-11-15-1931-img/s01-start.jpg)
+
+## S02 · Write, the first minute
+
+A new project opens on its first chapter in Write mode, both columns closed. The heading reads "Chapter 1" in gray: a placeholder, since a numbered chapter needs no title, and typing replaces it. Under the menu bar, the strip: the left toggle, Back, Forward, Undo and Redo, then **where you are** (chapter › scene, each a menu of its siblings), then the **mode switch**, one control with six positions, Write pressed, and a small blue count on Review when something waits there; after a gap, the **Find** magnifier, the **bell** and the right toggle. The status bar: the style at the cursor in its own look (here **Thought**, italic), the words, "p. 146 of 248" in the printed book (both open Statistics), and **"Saved 19:32"**, which is how you know Libreto saves as you type; at the right, **Whole book ▾**, **Show ▾** (underlines, scene names, your notes: on or off), History, zoom, and last the **⌨** button, which lists the keys that work right where you are (`F1` does the same). The round **Ask** button at the bottom right is the AI's door.
+
+The marks are the thing to look at. In Write the page carries **underlines only**, on the exact characters: **red** dotted for a word Libreto does not know and cannot fix alone, **blue** dotted for anything it proposes, **green** dotted for a change it already made; the gutter holds **your own notes** and nothing else. The rule for what gets done without asking is short: **Libreto changes by itself only what has one possible answer and does not touch meaning**: a word that is not a word with exactly one correction one slip away ("teh", "recieved", a doubled letter, a missing apostrophe), a space before a comma, a double space, straight quotes to curly. Two possible answers ("quite" or "quiet" are both words), agreement ("the letters was"), anything longer than a word: proposed, in blue. When a fix happens, the red underline fades to green in under half a second; the text never moves. **One word, one underline**: when a word carries more than one mark, the most important shows (red before blue before green) and the card lists the others.
+
+**Hovering any mark**, or resting the cursor inside it and pressing `Ctrl+.`, opens the same small card everywhere: a title that says what happened ("Done · typo", "Pending · agreement"), **Was** and **Now**, the buttons, and a gray footer line with the keys (`Ctrl+.` opens, `F8` next, `Shift+F8` previous), there every time until you turn tips off in Settings. Opened from the keyboard, the buttons show their keys inside. A red word's card lists the candidates as rows ("letters", "letter"): click one or press `Enter` for the first; **Ignore here** (`Delete`) and **Add to dictionary** are the other two ways out, and "Ignore everywhere in this project" is a click away. A name is added to the Codex from the right-click menu, not from here.
+
+![Write, the first minute](libreto-screens-d7-v1-2026-11-15-1931-img/s02-write-the-first-minute.jpg)
+
+## S03 · The marks, up close
+
+Not a moment in the app: the family of marks at twice the size, so the rules can be checked once. Four underlines: **red** = unknown word, **blue** = pending, **green** = done, **amber** = a note (only in this legend; in the text a note is its badge). A detected scene break or heading is a pending mark: a **blue dashed rule** where it would go, and nothing exists until you keep it. The same four colors are the four **badges** of Review, at the exact line: a red **?**, a blue **…**, a green **✓**, an amber **speech bubble** for a note; in Write only the bubble shows. When one line holds marks of several kinds, the badge is a gray stack with the count, and a click opens the list in color. Every card says **who** it is from with a small round initial: **M** for Marta, **You**, and the spark for the AI; that is how an AI note is told from a reader's before it is opened.
+
+The card is the same for all four and differs only in its buttons. **Unknown** (red): the candidates as rows, **Ignore here**, **Add to dictionary**. **Pending** (blue): **Was** and **Now** with the changed part tinted, no italics, spaces shown as **middle dots** (·), then **Apply** and **Dismiss**: dismissed means gone, and it says so. **Done** (green): the same two rows, **Keep** and **Undo**. **Note** (amber): the text, **Reply** and **Resolve**, which means "read; nothing more to do here", and a resolved note turns green and stays in History. Replies hang under their note. Notes and replies go into a Word export when "Include notes" is checked there. The rule to remember: **red you fix by typing, blue waits for you in Review, green is done and one Undo away, amber is a remark.**
+
+![The marks, up close](libreto-screens-d7-v1-2026-11-15-1931-img/s03-the-marks-up-close.jpg)
+
+## S04 · Coming back
+
+Libreto reopens exactly as you left it: same mode, same chapter, same columns, the cursor where it was. No dialog asks what you want to do. A notice at the bottom of the page, titled **Last session**, says when that was and how much you wrote, and what is waiting, with one button per kind of thing that waits: "12 to review" opens Review, "2 cards unplaced" opens Plan, "3 clippings in the Inbox" opens Research; nothing else is on it. It stays until you close it with ✕, and "Don't show this again" is on the card. Closing it sends it, visibly, into the **bell** at the top right: the bell lists the day's notices with their time and, where it still applies, their Undo, and "Clear" empties it. The bell is not History: History is every change, the bell is what Libreto told you today.
+
+![Coming back](libreto-screens-d7-v1-2026-11-15-1931-img/s04-coming-back.jpg)
+
+## S05 · Chapters, on the left
+
+Open the left column with the icon at the top left or `Ctrl+Shift+L`. It lists parts, chapters and scenes by the names your project gives them. Scenes are indented under their chapter with a thin guide line and lighter text, no bullets; in Write the list carries no badges, and the counts appear in Review. One click peeks at a chapter without leaving your place; a double click goes there; `Back` returns. The filter box at the top matches titles and text, with a ✕ to clear it; while a filter is on, nothing can be added or moved. **Adding** is one gesture: rest the mouse between two rows (or above the first, or below the last) and a small **+** appears at the right; it offers what can start there: **Scene, Chapter, Part**. There is no button at the bottom and no automatic "Part One": parts exist when you add one, before the first chapter or anywhere else, and a part always begins where a chapter begins. The same three live in the Insert menu and in `Ctrl+Enter` (a chapter at the cursor), and typing "Chapter 8" on its own line still works.
+
+Every row has a short right-click menu for its level. A **scene**: Rename, Make this scene a chapter, Join with the previous scene, Move to Discarded, Delete…. A **chapter**: Rename, Start a new part here, Join with the previous chapter (its text joins the one before; nothing is lost), Move to Discarded, Delete…. A **part**: Rename, Remove the part heading (its chapters stay). Joining never deletes text and never asks; deleting asks in words and pages. **Discarded** is a box at the end of the list that holds, as scenes, every text you removed from the book: each keeps its name and its words, can be read, and "Put back" or a drag returns it; Delete… from there is the only real deletion, and History still has it.
+
+**Dragging a row moves it**; a line shows where it will land and the pointer refuses only the impossible (a chapter inside a scene). The keyboard does the same: `Ctrl+Shift+↑` and `Ctrl+Shift+↓` move the selected row, across chapters too, and `F6` moves the focus between the columns and the page. When Libreto knows the move breaks continuity, the notice says so when you stop, not at every step: "Moved 'Vega asks about Kit' after chapter 8 · Kit finds the ledger only in chapter 9", with **Undo**, **Add to Review** (a pending card, to look at later) and ✕. Cutting text from one chapter and pasting it into another goes the same way. The index re-reads whatever paragraph changed, as you type, paste or move, so the Codex's counts and places are never stale; what the AI knows catches up at its next pass (S18).
+
+![Chapters, on the left](libreto-screens-d7-v1-2026-11-15-1931-img/s05-chapters-on-the-left.jpg)
+
+## S06 · Scene breaks, typed and detected
+
+A line that holds only a repeated symbol (`***`, `* * *`, `---`, `~`, a single `*` or `-`, any length) becomes a scene break, drawn as a soft gray rule, with a passing notice ("Scene break · Undo") for the time you meant the character itself. On disk it is a `***` line in the chapter's Markdown file. Every chapter begins with a first scene that needs no rule. When the time or place jumps without a break, Libreto proposes one with a **blue dashed** rule, and the card is the usual one: "Pending · scene break", Keep or Dismiss. A detected chapter heading looks the same way. Scenes have names, and **"Scene names"** in the Show menu writes each name in small gray at the right of its rule (and at the top of a chapter for its first scene), where a click renames it; off by default, since many writers only want the rule. Unnamed scenes read as their first words, in lighter gray, in the list and beside the rule; with an AI connected, "Name the unnamed scenes" in the list's ⋯ menu proposes names, kept one by one.
+
+A scene break is a block like a paragraph: a click selects it, it is copied, cut and pasted as its `***` line, `Backspace` or `Delete` removes it, and right-click offers "Remove scene break" and "Rename the scene…". Right-click anywhere in the text has **Insert ▸ Scene break, Chapter here, Part here**, the same three as the list's **+**. Removing a break merges two scenes, the row fades out of the list and the notice says "Scene break removed · Undo".
+
+![Scene breaks, typed and detected](libreto-screens-d7-v1-2026-11-15-1931-img/s06-scene-breaks-typed-and-detected.jpg)
+
+## S07 · Styles
+
+A style says **what** a piece of text is (a thought, a letter, a sign on a door, a chapter heading), not how it will print. The print look of every style is set once per project in Book (S24); on the page each style shows the working look you gave it. For the two things every writer reaches for, there is a bridge: **select some text and a small bar appears over it with Emphasis, Strong and "Style as ▾"**; `Ctrl+I` and `Ctrl+B` do the same, and `Ctrl+U` explains in a tip that underlining is not a style in a book and offers Emphasis. Thought, Foreign, Letter and the rest are under "Style as", in the palette, and in the right-click menu. The chip at the bottom left always shows the style at the cursor. A **chapter** is a container, the file on disk; its **heading** is the chapter's first line in the Chapter heading style, so applying that style to a paragraph in the middle of a chapter **starts a new chapter there**, with a notice and Undo; in the By chapter view the page stays where you are and the notice offers "Go to it".
+
+The palette (the chip, `Ctrl+T`, or right-click ▸ Style as) shows **each row in its own working look**, the key at the right where there is one, and "+ New style…" at the bottom. **A style is simple on purpose.** The dialog asks for a name; **Paragraph** or **Text**; one of **three faces** (Serif, Sans, Mono: the whole book uses three typefaces at most); one of five sizes (Small, Normal, Large, Larger, Largest); Bold, Italic, Underline; an indent; a text color (not one of the four mark colors); and it shows a sample as you choose. Nothing is "based on" anything. The built-in styles (Plain, Chapter heading, Subheading, Thought, Emphasis, Strong, Letter, Sign, Verse, Not printed) can be changed the same way, with "Reset" beside each. Styles are **yours, for every project**, and live in Settings ▸ Styles; "Not printed" is for working text that must never leave the manuscript. When something is wrong by Libreto's own rules (a forty-word heading, two headings in a row), it becomes a blue card in Review without any AI.
+
+![Styles](libreto-screens-d7-v1-2026-11-15-1931-img/s07-styles.jpg)
+
+## S08 · Ask: type and go
+
+`Ctrl+K`, or a click on the round button, opens **Ask** at the bottom right: one box for everything. As you type, results appear above the box in two short groups, **Go to** (chapters and scenes, people, places, things and topics, each row with the icon of its kind) and **Do** (a command, such as "Export PDF" or "Open Statistics"), three rows each and "4 more…". **The bottom row is the question**, the text you typed, and it is the one preselected whenever an AI is connected: `Enter` asks, `↑` picks a result instead, a click picks any row. With no AI, the bottom row reads **"Connect an AI to ask questions"** (a link to Settings ▸ AI) and `Enter` takes the first result. `Esc` closes the box and puts the cursor back in the text; `Back` (`Alt+←`) returns from wherever a result took you.
+
+**No AI is involved while you type**, and nothing spins: the groups come from Libreto's index (titles, names and aliases, topics, commands with a few words each), in a fixed order (an exact name before a prefix before a part of a word, the current chapter first, recent things first), so there is no guessing to explain; the exact ranking is a page of the specification. In the header, at the left, **+** starts a new conversation and the clock lists earlier ones; at the right, **–** minimizes the panel into the button and keeps the conversation, and **✕** closes it (it stays in the clock's list; the next open starts fresh). Opened from a Research topic or on a selection, Ask knows what "this" means.
+
+![Ask: type and go](libreto-screens-d7-v1-2026-11-15-1931-img/s08-ask-type-and-go.jpg)
+
+## S09 · Ask: a conversation
+
+When you ask, the same panel becomes the conversation. It opens **over the right column**, which dims under it, so the page keeps its place; it can be moved and resized, and `–` folds it back into the button with its conversation; a dot on the button says an answer is waiting. The header names the model in use. The AI reads the book through the Codex and the open scene, and answers with links: a chapter name jumps the page there (`Back` returns), a person's name opens the Reference panel; an answer about two places offers "Go to chapter 7" and "Go to chapter 12" as two links, nothing cleverer. Its answers carry **buttons** when there is something to do: "Add as a note", "Open in Research", and for any change to the text a before-and-after block that shows only the changed sentences, with "[…]" inline for the unchanged stretch; under it **Keep mine** and **Take proposed**, in that order, the same as the two texts above them; `Tab` moves between the buttons, `Enter` presses. Nothing in the book changes until a button is clicked, and every applied change is one Undo away. The buttons, links and tools a conversation can show are a page of the specification.
+
+![Ask: a conversation](libreto-screens-d7-v1-2026-11-15-1931-img/s09-ask-a-conversation.jpg)
+
+## S10 · Hold Alt
+
+Hold `Alt` for half a second and the page shows **everything** Libreto knows about it: people, places, things and motifs tinted in their own hues (violet, cyan, brown, magenta: never the four mark colors), styled passages labeled in the left margin, every underline, even the ones Show has hidden, and every badge. Release it and the page is clean: outside the reveal the text carries no colors, because it is a book. `Ctrl+Shift+A` toggles the same reveal and keeps it, on every system; on Windows a held `Alt` also works, because Libreto keeps it from opening the menus. `Alt`+click on a name opens its peek; `Alt`+right-click is the ordinary right-click. Hovering does nothing by itself. To find text by its style, Find has a "Style" option (S20).
+
+![Hold Alt](libreto-screens-d7-v1-2026-11-15-1931-img/s10-hold-alt.jpg)
+
+## S11 · Peek and the Reference panel
+
+`Alt`+click a name, or right-click ▸ "Look up", and a small card says who that is: the kind, the name (a link), a line, the chapters she is in, and under **Research**, the topics linked to her. "Open" puts her in the **Reference panel** on the right. The panel's head is two rows: a thin one with `‹ ›`, the kind in small capitals and ✕, and under it **the name, large**, so no name is ever squeezed beside buttons. The body is a summary, not the whole Codex: the picture, the line, where she appears, who she is with, the **five most recent facts** with "All 84 facts in the Codex", the open questions, the topics. At the foot, two buttons that are always there: **Open in Codex** and **Ask the AI**. The panel remembers its own `‹ ›` history for the session, twenty steps deep.
+
+Two rules keep the panel from becoming a maze. **A link to the text moves the page** (and `Back` returns); **a link to another entry moves the panel** (and the panel's own `‹` returns). The panel has no tabs and no search box: to look up something else, click its name in the text or press `Ctrl+K` and type it.
+
+![Peek and the Reference panel](libreto-screens-d7-v1-2026-11-15-1931-img/s11-peek-and-the-reference-panel.jpg)
+
+## S12 · Everything open, the text in the middle
+
+The most Write can show on a 1440 px laptop: chapters on the left, Lena in the panel on the right, the reveal on (so the style labels show in the left margin and the hues in the text), the Ask button over the panel's corner, with the panel's content ending above it, never behind it. Both columns are 320 px; the page is where it always is, centered on the window, 620 px wide at 100 %. The size of the interface (not of the text) is a setting: Settings ▸ General ▸ Interface size. Shown to judge the load; nobody needs this all day.
+
+![Everything open, the text in the middle](libreto-screens-d7-v1-2026-11-15-1931-img/s12-everything-open-the-text-in-the-middle.jpg)
+
+## S13 · One key back to the page, and Focus
+
+`Ctrl+Shift+H` closes both columns and quiets the reveal; the same key brings back what was open. The rule is simple: the key restores the layout as it was when you hid it; if you open a column by hand in between, the key just hides again. `F11`, or View ▸ Focus, goes further: **Focus** leaves only the page, without strip, status bar or Ask button; in the whole-book view it is the whole book, scrolled where you were. Inside Focus, `Esc` does what it always does, closes the innermost thing (a peek, a card), and nothing more; Focus itself is left with `F11` or the small "Exit focus" the mouse brings back at the top. The Focus page keeps the project's paragraph spacing and first-line indent as set in Book; nothing is reformatted.
+
+![One key back to the page, and Focus](libreto-screens-d7-v1-2026-11-15-1931-img/s13-one-key-back-to-the-page-and-focus.jpg)
+
+## S14 · A note, without leaving Write
+
+Writing and noting are the same hour, so notes do not wait for a mode. Right-click ▸ "Add note", `Ctrl+Shift+N`, or the small "+" that appears at the right of the line under the mouse: a card opens beside the line, you type, `Esc` returns to the sentence. With text selected, the note is anchored to those words; without, to the paragraph. The card folds to an amber bubble in the gutter at that line; clicking it opens the card again right there, with a short **line from the badge to the card** and the anchored words tinted. With the Reference panel open, the card opens over the panel's edge and the panel dims until the card closes. Several notes on one line fold into one bubble with a count.
+
+A note is yours and asks nothing; it has Reply, Resolve and Delete. A mention of a place in it ("check with chapter 10") becomes a link by itself. Your own notes are the only badges Write shows; a reader's note, an AI finding or a grammar proposal waits in Review, where its card carries the person's initial.
+
+![A note, without leaving Write](libreto-screens-d7-v1-2026-11-15-1931-img/s14-a-note-without-leaving-write.jpg)
+
+## S15 · Review
+
+Review is the same text, still editable, with the underlines still on it and everything that waits for you shown at its line. Choose it when the second pass starts, when a reader sends notes back, or by clicking the count on the mode switch. The left column is the chapter list with counts, and above it the **filters**, which look like what they are: toggles that stack, no modifier key: one row by kind (Notes · Pending · Done · Unknown) and one by person (You · Marta · AI; past three people the row becomes a "People ▾" menu). The gutter shows the four badges at the exact line (a gray stack with a count when a line holds several kinds), and the **margin** on the right holds the cards level with their lines; the margin scrolls **with** the text, so a card's line to its words never slants, and clicking a badge or a card brings both to that line. Each card shows its person's initial and only its buttons: a note has Reply and Resolve; a pending change has **Apply**, **Dismiss** and **Edit** (to change the proposed text first), plus the spark for "Why?"; a done fix has Keep and Undo.
+
+At the top of the margin sit the two things you do here, as buttons: **Review all ▶** (S34) and **Add notes from a file…**, whose hover says what it means: "A copy of this project that came back with comments or changes, from Word or from Libreto: its notes arrive here as cards, with the reader's name and date." That is how readers' copies come in; S21 and S22 show it. Write and Review share the cursor and the scroll, so switching is a blink.
+
+![Review](libreto-screens-d7-v1-2026-11-15-1931-img/s15-review.jpg)
+
+## S34 · Review all
+
+**Review all** walks the cards one at a time, starting at the selected card (or the first one): the text scrolls to its line, the card sits level with it, and a short header in the margin reads **"4 / 12"** with the person's initial. During the walk the margin scrolls on its own, so a long card can be read whole without moving the text. The keys are inside the buttons: `Enter` **Apply** (or Resolve), `Delete` **Dismiss**, **Edit** to change the proposal before applying, `Tab` **Skip for now**, which leaves the card for later. A **Stop** button ends the walk; `Esc` does not, so a stray key cannot drop you out. Leaving the mode pauses the walk, and Review offers "Continue · 4 / 12" when you come back. **"Don't bother me"** on an AI or rule finding stops that kind of finding for this project ("long headings", "repeated words"); Settings ▸ Tips lists what was silenced. When the walk ends, the margin says what was decided and what was skipped, with Undo for the whole walk as one step.
+
+![Review all](libreto-screens-d7-v1-2026-11-15-1931-img/s34-review-all.jpg)
+
+## S16 · Plan, as rows
+
+Plan shows the book as cards, one per scene, in **rows**: one row per chapter, the chapter's name at the left, its scenes left to right, and the board scrolls down like the chapter list; a part is a thin band between rows. Above the board, one line: **+ New card**, **Color by ▾**, and at the right **"3 moves ▾ · Apply · Discard"**. The moves menu lists each move in words ("Vega reads the ledger · from chapter 11, after 'Kit finds the ledger' → to chapter 10, after 'The confession'") and, under a move that breaks continuity, the warning in orange with **Add as a task**, so moves and issues are one list, read once before Apply. Nothing changes in the text until Apply; leaving the mode with moves pending asks once. The left column is closed and there is no breadcrumb; the right column is the Reference panel with the selected card's scene: its line, who is in it, where, the facts it relies on, its words, its labels, all editable.
+
+Drag a card to move it; the row under the pointer lights up, and before you drop, Libreto warns when it knows the move breaks something. **What it can know**: without an AI, only facts with places in them (who is in which scene, what you pinned with a chapter number); an ordering problem such as "Vega reads the ledger before Kit finds it" needs the AI, at its pass or when you ask "Check continuity". Right-click on a card: Open, Rename, Labels ▸, Move to ▸, Unplace, Move to Discarded, Delete…; `Delete` on a selected card asks. **Unplaced** (cards that belong to no chapter: not printed, not counted) and **Discarded** are the last two rows, under a line, gray; both are also the last rows of the chapter list. Cards carry labels: point of view and place fill themselves from the Codex; **status** (draft · working · done) is yours and can show as a small dot in the chapter list ("Status" in Show); **storyline** is a name you give a scene, no more; and one label of your own. "Color by" chooses which paints the cards, with the legend at the bottom.
+
+![Plan, as rows](libreto-screens-d7-v1-2026-11-15-1931-img/s16-plan-as-rows.jpg)
+
+## S35 · Plan, as columns
+
+The same board the other way, to choose with both in view: one **column** per chapter, scenes top to bottom, the board scrolling sideways, parts as bands above their columns. **Columns**: a card has room for two lines and its labels, a chapter reads as a stack, and the right panel is beside the cards it describes; but a book of thirty chapters is thirty columns and a long sideways scroll, which mice and trackpads do worse than a vertical one, and the part bands are far from the cards. **Rows** (S16): the board grows downward like the chapter list and twelve chapters fit on one screen; a chapter's scenes read like a sentence, left to right, which is also their order; a chapter with many scenes needs a small sideways scroll inside its own row. Draft 7 proposes **rows**; the picture is here so the choice is yours.
+
+![Plan, as columns](libreto-screens-d7-v1-2026-11-15-1931-img/s35-plan-as-columns.jpg)
+
+## S17 · Research
+
+Research is where material lives before it is true. The left column is your material: the **Inbox**, then your **topics**, in one level of folders when you want them ("New folder" under the column's **+**), then the files. Things reach the Inbox three ways: dropped on the window (a file, an image, a link), pasted with **Edit ▸ Paste into the Inbox** when nothing in the text is selected, or sent from any selection with right-click ▸ **Send to the Inbox**; there is no browser inside Libreto in version 1, so a page from the web comes as a link or a pasted passage. A topic is a document like a chapter: a title, text with the same styles, pictures inline, files attached, and a row of what it is linked to. In the center, the topic, large. On the right, the Reference panel shows what the topic links to: entries and the chapters that mention them.
+
+Linking is mostly free: names from the Codex typed in a topic are recognized as in the manuscript, so the topic and the entry know each other at once; "**Link to a person or place…**" adds the rest by hand. Moving knowledge from research to the Codex is one gesture: select a passage in a topic and right-click ▸ **Add to the Codex as a fact of ▸ Lena**; the fact appears on her entry with the topic as its source and a link back. Ask knows where it is: opened here, "summarize this PDF" means the open one. The AI, when asked, summarizes, proposes facts and links (blue, in Review), and proposes to split or merge topics; the writer can do all of it by hand.
+
+![Research](libreto-screens-d7-v1-2026-11-15-1931-img/s17-research.jpg)
+
+## S18 · The Codex
+
+The Codex is **what the book says**, and it has its own position on the switch because it is neither writing nor research: it is the book, read by Libreto and checked by you. **It is built without any AI.** The index finds the names, their aliases (you confirm them), every scene each one is in, who is with whom and how often, and it is kept up as you type: the paragraph you changed is re-read at once, cut, paste, drag and Replace all included, so the Codex is never stale. What the AI adds is what rules cannot see: a fact stated in the text ("about fifty", chapter 2), two facts that disagree, a summary, a question. **When the AI reads**: at the start of a session, it reads what changed since its last pass (never when you close the app); with the Proactive level, also while you write, after a pause, within the monthly budget (S25); and whenever you ask ("Read the book again"). What it found arrives as blue cards in Review, marked with the spark.
+
+The left column is the navigator: **People, Places, Things, Motifs**, each with a count, filtered as you type. The center is one entry, large. Yours to edit: the name and its aliases, the kind, the picture, a line about her, your notes, the facts you add. Computed and read-only, with a gray "from the text" label: where she appears, scene by scene, as links; who she is with; the facts the AI quoted, with their chapter; the **open questions**, each with **"Fix in the text →"** on each side of a contradiction, so the Codex is a way back into the manuscript rather than a second place to type the truth. Facts pinned from Research keep their source. Under the entry, questions the Codex answers from the index alone: "When are Lena and Kit together?", "Who is in the back room in chapter 7?", each a list of scenes. Renaming happens here or in Find (S20), and both change the text, the Codex and the topics together.
+
+![The Codex](libreto-screens-d7-v1-2026-11-15-1931-img/s18-the-codex.jpg)
+
+## S19 · Research beside the text
+
+While writing, you want one thing: the photo of the bar, two facts. `Alt`+click "Blue Lamp", and the peek lists under **Research** the topics linked to that entry ("Bars in the 1950s", "The Blue Lamp's history"); choose one and the Reference panel shows the topic, readable and scrollable, with its pictures. Enough to check and go on. The panel's foot has **Edit in Research**, and `Back` returns to the sentence. Gathering happens in Research; using happens beside the text.
+
+![Research beside the text](libreto-screens-d7-v1-2026-11-15-1931-img/s19-research-beside-the-text.jpg)
+
+## S20 · Find and Replace
+
+The magnifier in the strip, or `Ctrl+F`, opens a **small box under the magnifier**, at the top right, over the margin and never over the text: the search field with "3 of 27", `‹ ›` and ✕, and two small words, **Replace** and **Options**. Replace adds a second field with "Replace" and "Replace all…"; Options adds one row of checkboxes: Match case, Whole word, Regular expression, and **Style** (find every Thought, every Letter). In the By chapter view the row also has "This chapter / Whole book"; in the whole-book view there is nothing to choose. Hits walk across chapters, and `Back` returns to where the cursor was.
+
+**Replace all…** never replaces blindly: it opens a dialog with every hit in context, grouped by chapter, each chapter folded with its count when there are hundreds, each hit with a checkbox, and a "Replace 27" button. When the found text is a Codex name, the box says so in one line, **"Lena is a person in the Codex · Rename everywhere instead"**, and that command changes the text, the Codex and the topics together. If a name is replaced anyway, the index sees her mentions vanish and a new name appear in the same places, and a notice asks "Did you rename Lena to Elena?"; Keep merges the entry, ✕ leaves two.
+
+![Find and Replace](libreto-screens-d7-v1-2026-11-15-1931-img/s20-find-and-replace.jpg)
+
+## S21 · Sending a copy
+
+File ▸ Share ▸ **Send a copy…** is one small dialog with three questions. **To whom**: a name, completed from this project's readers, and a new name is simply added (readers are listed in Project settings ▸ People). **Format**: Word, PDF, or a Libreto file for a reader who has Libreto, with "Include notes" where it applies. **Where**: a folder, or your email program with the file attached; with an email tool connected, the AI can draft the message. Sending makes a named snapshot ("Sent to Marta · November 7, 18:32") and the Word file carries a hidden id on every paragraph, which is what lets the copy come back. There is no "receive" dialog: a copy that comes back is **Add notes from a file…** in Review (S22).
+
+![Sending a copy](libreto-screens-d7-v1-2026-11-15-1931-img/s21-sending-a-copy.jpg)
+
+## S22 · A reader's copy, in Review
+
+**Add notes from a file…** (the button in Review's margin, or File ▸ Share) lists the files found in Downloads and on the Desktop that belong to this project, newest first, with "Browse…" for anywhere else. Choosing one imports the reader's comments and changes as cards labeled with the name and the date, **"Marta · Nov 7"**, and keeps the file in the project's `received` folder; nothing else is copied, and a second file from Marta gets its own date. Review then opens filtered to that import, so the first thing seen is only what came back. A comment is a note with her initial: Reply, Resolve. A change is a pending card, and at its paragraph the page shows the two versions **side by side**, yours at the left and Marta's at the right, the changed words marked, with **Keep mine**, **Take Marta's** and **Edit** under them; a paragraph both of you changed shows the same two columns and adds **Merge for me** (an AI proposal) when an AI is connected. Between the differences, a folded line reads "14 paragraphs unchanged" and a click opens or closes it. Paragraphs are matched by their ids, so a paragraph moved to another chapter still meets its change; a comment on text that no longer exists is shown at the nearest place with "the words it was on are gone". Decided rows fold to one line with Undo; Review all walks these cards like any others.
+
+![A reader's copy, in Review](libreto-screens-d7-v1-2026-11-15-1931-img/s22-a-reader-s-copy-in-review.jpg)
+
+## S23 · History
+
+History is a sheet. A **session** is one run of the app, and each is one line, grouped by day: the hours, small icons for what you did (wrote, planned, reviewed), **+86 −12** words, and a one-line summary. Clicking a session opens its changes in place, each a link; clicking a change goes to that place as it is today and flashes it, or says "This text is no longer in the book · Show it in the snapshot". **Snapshots** are listed under their day: the named ones ("Sent to Marta") and the automatic ones (end of a session, before a big action such as Apply in Plan or Rename everywhere, and every ten minutes while you write, folded under "…"); they exist to be read and to be compared. "Open" reads a snapshot as it was; **"Compare with today"** shows the two versions side by side in the page, the same two-column view as a reader's copy, with **Restore** on any paragraph or chapter; **"Bring back this version"** restores the whole book and says first that today's text is kept as a snapshot, so nothing is lost either way. Questions in words ("when did I write about Lena's car?") go to Ask, and need an AI.
+
+![History](libreto-screens-d7-v1-2026-11-15-1931-img/s23-history.jpg)
+
+## S24 · Book
+
+Book shows the book as it will print. The left column has page thumbnails; the right has the layout, in a few plain groups. **Page**: a template to start from (paperback 5.5 × 8.5 in, trade 6 × 9 in, A5, manuscript, reading PDF), size and margins in fields wide enough to read, with the unit (cm or in) as a small selector beside them, and **"Two-page spreads"**, which turns the thumbnails into pairs and enables **"Chapters start on a right-hand page"** (grayed out otherwise, with the reason). **Print styles**: every style of yours with its print look (face, size, spacing, alignment, a page break before), filled with a good standard and "Reset" beside each; Plain's look is the body text, the Chapter heading's look says number and title, title only, number only, or nothing but a new page and space. **Pictures** are figures: in place, at the top of the page, or on a page of their own; **footnotes** go to the foot of their page (in Write they show after their paragraph, in smaller type, since Write has no pages). **Export**: PDF, EPUB, or Word with "Include notes"; File ▸ Print opens Book and prints the same pages. One click gives the standard; the groups are there for those who want to adjust; shared templates can come later. Arrows and Page Up/Down turn pages, and the layout of a whole novel updates in seconds while you adjust. Ask can do this in words ("start chapters on the right page").
+
+![Book](libreto-screens-d7-v1-2026-11-15-1931-img/s24-book.jpg)
+
+## S25 · The AI, in Settings
+
+The AI is a tab in Settings. When no AI is connected the Ask button is gray but works (it finds, looks up and runs commands), and its bottom row, "Connect an AI to ask questions", opens this tab. One provider at a time: Claude with a key, or through Claude Desktop where that is allowed, with more to come; the model it uses is shown here and in the header of every conversation. The **level** says in one line what each does: **Off**: nothing is ever sent. **Quiet**: answers when you ask, nothing on its own. **Reviews**: also reads a chapter when you ask it to, names scenes, checks continuity when you ask. **Proactive**: also reads what changed at the start of every session and, after a pause, while you write, and proposes in Review. A **budget** keeps it honest: a monthly amount, what is spent so far, and the AI stops at the limit and says so. The **disclosure** is always on this screen, with a warning sign: AI text may raise copyright, contest and disclosure problems; Libreto records what the AI wrote and can report it (Reports ▸ What the AI wrote, AI log). What is sent is listed in plain words. Libreto works fully without any of it.
+
+![The AI, in Settings](libreto-screens-d7-v1-2026-11-15-1931-img/s25-the-ai-in-settings.jpg)
+
+## S26 · Settings
+
+Two windows, because they are two things. **Settings** is yours, for every project: General (language, Interface size, the start screen), Editor, Styles (S07), Keys, AI, Privacy (anonymous usage statistics, asked once at install, off unless you said yes), Tips (and what was silenced). A search box at the top finds any setting. **Keys** works like a code editor's: a table of command · key · where it applies, click a key to record a new one, conflicts flagged, and a check against the current keyboard layout. **Project settings** (File ▸ Project settings…) is this project only: the names of the structure levels, the readers, the look; each window links to the other. There are no "?" buttons: `F1` and the Help menu open Help at the view you are in.
+
+![Settings](libreto-screens-d7-v1-2026-11-15-1931-img/s26-settings.jpg)
+
+## S27 · Help
+
+Help is not a column. `F1` opens the **Help window** at the topic of what has focus, and its search box finds the rest; each topic is a short text with a small drawing of the control it talks about. "How do I add a chapter?" typed in Ask answers from the same help with a link. Tutorials are short, one per feature, offered once when the feature first matters; each runs in your own project with a bubble pointing at the control, can be left at any step, and is never required. Help ▸ Tips lists the tips Libreto can give; Help ▸ Keys here is the ⌨ list.
+
+![Help](libreto-screens-d7-v1-2026-11-15-1931-img/s27-help.jpg)
+
+## S28 · Statistics
+
+A sheet from the word count or the page count in the status bar, or Reports ▸ Statistics: tabs for **Words** (per chapter and per day), **Sessions** (time and words), and **Who appears where** (a grid of people by chapter, from the Codex), a range at the top (this week, this month, all), and "Back to the text" to leave. The Codex can feed much more here later (words per character, places by chapter); this is the start.
+
+![Statistics](libreto-screens-d7-v1-2026-11-15-1931-img/s28-statistics.jpg)
+
+## S29 · Everything in the status bar and the menus
+
+Not a moment: the status bar menus and the seven menus of the menu bar, opened together, to see what lives where. **File**: New project, Open, Recent, Import a Word file, Share ▸ Send a copy… / Add notes from a file…, Export ▸ PDF / EPUB / Word, Print…, Project settings…. **Edit**: Undo, Redo, Cut, Copy, Paste, Paste into the Inbox, Find, Replace, Rename everywhere. **Insert**: Part here, Chapter here, Scene break, Picture, Footnote, Front matter ▸, Back matter ▸. **Format**: Emphasis (`Ctrl+I`), Strong (`Ctrl+B`), Style as ▸. **View**: Chapters, Reference panel, Panels (`Ctrl+Shift+H`), Focus (`F11`), then Whole book and By chapter as two exclusive choices, Show ▸, Reveal (`Ctrl+Shift+A`), Zoom in / out / 100 %. **Reports**: Statistics, What the AI wrote, AI log, History. **Help**: Help (`F1`), Keys here, Tips, Tutorials, About. In the status bar: the style palette; the words and the page count open Statistics; "Saved 19:32"; Whole book / By chapter as two exclusive rows; **Show** with Underlines, Scene names, Status dots, Your notes; History; zoom 50 to 200 % with 100 % in the middle; and the ⌨ list of the keys for where you are. Menus do not filter as you type; only palettes have a filter box.
+
+![Everything in the status bar and the menus](libreto-screens-d7-v1-2026-11-15-1931-img/s29-everything-in-the-status-bar-and-the-menus.jpg)
+
+## S30 · Three window sizes
+
+How the window adapts. The page is 620 px and each column 320 px, so at **1260 px** and above both columns fit in the margins and the page never moves. Between **1000 and 1260**, one column at a time, and the page moves aside to give it the room, once; opening the other column closes the first. Below **1000**, the open column lies over the margin and the edge of the page; below about 900 the page itself narrows. The interface can be made larger or smaller in Settings ▸ General. Libreto is a desktop app in version 1; a phone layout is not planned.
+
+![Three window sizes](libreto-screens-d7-v1-2026-11-15-1931-img/s30-three-window-sizes.jpg)
+
+## S31 · Right-click, everywhere
+
+Not a moment in the app: the right-click menus side by side, so they can be checked as one family. The rule: **the few things done here most often, then the way to the rest, and nothing that is not expected.** In the text with a selection: Emphasis, Strong, Style as ▸, Add note, Ask the AI about this, Look up (when the selection is a name), Add to the Codex ▸ (person, place, thing), Send to the Inbox, Find in the book, Cut / Copy / Paste. In the text with no selection: Style as ▸, Insert ▸ (Scene break, Chapter here, Part here), Add note, Paste. On a mark: its two buttons (Apply / Dismiss, Keep / Undo, Ignore here / Add to dictionary), Add note, Open in Review. On a scene row: Rename, Make this scene a chapter, Join with the previous scene, Move to Discarded, Delete…; on a chapter row: Rename, Start a new part here, Join with the previous chapter, Move to Discarded, Delete…; on a part: Rename, Remove the part heading. On a Plan card: Open, Rename, Labels ▸, Move to ▸, Unplace, Move to Discarded, Delete…. On a Codex entry: Open, Rename everywhere, Show in the text, Research ▸. Menus walk with the arrows and `Enter` and close with `Esc`; none filters as you type. The full inventory of every menu is a page of the specification.
+
+![Right-click, everywhere](libreto-screens-d7-v1-2026-11-15-1931-img/s31-right-click-everywhere.jpg)
+
+## S32 · The whole book, or by chapter
+
+The page holds the **whole book** by default: every chapter on one long page, each heading as a divider with its part above it when parts exist, and, when "Scene names" is on in Show, each scene's name in small gray at its rule; the chapter list follows the scroll and highlights where you are, a double click on a row scrolls there, and the status bar counts the chapter under the cursor. The switch is the **"Whole book ▾"** item in the status bar, with the two choices as exclusive rows. **By chapter** is for those who want one chapter on the page: at its end a gray line reads "Next · 8 Closing time ↓" (at the top, "Previous · 6 The back room ↑"), clicking it goes there, the cursor crosses too, and `Ctrl+Page Down` / `Ctrl+Page Up` jump a whole chapter from anywhere. Every control is checked in both views (what a new chapter does, what Find offers, where a notice points) and that checklist is a page of the specification. The switch is remembered per project; `Back` returns from any jump.
+
+![The whole book, or by chapter](libreto-screens-d7-v1-2026-11-15-1931-img/s32-the-whole-book-or-by-chapter.jpg)
+
+## S33 · Notices, Undo and tips
+
+Not a moment in the app: the one way Libreto tells you something, and the one way back. Every notice is the same **card at the bottom center of the page**: an icon, one line that names the place ("Scene break removed in chapter 7"), its buttons, and ✕. There are two kinds. A **passing** notice reports a small change you can undo (a break removed, a fix made, a row moved): it stays about twenty seconds, or until you close it, and then slides visibly into the **bell**. A **standing** notice is something to read or decide (Last session, a continuity warning, "Did you rename Lena?"): it stays until ✕ or a button, and only one shows at a time; the others wait in the bell, which shows a dot. The bell lists the day's notices with their time and, where it still applies, their Undo; "Clear" empties it. The bell is not History, and a notice is not a note.
+
+**Undo is one list.** Your typing (grouped by pauses, so one `Ctrl+Z` takes back a phrase, not a letter), Libreto's fixes, a kept proposal, a deleted scene, a move applied in Plan, a change the AI applied: all on the same stack, so `Ctrl+Z`, the Undo on a notice and the Undo on a card are the same step, in the same order, and Redo brings it back. **Every Undo shows its place**: the page scrolls to the change and flashes it, with a small label saying what it was. The Undo on an old notice works while nothing later touched the same place; when something did, the notice says so and offers **"Bring back this version"**, which opens History at the snapshot from before and keeps today's text as a snapshot first, so it is never a leap into the dark. A fix you undid stays in History, gray, and is not proposed again. **Tips** use the same card, one a day at most, only for a habit from a fixed list; "Show me" plays a ten-second demonstration on your own text, "Not this one again" is remembered, and Settings ▸ Tips holds the switch.
+
+![Notices, Undo and tips](libreto-screens-d7-v1-2026-11-15-1931-img/s33-notices-undo-and-tips.jpg)
+
+## What changed in draft 7, and why
+
+Everything below answers the notes on draft 6. The first move was to take things away.
+
+- **Less on the screen.** The menu bar is back and the ☰ button is gone (your choice). The "to review" item left the status bar: the mode switch already carries the count. "Make a Codex entry" left the red card. The "+ New chapter" button left the list, replaced by a **+ between rows** that offers Scene, Chapter and Part at that point. Nothing on Start explains how files are stored.
+- **The mode switch** is one control with six exclusive positions, at the right of the strip, instead of tabs: tabs were too close to the text under them, and this says "one of these" more plainly. Open question 1 keeps tabs on the table.
+- **One word, one underline**, by precedence (red, blue, green); the card lists the rest. Stacked underlines were a bad idea.
+- **Marks and words.** Pending changes are **Applied or Dismissed**; a note is **Resolved**; a red word is **Ignored here** or added to the dictionary, with the candidates as rows. A note's badge is a speech bubble. Mixed marks on one line are a gray stack with a count. Every card shows **who** with a round initial (M, You, the spark).
+- **Start** asks what you are writing in three words, **Book, Play, Paper**, each listing what it covers; the look is a letter or one of twenty simple drawings in the app's style, recolored; cover design is a later, separate thing.
+- **Notices in two kinds**: passing ones fade into the bell after about twenty seconds; standing ones stay until ✕. The welcome card is titled Last session and has "Don't show this again". Five words defined once: note, card, notice, History, Undo. **Undo shows its place.**
+- **Esc** closes only the innermost thing; a sheet with decisions pending asks; Focus is left with `F11`, not `Esc`.
+- **Chapter list**: short menus per level in plain words (Join with the previous chapter, Remove the part heading, Make this scene a chapter); Discarded holds scenes; keyboard moves with `Ctrl+Shift+↑/↓` and a continuity notice when you stop, with "Add to Review"; ✕ in the filter box; nothing added or moved while filtering.
+- **Scene names** are an option in Show, written at the rule and renamed there; every chapter begins with an unnamed first scene.
+- **Styles are simple**: three faces, five sizes, bold / italic / underline, indent, a text color, nothing "based on"; built-ins editable with Reset; styles are yours, in Settings ▸ Styles; their print look is per project, in Book ▸ Print styles. A small bar on any selection offers Emphasis, Strong and Style as.
+- **Ask**: the question row at the bottom is preselected; `↑` picks a result; "Connect an AI" when there is none; `+` and the clock at the left, `–` and ✕ at the right; "[…]" inline; Keep mine before Take proposed.
+- **Colors**: the four mark colors are reserved; people, places, things and motifs got their own hues, shown only under the reveal, and the reveal shows every underline and every badge.
+- **Reference panel** with a two-row head (kind, then the name, large), a summary body with "All 84 facts", and two buttons at the foot; the peek lists the linked topics.
+- **Review**: filters as stacking toggles, "People ▾" past three names; the margin scrolls with the text; two buttons at its top, Review all and Add notes from a file; underlines shown here too; Review all has Stop, Skip for now, Dismiss and Edit, and resumes.
+- **Plan as rows**, with the moves and their warnings as one list, "Add as a task", the toolbar above the board, Unplaced and Discarded under a line; what continuity can and cannot know without an AI is said; **S35** shows the columns alternative with pros and cons.
+- **Research**: how things reach the Inbox; "Add to the Codex as a fact of…" and "Link to a person or place…" in plain words; no browser in version 1.
+- **The Codex is built without an AI** and kept up as you type; the AI reads at the start of a session, while you write at the Proactive level, or on request, never at close; a **monthly budget** with a stop.
+- **Find** is a small box under the magnifier with Replace and Options folded away, a Style option, the chapter choice only in By chapter view; Replace all is a dialog; renaming a Codex name by replacement is caught.
+- **Share** is one small dialog (to whom, format, where). **Receive and Compare are gone**: a reader's copy is "Add notes from a file" in Review, cards labeled by name and date, a two-column view at each changed paragraph, folded unchanged stretches. History compares with the same view and "Bring back this version" says what it keeps.
+- **Book**: Two-page spreads as a checkbox that drives the thumbnails and the right-hand start; Print styles map every style to its print look; units beside the fields; File ▸ Print; footnotes shown after their paragraph in Write.
+- **Settings** and **Project settings** are two windows that link to each other; no "?" buttons; `F1` opens the help of the view. The autosave word "Saved 19:32" sits in the status bar; the ⌨ button moved to the end of it.
+
+## To the specification
+
+Pages the notes asked for, too long for a walkthrough: the **Codex engine** (what the index computes, when it re-reads, what the AI pass adds, the budget); the **index and the Ask ranking**; the **conversation's buttons, links and tools**; **what works without an AI**, mode by mode; the **menu inventory** as one list; the **By chapter checklist** (every control in both views); **Undo semantics**; the **review import** (ids in Word files, matching moved paragraphs, comments on deleted text, several copies from one reader); **print styles** and what each style look can set; the **spacing and overlap rules** for underlines, badges and cards; **on disk**: Markdown per chapter plus a sidecar for marks and notes, the `received` folder, autosave.
+
+## What changed in draft 6, and why
+
+Everything below answers the notes on draft 5, which covered all screens.
+
+- **Write is for writing, Review is for deciding.** Write shows only the underlines (switchable in Show) and your own notes; counts, badges, filters, readers' and AI cards and the walker are Review's. The Review tab and the status bar carry the count, so nothing waiting is invisible. The two share cursor and scroll.
+- **Four colors, one meaning each.** Red unknown, blue pending, green done, amber note; gray proposals are gone (a detected break is blue). Underlines never share a height; Was / Now tints the change and shows spaces as middle dots.
+- **Codex is a mode.** It was half of Research and is the book read by Libreto: a navigator, a computed, read-only entry with "Fix in the text", questions answered from the index without an AI. Research keeps the Inbox, the topics (one folder level) and the files; "Pin as fact" is the bridge. The Codex gets its own specification.
+- **Six modes as tabs** in the strip, apart from the right toggle; the ☰ menu at the far left hides the menu bar on Linux and Windows; Find and the bell sit before the right toggle. Columns are 320 px, fixed.
+- **Notices stay until "Got it"**, one at a time, the rest in the bell; the welcome-back card is one of them. Undo is linear; an old Undo works while it is still the latest change at that place, otherwise "Restore this version".
+- **Whole book is the default view**; By chapter stays as the option.
+- **No kinds of text.** Part / Chapter / Scene, optional and renameable per project; "New project" instead of "New book"; the tile is a color, a plain image or an initial.
+- **Dragging in the chapter list moves**, with a drop line, a continuity warning in the notice and Undo; "Moving happens in Plan" is gone. A part starts at a chapter; Front and Back matter have "+ New ▾"; deleting sends to Discarded.
+- **Plan**: horizontal lanes, Reference panel for the selected card and "+ New card", "moves · issues · Apply · Discard" at the top right, Unplaced and Discarded lanes, no breadcrumb.
+- **Ask**: three groups (Go to with kind icons, Do, Ask the AI after three words), no spinners, spark icon for the AI, context-aware; the chat floats over the dimmed right column; long paragraphs compare with "[…]"; "Take proposed / Keep mine". The ranking goes to the specification.
+- **Find** from the magnifier in the strip, a browser-like strip with checkboxes, a tester for regular expressions, hits grouped by chapter, "Rename everywhere" names the entity.
+- **Share** is two commands, Send a copy… and Receive a copy…, with date and time and a plain message when nothing was sent. **Compare** opens from Review, folds unchanged stretches under a wavy line, puts the buttons under each box, edits with E, folds decided rows with Undo, turns comments into blue cards, resumes. **History** counts sessions as runs of the app with mode icons and +/− words, and lists snapshots.
+- **Styles**: Emphasis and Strong first (`Ctrl+I`, `Ctrl+B`), the palette in its own looks at one size, a "New style" dialog; right-click menus do not filter.
+- **The AI lives in Settings ▸ AI**: one provider, the model shown, the level, when Libreto reads the book (session end by default, for tokens), the disclosure; a Reports menu with What the AI wrote, the AI log and Statistics. Where an AI is needed, the walkthrough says so.
+- **Settings** with tabs, a search box, Project settings, a code-editor-like Keys tab, anonymous statistics off by default. **Help** searchable with drawings. **Book** with spreads, right-hand page starts, units from Settings, figures and footnotes.
+- **Status bar**: "● 12 to review" instead of the fixes count, a ⌨ button for the keys where you are, Show instead of Highlights, zoom 50 to 200 % without "Fit width".
+
+## To the specification (draft 6)
+
+Things the notes asked for that are too long for a walkthrough and will be pages of the specification: the **Codex** (kinds, aliases, what is computed and how, the questions it answers, when the AI is read); the **index and the Ask ranking**; **what works without an AI**, mode by mode, as a table; the **menu inventory** as one list; **Undo semantics** (grouping, old undos, restore); the **spacing and overlap rules** for underlines, badges and cards, and what happens when zoomed out; **on disk**: Markdown per chapter plus a small sidecar file for marks and notes, continuous autosave, and how a chapter's file is named when chapters are renumbered; **when Libreto reads and proposes**, by level, with tokens in mind.
+
+## What changed in draft 5, and why
+
+Everything below answers the notes on draft 4 for screens 1 to 8; screens 9 to 30 are unchanged apart from the strip, the status bar and the notice card.
+
+- **Modes at the right of the strip.** The breadcrumb needs room on laptops with large fonts and the two cannot both be centered; the pill at a fixed right edge is where design tools put their mode switch, and the breadcrumb owns the left. One line, no second row.
+- **Status bar items look clickable**: a soft background and a ▾ on every item that opens a menu. A hint alone was not enough.
+- **One card for every mark**, on hover or `Ctrl+.`: what happened, Was / Now, ✓ ✗ with `Enter` / `Delete`; `F8` walks the marks. The same card is the margin card in Review.
+- **The fix rule is written down**: one possible answer and no meaning touched; "recieved" is fixed, "quite / quiet" is proposed. A fix fades red to green and never moves the text.
+- **One underline per problem, one underline per word**, red before blue before green; one gutter icon per line with a count; a count opens the stack as a list.
+- **Red marks** have no icon in Write and a Spelling filter in Review; their card offers candidates and "Add to the book's words".
+- **Review filters by people**, named when you share; the AI never guesses who a reader is.
+- **The welcome line is a card**, on no timer, that slides into the Ask button and stays reachable there and in History.
+- **Kind of text at Start** sets the names of up to three structure levels (parts / chapters / scenes, acts / scenes, nothing); a book can gain or lose a level later. Front matter and Back matter are rows in the list.
+- **Start shows the full path on one line** under "Will be stored in", cleaned as you type, and a cover tile per book.
+- **Right-click menus per level and per place**, written out in S31; removing a mark never deletes text and never asks, deleting asks in words and pages.
+- **Dragging in the chapter list points to Plan** instead of moving; cutting and pasting across chapters is free and any coherence problem becomes a task later.
+- **Scene breaks** from any repeated symbol, with Undo; the break is a selectable block; a proposed break is a mark like any other, with the usual card; detected scenes are named by first words without an AI.
+- **By chapter or Whole book** (S32), with a gray Next / Previous line and cursor crossing; `Ctrl+Page Down` jumps a chapter.
+- **One notice, one Undo** (S33): the card at the bottom, History ▸ Today, one stack for everything, tips through the same card.
+- **A chapter heading starts a chapter**: applying the style mid-chapter splits there. The style palette reads as a list (names in the interface font, samples at the right), with "+ New style…".
+- **Ask needs no AI while you type**: index, fixed order, three rows per group; questions are templates; no on-device model in version 1. The Codex is kept by the writer, by rules (names, mentions, counts, proposed entries) and, when connected, by the AI, marked as such.
+- **On disk**: Markdown, one file per chapter, `***` for a scene break, readable without Libreto; said in S01 and S06.
+
+## What changed in draft 4, and why
+
+- **One door for the AI.** Search & ask, the Chat tab and the status-bar icon were three faces of one thing. They are now **Ask**: `Ctrl+K` or the round button; results while you type, a conversation when you ask. The button is the AI's status too: gray when not connected, pulsing when working, a dot when an answer waits.
+- **The page never moves.** Columns open in the margins; the text stays centered on the window at any width that allows it.
+- **The Reference panel instead of tabs.** The right column shows one thing with its own `‹ ›`: a Codex card or a research topic. No tabs, no second search box; `Ctrl+K` looks things up.
+- **Codex and Research are two things in one library.** The Codex is what the book says; Research is what you gather. They sit as two sections of the Research mode, link to each other mostly by themselves (names are recognized in topics as in the text), and knowledge moves between them with "Pin as fact" and "Open in Research".
+- **Review is Write with the margin open.** Notes are made and fixed in Write, beside the line; Review adds the counts, the filters and the walker. History, Compare, Statistics and Help are **sheets** over the window, not modes, so there are still five modes and nothing more.
+- **One family of marks.** Underlines on the exact characters in three colors; icons, not dots, in the gutter at the exact line, with the same icons as counts on the left; dotted green = done, dashed gray = proposed. Scenes lost their bullets.
+- **Lines to the text.** A selected note draws a short line from its gutter icon to its card and tints its words; unselected cards stay quiet.
+- **Adding chapters without keys.** A "New chapter" button at the bottom of the list, a right-click menu on every row, the Insert menu; `Ctrl+Enter` for those who want it.
+- **The "what now" dialog is gone.** Libreto reopens as you left it; a line at the bottom says what is waiting.
+- **The start dialog names the folder.** The sentence under the location shows the exact path that will be created.
+- **Keys on every keyboard.** `Ctrl+Shift+H` panels, `Ctrl+Shift+L` / `Ctrl+Shift+R` each column, `F11` Focus, `Ctrl+Enter` chapter, `Ctrl+Shift+Enter` scene break, `Ctrl+Shift+M` note, `Ctrl+Shift+A` reveal, `Ctrl+0` zoom reset, `Alt+1…5` modes, `Alt+←/→` back and forward. Every key is editable in Settings and checked against the layout.
+- **Replace all shows the list first.** And a Codex name offers "Rename everywhere" instead of a blind replace.
+- **Cards can take a color** with a legend you name; "Color by" fills them from the Codex.
+- **Pictures** on Codex entries, in research topics and in the book itself.
+- **The disclosure is always visible** on the AI screen, with a warning sign.
+
+## Questions
+
+Answered by the notes on draft 6 and settled above: Codex as a mode (for now); Write shows only underlines and your notes (for now); who a card is from, visible as an initial; whole book as the default; the menu bar instead of ☰; "Don't bother me" per project; usage statistics asked at install; footnotes after their paragraph; a project as one file, later.
+
+Open in draft 7:
+
+1. **The mode switch**: one exclusive control at the right (as drawn), or tabs with more room under them?
+2. **Plan**: rows (S16) or columns (S35)?
+3. **Start**: Book, Play, Paper, each listing what it covers. Enough, or is a fourth needed?
+4. **Ask**: the question row at the bottom always preselected, results reachable with `↑`: right?
+5. **Notices**: passing ones fade into the bell after about twenty seconds, standing ones stay until ✕: fine, or should nothing fade?
+6. **Readers' copies as "Add notes from a file" in Review**, with the two-column paragraph view, instead of a separate Compare: right?
+7. **Styles** yours in Settings, their print look per project in Book: the right split?
+8. **The small bar on a selection** (Emphasis · Strong · Style as) as the bridge for people who miss Bold and Italic: enough?
+9. **Continuity** warnings need the AI except for facts with chapter numbers: acceptable for version 1?
+10. **A web view inside Research**, to read and clip pages without copy and paste: version 2?
+11. **The AI pass at the start of a session**, with a monthly budget and a stop: the right default?
+12. **The + between rows** in the chapter list, replacing the bottom button: fine on the keyboard too (`Ctrl+Enter` for a chapter, Insert menu for the rest)?
+13. **Discarded as scenes** in a box at the end of the list: right, or a separate place?
