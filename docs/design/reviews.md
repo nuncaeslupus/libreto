@@ -4,7 +4,7 @@ Every round of the Libreto concept was reviewed on an annotatable reader (claude
 
 | Round | Reviewed | Document with the notes | Notes | Annotatable reader |
 |---|---|---|---|---|
-| Specification v1 | 2026-11-04 | [libreto-spec-v2 (reviewed)](../status/libreto-spec-v2-2026-11-04-2150-reviewed.md) | 8 | [HTML](../status/libreto-spec-v2-2026-11-04-2150-reader.html) |
+| Specification v1 | 2026-11-04 | [libreto-spec-v2 (reviewed)](../../status/libreto-spec-v2-2026-11-04-2150-reviewed.md) | 8 | [HTML](../../status/libreto-spec-v2-2026-11-04-2150-reader.html) |
 | Concept 1 | 2026-11-06 | [libreto-screens-c1 (reviewed)](concepts/libreto-screens-c1-v1-2026-11-11-0004-reviewed.md) | 13 | [HTML](concepts/libreto-screens-c1-v1-2026-11-11-0004-reviewed.html) |
 | Concept 2 | 2026-11-07 | [libreto-screens-c2 (reviewed)](concepts/libreto-screens-c2-v1-2026-11-11-0004-reviewed.md) | 20 | [HTML](concepts/libreto-screens-c2-v1-2026-11-11-0004-reviewed.html) |
 | Walkthrough, draft 3 | 2026-11-08 | [libreto-screens-d3 (reviewed)](concepts/libreto-screens-d3-v1-2026-11-11-0005-reviewed.md) | 32 | [HTML](concepts/libreto-screens-d3-v1-2026-11-11-0005-reviewed.html) |
