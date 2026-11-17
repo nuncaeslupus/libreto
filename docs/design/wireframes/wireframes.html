@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Libreto wireframes</title>
+<style>
+:root{--canvas:#e8e8e6;--paper:#fff;--ink:#1f2328;--muted:#59636e;--link:#0969da;--rule:#d1d9e0;--hl:#fff8c5;--soft:#f6f8fa;--add:#dafbe1;--del:#ffebe9;--ui:Inter,system-ui,sans-serif;--text:"Source Serif 4",Georgia,serif}
+*{box-sizing:border-box}body{margin:0;font:13px var(--ui);color:var(--ink);background:var(--canvas);width:1440px;height:900px;overflow:hidden}
+.top{height:44px;display:flex;align-items:center;gap:16px;padding:0 16px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.top .title{font-weight:600}.top .muted{color:var(--muted)}
+.ws{display:flex;gap:2px;background:var(--soft);border-radius:8px;padding:2px;margin-left:24px}.ws span{padding:4px 12px;border-radius:6px;color:var(--muted)}.ws .on{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px #0002}
+.sp{flex:1}.pill{border:1px solid var(--rule);border-radius:14px;padding:3px 10px;color:var(--muted)}.pill.ok:before{content:"● ";color:#1a7f37}
+.main{display:flex;height:calc(900px - 44px - 28px)}
+.left{width:260px;background:var(--paper);border-right:1px solid var(--rule);padding:12px}
+.right{width:340px;background:var(--paper);border-left:1px solid var(--rule);padding:12px;overflow:hidden}
+.center{flex:1;overflow:hidden;padding:28px 0}
+.h{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 6px}
+.tree div{padding:4px 6px;border-radius:5px}.tree .sel{background:#ddf4ff}.tree .in{padding-left:22px}.tree .range{background:#f1f8ff}
+.tree .st{float:right;color:var(--muted);font-size:11px}
+.paper{width:720px;margin:0 auto;background:var(--paper);padding:56px 72px;box-shadow:0 1px 3px #0002;font:17px/1.65 var(--text);min-height:780px}
+.paper h1{font:600 26px var(--ui);margin:0 0 20px}.paper p{margin:0 0 14px}
+.sign{text-align:center;text-transform:uppercase;letter-spacing:.08em;font-family:var(--ui);font-size:14px;margin:18px 0}
+.mention{color:var(--link);border-bottom:1px dotted var(--link)}.maybe{border-bottom:2px dotted #9a6700}
+.cmt{background:var(--hl)}
+.status{height:28px;display:flex;align-items:center;gap:18px;padding:0 16px;background:var(--paper);border-top:1px solid var(--rule);color:var(--muted);font-size:12px}
+.pop{position:absolute;background:var(--paper);border:1px solid var(--rule);border-radius:10px;box-shadow:0 6px 20px #0002;padding:12px;width:260px}
+.pop .row{display:flex;justify-content:space-between;padding:5px 0}.btn{display:inline-block;border:1px solid var(--rule);border-radius:6px;padding:5px 12px;background:var(--soft)}.btn.pri{background:#1f883d;color:#fff;border-color:#1f883d}.btn.no{color:#cf222e}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px;width:220px;display:inline-block;vertical-align:top;margin:0 12px 12px 0}
+.ph{height:90px;background:var(--soft);border-radius:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.thread{border:1px solid var(--rule);border-radius:8px;padding:10px;margin-bottom:10px}.thread b{font-size:12px}.thread .who{color:var(--muted);font-size:11px}
+.divider{border-top:1px dashed var(--rule);margin:26px 0 22px;text-align:center;font:12px var(--ui);color:var(--muted)}.divider span{background:var(--paper);padding:0 8px;position:relative;top:-9px}
+.cmp{display:flex;gap:16px}.cmp>div{flex:1;background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:16px;font:15px/1.6 var(--text)}
+.del{background:var(--del)}.add{background:var(--add)}
+.place div{padding:7px 8px;border-radius:6px;border-bottom:1px solid #eee}.place .sel{background:#ddf4ff}
+.summary{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:0 32px 16px}
+.lbl{font:600 12px var(--ui);color:var(--muted);margin-bottom:8px}
+</style></head><body>
+<div class="top"><span class="title">The Blue Lamp</span><span class="muted">novel</span>
+<div class="ws"><span id="w-write">Write</span><span id="w-plan">Plan</span><span id="w-review">Review</span></div>
+<span class="sp"></span><span class="pill">Search ⌘K</span><span class="pill ok">Claude connected</span></div>
+<div class="main" id="main"></div>
+<div class="status"><span id="st1">Chapter 3 · 2,418 words</span><span>Book 61,204 / 90,000</span><span class="sp"></span><span>Saved · snapshot 18:40</span></div>
+<script>
+const s=new URLSearchParams(location.search).get('s')||'write';
+const binder=(full)=>`<div class="left"><div class="h">Manuscript</div><div class="tree">
+<div>▾ Part One</div><div class="in">1. Rain on the glass <span class="st">final</span></div><div class="in${full?' range':''}">2. The bartender <span class="st">revised</span></div>
+<div class="in ${full?'range':'sel'}">3. A note in the office <span class="st">draft</span></div><div class="in${full?' range':''}">4. Quarter past three <span class="st">draft</span></div><div>▸ Part Two</div></div>
+<div class="h">Notes</div><div class="tree"><div>Timeline ideas</div><div>Ending options</div></div>
+<div class="h">Research</div><div class="tree"><div>bar-1950s.jpg</div><div>jazz-clubs.pdf</div></div>
+<div class="h">Characters & places</div><div class="tree"><div>Vega</div><div>Kit</div><div>Lena</div><div>Blue Lamp bar</div></div></div>`;
+const text=`<h1>3. A note in the office</h1>
+<p>The door to the back office was locked, which surprised nobody except <span class="mention">Kit</span>. <span class="cmt"><span class="maybe">Lena</span> dried the same glass for the third time and pretended not to watch.</span></p>
+<p class="sign">Private — staff only</p>
+<p>On the desk, under a saucer, lay a note in <span class="mention">Vega</span>'s narrow handwriting: <i>you are late, as usual.</i></p>`;
+const M=document.getElementById('main'),on=id=>document.getElementById(id).classList.add('on');
+if(s==='write'){on('w-write');M.innerHTML=binder()+`<div class="center"><div class="paper">${text}</div></div>`+
+`<div class="pop" style="left:1222px;top:290px;width:206px"><div class="lbl">Style</div><div class="row"><b>Sign</b><span class="muted">what it is</span></div><div class="row"><span>Look</span><span>centred · capitals</span></div><div class="row"><span>In final book</span><span>in a box</span></div><div style="margin-top:8px"><span class="btn">+ New style</span></div></div>`+
+`<div class="pop" style="left:1222px;top:150px;width:206px"><div class="lbl">“Lena” is a character</div><span class="btn pri">Link</span> <span class="btn">All 12</span> <span class="btn">Ignore</span></div>`}
+if(s==='full'){on('w-write');document.getElementById('st1').textContent='Full view · chapters 2–4 · 7,960 words';M.innerHTML=binder(1)+`<div class="center"><div class="paper"><p>…and Lena laughed, for the first time that night.</p><div class="divider"><span>3. A note in the office</span></div>${text.replace(/<h1>.*?<\/h1>/,'')}<div class="divider"><span>4. Quarter past three</span></div><p>The clock above the bar had stopped at a quarter past three. Kit noticed it only because Lena kept glancing at it.</p></div></div>`}
+if(s==='comments'){on('w-write');M.innerHTML=binder()+`<div class="center"><div class="paper">${text}</div></div><div class="right"><div class="h">Comments · chapter 3</div>
+<div class="thread"><b>Lena's glass</b><div class="who">You · today</div><p>Too obvious? She should hide it better.</p><div class="who">Claude · suggestion</div><p>Keep the glass, drop “pretended”: let the reader notice.</p><span class="btn">Show change</span> <span class="btn">Resolve</span></div>
+<div class="h">Linked</div><div class="thread"><b>Note: Ending options</b><div class="who">Linked from this paragraph</div></div><div class="thread"><b>Kit · first appearance</b><div class="who">Chapter 1, paragraph 4</div></div></div>`}
+if(s==='plan'){on('w-plan');M.innerHTML=binder()+`<div class="center" style="padding:24px 32px"><div class="h">Characters & places</div>
+${['Vega|Sets the case in motion. Appears in 9 chapters.','Kit|Apprentice. Point of view in Part One.','Lena|Bartender. Knows more than she says.','Blue Lamp bar|Jazz bar, back office, piano.'].map(c=>{const[a,b]=c.split('|');return `<div class="card"><div class="ph">picture</div><b>${a}</b><p class="muted">${b}</p><span class="pill">${a==='Blue Lamp bar'?'place':'character'}</span></div>`}).join('')}
+<div class="h" style="margin-top:18px">Chapters as cards</div>${['1. Rain on the glass|Kit arrives in the rain.','2. The bartender|Lena tests him.','3. A note in the office|The first message.','4. Quarter past three|The stopped clock.'].map(c=>{const[a,b]=c.split('|');return `<div class="card"><b>${a}</b><p class="muted">${b}</p></div>`}).join('')}</div>`}
+if(s==='review'){on('w-review');M.innerHTML=`<div class="left"><div class="h">Proposal · from Claude</div><div class="place"><div class="sel">Ch. 1 · ¶ 4</div><div>Ch. 2 · ¶ 1</div><div>Ch. 2 · ¶ 7</div><div>Ch. 3 · ¶ 1</div><div>Ch. 4 · ¶ 2</div><div>Card: Lena</div><div>Note: Ending options</div><div class="muted">… 7 more</div></div></div>
+<div class="center" style="padding:24px 0"><div class="summary"><div class="lbl">WHAT WILL CHANGE</div><div style="font-size:16px"><b>Rename Lena → Lenore</b>: 14 mentions in 6 chapters, 2 notes, 1 character card.</div><div class="muted" style="margin-top:6px">Nothing changes until you accept. A snapshot is taken first.</div><div style="margin-top:12px"><span class="btn pri">Accept all 14</span> <span class="btn no">Reject all</span></div></div>
+<div style="margin:0 32px"><div class="lbl">1 of 14 · Chapter 1, paragraph 4</div><div class="cmp"><div><div class="lbl">NOW</div>Behind the bar, <span class="del">Lena</span> was drying a glass that was already dry.</div><div><div class="lbl">AFTER</div>Behind the bar, <span class="add">Lenore</span> was drying a glass that was already dry.</div></div>
+<div style="margin-top:12px"><span class="btn pri">Accept this</span> <span class="btn">Skip</span> <span class="btn no">Reject this</span></div></div></div>`}
+</script></body></html>
