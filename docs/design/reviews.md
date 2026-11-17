@@ -1,6 +1,6 @@
 # Design reviews
 
-Every round of the Libreto concept was reviewed on an annotatable reader (claude-arsenal's `create_reader.py`): one HTML page with the document, a picture per screen and a note field under each section. The owner's notes were exported and committed next to the reader, and a baked copy keeps them read-only. GitHub shows those HTML files as source, so each record also has a **Markdown copy** with the pictures beside it, which GitHub renders at its link; `reviewed-markdown.py` in this folder writes it from the reader and the notes export.
+Every round of the Libreto concept was reviewed on an annotatable reader (claude-arsenal's `create_reader.py`): one HTML page with the document, a picture per screen and a note field under each section. The owner's notes were exported and committed next to the reader, and a baked copy keeps them read-only. GitHub shows those HTML files as source, so each record also has a **Markdown copy** with the pictures beside it, which GitHub renders at its link. Since claude-arsenal 5.28.0, `create_reader.py` writes that copy on every run: `<stem>-reader.md`, or `<stem>-reviewed.md` with `--bake`, and the pictures in `<stem>-img/`. The rounds up to draft 7 were converted once, from their finished readers, by a script that did the same; it went with the upgrade to 5.28.0 and is in the history at `5c49d4e`.
 
 | Round | Reviewed | Document with the notes | Notes | Annotatable reader |
 |---|---|---|---|---|
@@ -13,12 +13,12 @@ Every round of the Libreto concept was reviewed on an annotatable reader (claude
 | Walkthrough, draft 6 | 2026-11-15 | [libreto-screens-d6 (reviewed)](concepts-d4/libreto-screens-d6-v1-2026-11-13-1917-reviewed.md) | 80 | [HTML](concepts-d4/libreto-screens-d6-v1-2026-11-13-1917-reader.html) |
 | Walkthrough, draft 7 | in review | [libreto-screens-d7](concepts-d4/libreto-screens-d7-v1-2026-11-15-1931-reader.md) | — | [HTML](concepts-d4/libreto-screens-d7-v1-2026-11-15-1931-reader.html) |
 
-The notes exports themselves are in `concepts/review-notes-*.md` and `../status/*-notes.md`; the current text of the walkthrough is `walkthrough.md`, and its screens are built from `concepts-d4/`.
+The notes exports themselves are in `concepts/review-notes-*.md` and `../../status/*-notes.md`; the current text of the walkthrough is `walkthrough.md`, and its screens are built from `concepts-d4/`.
 
-To add a round: build the reader, review it, export the notes, then
+To add a round: build the reader (`create_reader.py --input <the screens document> --output-dir <its folder>` writes `<stem>-reader.html` and, beside it, `<stem>-reader.md` with the pictures in `<stem>-img/`), review it and export the notes, then
 
 ```bash
-python3 docs/design/reviewed-markdown.py <the reader>.html --notes <the notes export>.md
+python3 claude-arsenal/scripts/create_reader.py --input <the screens document>.md --notes <the notes export>.md --bake --output-dir <the reader's folder>
 ```
 
-writes `<stem>-reviewed.md` and `<stem>-img/` next to the reader. Without `--notes` it writes `<stem>-reader.md` (the document and the screens, no notes), which is what the draft 7 row links until its notes come back.
+writes `<stem>-reviewed.html` and `<stem>-reviewed.md`, the notes under their sections. Commit the export, both reviewed files and the pictures in one commit, and link the `.md` here. The draft 7 row links its `-reader.md` until its notes come back.
