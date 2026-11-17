@@ -147,6 +147,8 @@ review-bots = ["coderabbitai[bot]"]
 
 setup-interview = "2026-11-11"
 
+branch-protection = "off"
+
 [models]
 orchestrator = ""
 workers = "sonnet"

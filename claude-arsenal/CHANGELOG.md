@@ -18,6 +18,76 @@ being a changelog nobody reads.
 
 Format: `## [X.Y.Z] - YYYY-MM-DD`, newest first, plain bullets below.
 
+## [5.28.0] - 2026-11-17
+
+- `create_reader.py` now writes a GitHub-readable Markdown copy beside every
+  reader and `--bake` copy: `<stem>-reader.md` / `<stem>-reviewed.md`, the
+  pictures as files in `<stem>-img/` (JPEG downscaled to 1400 px when Pillow is
+  available, drawspec diagrams as SVG) and every note as a `> [!NOTE]` alert
+  under its section, anchored notes with their quote. Link that `.md` — GitHub
+  shows the HTML as source. New flags: `--no-markdown`, `--picture-width`,
+  `--picture-quality`.
+
+## [5.27.1] - 2026-11-12
+
+- **`open_task_pr.sh` no longer drops work you already committed.** Run from a
+  branch that has commits not on the default branch, it used to cut a fresh
+  branch from the default and carry only uncommitted edits, so the PR claimed a
+  passing gate over a diff holding just the task-file archive. It now refuses
+  and names the way out (`--branch <current branch>`).
+- **Issue lookup honours `task-label` and reads up to 1,000 issues.** The
+  fallback that resolves a task's issue over the API hardcoded `arsenal:task`
+  and read one page of 100, so a board with more task issues than that, or a
+  renamed label, failed with "cannot resolve the issue handle". It now uses the
+  configured label and reads up to 10 pages.
+- **A claim only reads `lost` when the ref already exists.** Any HTTP 422 used
+  to mean "someone else has it", including an unpushed or invalid anchor commit;
+  that is now an error with the message shown, so a task is not silently skipped.
+- **Remote URLs of any shape resolve to `owner/repo`.** Token-bearing https
+  URLs, ssh host aliases, ports, other hosts and trailing slashes work, and a
+  credential in the URL is never echoed into a printed API path. A remote that
+  is not `owner/repo` fails instead of producing a garbage slug.
+- **`park_task.sh` pushes to `ARSENAL_QUEUE_REMOTE`** like every other queue
+  script, not `ARSENAL_REMOTE` (the update-check remote), where it could force-push
+  a whole working tree to the marketplace remote.
+
+## [5.27.0] - 2026-11-12
+
+- **`/init` says what it does to your repo, and you can decline each part.**
+  New flags `--no-statusline` and `--no-attribution` join
+  `--no-branch-protection`. The README badge is now announced on `--silent`
+  runs too, and the branch-protection change is announced before it is made.
+  A deliberate run ends with the exact `git add` line for everything it
+  touched, `README.md` included; the documented quick-start command now stages
+  `README.md` as well, so the badge no longer lingers as an uncommitted change
+  that trips the "clean working tree" check.
+- **Your personal `statusLine` is no longer overridden.** `/init` registers the
+  project `statusLine` (the token-budget stop) only when none is set in the
+  project or in `~/.claude/settings.json`. An existing registration is left as
+  it is.
+- **No `tmp/arsenal-metrics/` in repos that never ran `/init`.** The skill-load
+  hook now writes only in a repo that has `claude-arsenal/` or `arsenal/`.
+- **A queue workflow that was never committed is no longer "removed by you".**
+  With `queue-automation = true` and no workflow file on disk, `/init` records
+  the opt-out only if git history shows the file was committed and later
+  deleted. Otherwise it reinstalls it, which is what happened to a session
+  whose token could not push workflow files.
+
+## [5.26.1] - 2026-11-12
+
+- **Imported task files pass Markdown lint.** `issue_import.py` pasted an
+  issue's body into `arsenal/tasks/<id>.md` exactly as written, and issue
+  bodies are not lint-clean: in a repository that gates on a Markdown linter,
+  eleven imported task files turned CI red and each had to be fixed by hand.
+  The body is now normalised as it is imported: a blank line before and after
+  every heading; heading levels shifted so the shallowest is `##` (the task's
+  title is the document title; relative depth is kept); `__` in prose escaped,
+  so a word like `__init__` shows as written instead of reading as bold; CRLF
+  line endings converted. Fenced code, indented code, inline code spans and
+  URLs are never touched, and no text is dropped.
+- Task files imported before this release are not rewritten. Fix those once by
+  hand if your linter flags them; nothing needs configuring.
+
 ## [5.26.0] - 2026-11-11
 
 Slow CI, addressed where it starts. A measured review of seven repositories
