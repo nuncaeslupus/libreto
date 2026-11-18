@@ -1,0 +1,9 @@
+## s00-map: The map of the whole app
+
+Libreto is one window. On the left is the Navigator, with a three-way switch at its head: Book (front matter, parts, chapters, scenes, back matter, and the Unplaced and Discarded boxes), Codex (the Brief, people, places, things, motifs, threads) and Research (the Inbox and topics). In the middle is the open document: the manuscript, whole book or one chapter, seen as Text, Board or Pages; or a Codex entry, a research topic or the Brief. On the right is the side panel, which shows one thing at a time: Reference (an entry or topic beside the text, or a chapter to read alongside), the Review margin, the Ask conversation, or, in Pages, Book layout. The menu bar sits above, the strip below it, the status bar at the bottom.
+
+Everything else opens over this window and is gone when finished. Small things (the quick look, a mark card, menus, notices, Find) appear over the text without dimming it. Sheets (History, Statistics, AI activity) cover the work area and carry a "Back to the text" link. Dialogs (Export, Print, Send a copy, Add notes, Replace all, Rename everywhere, Book details, an agent's permissions) ask one question and close. Settings and Help are windows of their own.
+
+Four ways back, and each does one thing. Esc closes the innermost thing in front. Alt+Left and Alt+Right walk the jumps between documents and never undo anything. Ctrl+Z undoes the last thing in the place you are looking at, and never takes you elsewhere. Revert takes back one older thing, such as a review round or an agent session, as a new step that says what it could not undo.
+
+**Changed from draft 7:** new page. Draft 7 had six modes and no single picture of where things live; the navigation critique (A-01, A-02, A-12) asked for one map and for one meaning of Back, Esc and Undo.

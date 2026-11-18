@@ -1,0 +1,9 @@
+## s47-menus: All the menus
+
+Every menu of the menu bar is opened at once so that anything a writer might look for can be checked against where it is. File holds the project (new, open, close, save a version, versions and history, bring in a Word manuscript, send a copy, add notes from a reader's file, export, print, book details) and starts with a gray line, "Saved automatically · 19:32". Edit holds Undo, Redo and Revert, the clipboard commands, Find and Replace, Rename everywhere and Settings. View holds the panels, the three views, the three Navigator sections, Back and Forward, next and previous mark, Show, Show names and styles, whole book or one chapter, Focus, Sprint and zoom. Insert holds Note, Footnote, Picture, scene breaks, chapter and part, front and back matter. Format holds Italic, Bold, Style as, Clear style, styles, passage language and Book layout. Tools holds Ask and the AI actions, Statistics, AI activity, Language and typography, spelling and Settings. Settings is both in Edit (where Linux writers look) and in Tools, and opens the same window.
+
+The spark marks what uses the AI; those items are dimmed when no AI is connected. Menus walk with arrows and Enter and do not filter as you type.
+
+Below are the right-click menus for six places: text with a selection, text without one, a mark, a chapter row, a Board card, and a Codex entry. Each begins with what is done there most often and ends with the way to the rest. Every item in a right-click menu also exists in a menu of the bar or in the Navigator, so nothing can be found only by right-clicking.
+
+**Changed from draft 7:** the old inventory screens now show seven menus with Settings, Revert, Close project, Insert ▸ Note, Show names and styles and the Navigator sections added, and Reports removed (F-A-19 to F-A-26).

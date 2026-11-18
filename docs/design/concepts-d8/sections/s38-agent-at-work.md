@@ -1,0 +1,9 @@
+## s38-agent-at-work: An agent at work
+
+An external agent such as Claude Code works on the book through Libreto's API while the writer keeps writing. The first time it asks, a dialog opens ("Claude Code wants to work on The Blue Lamp"): a checklist of what it may do (read the book, the Codex and the Brief; propose edits; draft new scenes; changing the text directly is shown but never offered), a scope (here chapters 12–14), quotas (50 waiting proposals, 20,000 words) and the line "A version is saved first (always)". The writer chooses Allow for this session, Always allow these, or Deny.
+
+While the agent works, a chip appears in the strip beside Review: "✦ Claude Code · drafting ch. 12 · 7 proposals · ■". The square stops it at once. Clicking the chip opens a popover with the goal ("Draft chapters 12–14 from the outline"), the scope, the grants, the quota ("7 of 50 proposals waiting · 5,880 of 20,000 words"), the last calls the agent made, and Pause and Stop. The chip vanishes when the session ends.
+
+Nothing the agent writes lands in the manuscript text. Edits to existing text arrive as one review round in the Review margin (the Review count goes from 12 to 19), with the usual Accept, Reject and Edit per change. New scenes arrive as blue italic draft scenes in the Navigator, tagged "draft", under the chapter they belong to; chapters inside the agent's scope carry a quiet "agent" label. A draft is opened and accepted whole (S39). Because a version was saved first and the session is recorded, the whole session can be reverted from Tools ▸ AI activity (S40). The writer can keep writing anywhere, including in chapters the agent is working on, since the agent's proposals record the text they were based on and go out of date if it changes.
+
+**Changed from draft 7:** new. Agents had no screen; this adds the chip, the per-session permission dialog, quotas and the draft-scene lifecycle (F-AI-04).
