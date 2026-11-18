@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S16: Notes while you write</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s16 .noted{position:absolute;left:calc(100% + 44px);width:262px;background:#fff;border:1px solid #e2aa28;border-radius:9px;box-shadow:0 0 0 3px rgba(226,170,40,.16),0 8px 22px rgba(0,0,0,.10);padding:8px 10px 8px;font:12.5px/1.4 var(--ui);text-indent:0;z-index:5}
+.s16 .noted .h{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.s16 .noted .h svg{width:14px;height:14px;color:var(--note)}
+.s16 .noted .h b{font-weight:600}.s16 .noted .h .wh{margin-left:auto}
+.s16 .noted .in{font:14px/1.45 var(--text);color:var(--ink);min-height:40px}
+.s16 .noted .in .cursor{display:inline-block;width:1.5px;height:15px;background:var(--ink);vertical-align:-2px;margin-left:1px}
+.s16 .noted .a{display:flex;gap:6px;align-items:center;border-top:1px solid var(--line2);padding-top:6px;margin-top:6px;color:var(--ink3);font-size:11.5px}
+.s16 .noted .a .b{border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:2px 9px;font-size:12px;background:#fff}
+.s16 .nl{position:absolute;left:calc(100% + 24px);width:22px;height:1.5px;background:#e2aa28;z-index:4}
+.s16 .showm{position:absolute;right:24px;bottom:30px;width:300px;z-index:45;padding:6px}
+.s16 .showm .mi .l{flex:1}
+.s16 .showm .ck{width:14px;color:var(--accent);font-size:12px}
+.s16 .seg3{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:12px}
+.s16 .seg3 span{padding:2px 9px;color:var(--ink2);background:#fff}.s16 .seg3 span+span{border-left:1px solid var(--line)}
+.s16 .seg3 .on{background:var(--ink);color:#fff}
+.s16 .status .sb.on{background:#e6e6e3}
+</style><style>
+.bb{position:absolute;left:calc(100% + 16px);width:19px;height:15px;border-radius:5px;text-indent:0;font:600 9.5px/15px var(--ui);text-align:center}
+.bb:after{content:"";position:absolute;left:4px;bottom:-4px;width:6px;height:6px;background:inherit;border-left:inherit;border-bottom:inherit;transform:skewY(-30deg) rotate(0deg);clip-path:polygon(0 0,100% 0,0 100%)}
+.bb.mine{background:#e2aa28;color:#fff}
+.bb.oth{background:#fff;border:1.5px solid #8f939a;color:#6b6f76}
+.bb.oth:after{display:none}
+.bb.oth i{position:absolute;left:3px;bottom:-5.5px;width:7px;height:7px;background:#fff;border-right:1.5px solid #8f939a;border-bottom:1.5px solid #8f939a;transform:skewX(35deg) rotate(0deg);clip-path:none;border-radius:0 0 2px 0}
+.bb.stk{width:auto;min-width:19px;padding:0 5px;background:#dcdad4;color:var(--ink2);border-radius:8px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.bb.stk:after{display:none}
+.wh{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.wh.lib{background:var(--ink2);color:#fff}.wh.ai{background:rgba(59,110,168,.12);color:var(--accent)}.wh.ai svg{width:12px;height:12px}
+.wh.M{background:#e8e1f6;color:#5b3fb0}.wh.T{background:#d9eef3;color:#177089}.wh.Y{background:#eceae4}
+.tM{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.tT{background:rgba(26,127,156,.14);box-shadow:inset 0 -2px 0 rgba(26,127,156,.55)}
+/* the Review margin (side panel) */
+.rvm{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);font:12.5px/1.4 var(--ui);color:var(--ink);display:flex;flex-direction:column;z-index:4}
+.rvm .rh{padding:10px 14px 0}
+.rvm .r1{display:flex;align-items:center;gap:8px}
+.rvm .r1 b{font:600 14px var(--ui)}
+.rvm .r1 .sp{flex:1}
+.pg2{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px;gap:2px}
+.pg2 span{padding:2px 10px;border-radius:5px;color:var(--ink2);font-size:12px}
+.pg2 .on{background:var(--ink);color:#fff;font-weight:600}
+.rounds{margin:8px 0 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+.rd2{display:flex;align-items:center;gap:8px;padding:5px 8px;border-top:1px solid var(--line2);font-size:12px}
+.rd2:first-child{border-top:0}
+.rd2 .nm{flex:1;min-width:0;white-space:nowrap}
+.rd2 .nm small{color:var(--ink3);font-size:11.5px}
+.rd2 .pr{width:34px;height:4px;border-radius:2px;background:var(--line);position:relative;flex:none}
+.rd2 .pr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink2)}
+.rd2 .ct{width:106px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums;flex:none;white-space:nowrap}
+.rd2.on{background:var(--accent-tint)}
+.rd2.on .nm{font-weight:600}
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0}
+.tg span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 6px;background:#fff;color:var(--ink3);font-size:11.5px}
+.tg span:before{content:"";width:11px;height:11px;border:1.5px solid var(--ink4);border-radius:3px;box-sizing:border-box;flex:none}
+.tg span.on{color:var(--ink);border-color:var(--ink3)}
+.tg span.on:before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
+.rvm .r3{display:flex;align-items:center;gap:8px;margin:9px 0 9px}
+.rvm .r3 .sp{flex:1}
+.rvm .r3 .btn{height:26px;font-size:12px;padding:0 10px}
+.rvm .addl{color:var(--accent);font-size:12px}
+.rvm .cards{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.rc{position:absolute;left:10px;right:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 8px;box-shadow:0 1px 3px rgba(0,0,0,.05);font:12.5px/1.38 var(--ui)}
+.rc .h{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rc .h svg{width:14px;height:14px;flex:none}
+.rc .h b{font-weight:600}
+.rc .h .wh{margin-left:auto}
+.rc .h small{color:var(--ink3);font-size:11.5px}
+.rc.pend .h svg{color:var(--gram)}.rc.nt .h svg{color:var(--note)}.rc.fixd .h svg{color:var(--fix)}
+.rc .x{color:var(--ink);margin:0 0 6px}
+.rc .x .q{font:italic 13.5px var(--text)}
+.rc .a{display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:6px}
+.rc .b{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff;color:var(--ink);font-size:12px;white-space:nowrap}
+.rc .b.p{border-color:var(--accent);color:var(--accent)}
+.rc .b kbd{margin-left:3px;font-size:10px;padding:0 4px}
+.rc .b svg{width:12px;height:12px}
+.rc.stale{background:#eef1f6;border-color:#c3cddd}
+.rc.stale .h svg{color:#6a7b96}
+.rc.stale .b{background:#f8f9fb}
+.rc.sel{border-color:var(--gram);box-shadow:0 0 0 3px rgba(58,111,216,.12),0 6px 18px rgba(0,0,0,.08)}
+.rc .was{background:var(--red-tint);border-radius:2px;text-decoration:line-through}.rc .now{background:rgba(46,139,87,.14);border-radius:2px}
+.rc .rep{border-left:2px solid var(--line);margin:0 0 5px 3px;padding:1px 0 1px 8px;color:var(--ink2)}
+.rc .rep b{color:var(--ink);font-weight:600}
+.rc .fold{display:flex;align-items:center;gap:6px;color:var(--accent);margin:0 0 5px 3px;padding-left:8px;border-left:2px dashed var(--line)}
+.rc .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.rc .fade{position:relative}
+.rc .rall{color:var(--accent);margin-top:3px;display:inline-block}
+.dotu{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cline{position:absolute;height:1.5px;background:var(--line);z-index:2}
+.s .gm{}
+</style><div class="win s16" style="width:1440px;height:900px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 7 · Lena’s warning</span><span class="sep">›</span><span class="dd">Lena lies about the back room</span></span></span><span class="modes views"><span class="on">Text</span><span>Board</span><span>Pages</span></span><span class="right"><span class="revbtn" title="Review · Ctrl+Shift+V">Review<i class="n">12</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="page"><div class="col" style="padding-top:24px"><div class="chap"><div class="num">CHAPTER 7</div><h1>Lena’s warning</h1></div><div class="para"><p class="first">The Blue Lamp was half empty by ten, which was how Vega liked it. The jukebox had given up on the evening, and the only sound was Lena drying glasses that were already dry, one after another, as if the cloth could rub the night off them.</p></div><div class="para"><p>“You’re early,” Lena said without looking up. “Or late. I can never tell with you.”</p><span class="bb oth" data-m="marta" style="top:7.5px">1<i></i></span></div><div class="para"><p>Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p></div><div class="para"><p>“Kit who?” Lena set a glass down hard enough to make it ring. “Half the city’s called Kit.”</p></div><div class="para"><p>“Mine. Thin, nervous, writes everything down in a little green ledger.” Vega slid a coin across the counter and left her hand on it. “<span class="u-note" data-m="tint">He said he’d meet me here at nine.</span>”</p><span class="bb mine" data-m="mine" style="top:7.5px">1</span><span class="nl" style="top:14.5px"></span><div class="noted" data-m="noted" style="top:-0.5px"><div class="h"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3h11v7.5H7.6L4.6 13.4v-2.9H2.5z"/></svg><b>New note</b><span class="wh Y">You</span></div><div class="in">Does Vega already know about the spare key? Check ch. 10<span class="cursor"></span></div><div class="a"><span class="b">Done</span><span>Enter adds · Shift+Enter new line · Esc cancels</span></div></div></div><div class="para"><p>Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p></div><div class="para"><p><span class="thought">It was a good lie.</span> Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</p></div><div class="para"><p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.”</p></div><div class="para"><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow. And don’t ask Kit what he saw.”</p></div><div class="para"><p>Outside, the rain had turned to the fine kind that does not fall so much as hang. Vega walked the long way around, past the station steps, because it was the way Kit always walked.</p></div></div></div><span class="askbtn" title="Ask · Ctrl+K"><svg class="logo" width="13" height="13" viewBox="0 0 20 20"><g stroke="#3b6ea8" stroke-width="1.8" stroke-linejoin="round" fill="rgba(59,110,168,.16)"><path d="M10 2.4 12.1 7.9 17.6 10l-5.5 2.1L10 17.6l-2.1-5.5L2.4 10l5.5-2.1z"/></g></svg></span></div><div class="status"><span class="sb m"><span class="chipst"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 7 3h2l4 10M5 9h6"/></svg>Plain<span class="dd" style="margin-left:-2px"></span></span></span><span class="sb m"><svg class="ring" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--line)" stroke-width="2"/><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ink2)" stroke-width="2" stroke-dasharray="28.0 34.6" transform="rotate(-90 7 7)"/></svg><span class="dd">812 of 1,000 today</span></span><span class="sb m"><span class="dd">p. 146 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="menu showm"><div class="mhd">Show</div><div class="mi"><span class="ck">✓</span><span class="l">Marks (spelling, suggestions)</span></div><div class="mi"><span class="ck">✓</span><span class="l">Notes</span><span class="r" style="padding:0"><span class="seg3"><span>Mine</span><span class="on">All</span><span>None</span></span></span></div><div class="mi"><span class="ck"></span><span class="l">Scene names</span></div><div class="msep"></div><div class="mi"><span class="ck">✓</span><span class="l">Whole book</span><span class="r">one chapter</span></div><div class="mi"><span class="ck"></span><span class="l">Show names and styles</span><span class="r"><kbd>Ctrl+Shift+A</kbd></span></div></div><div class="tip" style="left:1076px;top:296px">Marta · 1 note · Open in Review</div><svg class="cursorptr" style="left:1056px;top:316px" width="14" height="20" viewBox="0 0 14 20"><path d="M1 1v15l4-3.5 2.5 6 2.5-1-2.5-5.5H13z" fill="#fff" stroke="#222" stroke-width="1.2" stroke-linejoin="round"/></svg><div class="ann wrap" style="left:20px;top:440px;--w:270px"><b>2</b><span>Your note, typed right beside its line; the words it holds are tinted amber</span></div><div class="ann wrap" style="left:20px;top:290px;--w:280px"><b>1</b><span>Marta’s note shows as a hollow gray bubble: it is someone else’s, so it is quiet. Hover says who and how many</span></div><div class="ann wrap" style="left:20px;top:640px;--w:300px"><b>3</b><span>Show ▸ Notes decides whose notes the gutter shows: Mine (the default) · All · None. Here All is chosen, so Marta’s note shows</span></div></div>
+<div class="caption"><span class="id">S16</span><span class="scn">Notes while you write.</span> Text view of chapter 7. The writer is typing a note of their own beside “He said he’d meet me here at nine.”; its amber bubble and tinted words show where it will sit. Higher up, Marta’s note on another paragraph is a hollow gray bubble, and the mouse rests on it. The Show menu in the status bar is open on Notes: Mine · All · None, with All chosen.<div class="vis"><b>On screen:</b> the strip with Review 12 (not pressed); the note editor beside its line (New note · You, text with cursor, Done); one amber bubble and amber-tinted words; one hollow gray bubble with a tooltip “Marta · 1 note · Open in Review”; the Show menu (Marks, Notes Mine · All · None with All chosen, Scene names, Whole book, Show names and styles); the status bar with the goal ring; the Ask button &nbsp;·&nbsp; <b>Not on screen:</b> the Review margin, any suggestion or spelling mark card, the navigator, Marta’s note text</div></div>
+</body></html>

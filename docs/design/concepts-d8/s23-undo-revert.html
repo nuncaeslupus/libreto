@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S23: Undo and Revert</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s23{display:flex;flex-direction:column;gap:20px;padding:24px 28px 26px;background:#d9d9d6;position:relative}
+.s23 .row{display:flex;gap:20px;align-items:flex-start}
+.s23 .crop>.z{padding:14px 16px 16px;position:relative}
+.s23 .notice{position:static;transform:none;display:inline-flex}
+.s23 .notice b{font-weight:600}
+.s23 .notice .lk{margin-left:12px}
+.s23 .inpage{position:relative;height:210px;overflow:hidden;background:#fff}
+.s23 .inpage .pg{width:560px;margin:22px auto 0;font:16px/1.7 var(--text);color:var(--ink)}
+.s23 .inpage .pg p{margin:0;text-indent:1.5em}
+.s23 .inpage .flash{position:relative;background:rgba(59,110,168,.10);box-shadow:0 0 0 6px rgba(59,110,168,.10);border-radius:3px;margin-top:34px}
+.s23 .inpage .flash .srule{margin:12px 80px 10px}
+.s23 .inpage .undid{position:absolute;right:-6px;top:-30px;font:600 11px var(--ui);color:#fff;background:var(--accent);border-radius:5px;padding:2px 8px;white-space:nowrap}
+.s23 .inpage .mst{position:absolute;left:0;right:0;bottom:0;height:26px;border-top:1px solid var(--line);background:var(--chrome);display:flex;gap:16px;align-items:center;padding:0 12px;font:12px var(--ui);color:var(--ink2)}
+.s23 .htp{width:470px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:5px 0 4px;font:13px var(--ui)}
+.s23 .htp .mhd{padding:7px 14px 3px}
+.s23 .htp .hx{display:flex;gap:12px;align-items:center;padding:6px 14px}
+.s23 .htp .hx .t{width:40px;color:var(--ink3);font-variant-numeric:tabular-nums;flex:none}
+.s23 .htp .hx .w{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s23 .htp .hx .lk{width:50px;text-align:right;flex:none}
+.s23 .htp .hx .g{width:50px;text-align:right;color:var(--ink4);flex:none}
+.s23 .htp .ft{border-top:1px solid var(--line2);margin-top:4px;padding:7px 14px 5px;display:flex}
+.s23 .htp .ft .lk{margin-left:auto}
+.s23 .sbar2{display:flex;align-items:center;gap:4px;height:28px;margin-top:6px;border-top:1px solid var(--line);padding:0 10px;font-size:12px;color:var(--ink2);justify-content:flex-end}
+.s23 .sbar2 .sb{padding:2px 8px;border-radius:5px;display:inline-flex;gap:6px;align-items:center}
+.s23 .sbar2 .sb.act{background:#e6e6e3;color:var(--ink)}
+.s23 .stk{display:flex;align-items:center;gap:0;margin:4px 0 0}
+.s23 .stk .step{border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px 12px 7px;text-align:center;font:12.5px var(--ui);min-width:122px}
+.s23 .stk .step small{display:block;font:600 9.5px var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.s23 .stk .step.now{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.s23 .stk .cx{width:20px;height:1px;background:var(--ink4)}
+.s23 .stk .lab{width:110px;font:600 11px var(--ui);color:var(--ink2);flex:none}
+.s23 .cap{font:13px/1.5 var(--ui);color:var(--ink2);margin-top:8px;max-width:640px}
+.s23 .cap b{color:var(--ink)}
+</style><style>
+.bb{position:absolute;left:calc(100% + 16px);width:19px;height:15px;border-radius:5px;text-indent:0;font:600 9.5px/15px var(--ui);text-align:center}
+.bb:after{content:"";position:absolute;left:4px;bottom:-4px;width:6px;height:6px;background:inherit;border-left:inherit;border-bottom:inherit;transform:skewY(-30deg) rotate(0deg);clip-path:polygon(0 0,100% 0,0 100%)}
+.bb.mine{background:#e2aa28;color:#fff}
+.bb.oth{background:#fff;border:1.5px solid #8f939a;color:#6b6f76}
+.bb.oth:after{display:none}
+.bb.oth i{position:absolute;left:3px;bottom:-5.5px;width:7px;height:7px;background:#fff;border-right:1.5px solid #8f939a;border-bottom:1.5px solid #8f939a;transform:skewX(35deg) rotate(0deg);clip-path:none;border-radius:0 0 2px 0}
+.bb.stk{width:auto;min-width:19px;padding:0 5px;background:#dcdad4;color:var(--ink2);border-radius:8px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.bb.stk:after{display:none}
+.wh{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.wh.lib{background:var(--ink2);color:#fff}.wh.ai{background:rgba(59,110,168,.12);color:var(--accent)}.wh.ai svg{width:12px;height:12px}
+.wh.M{background:#e8e1f6;color:#5b3fb0}.wh.T{background:#d9eef3;color:#177089}.wh.Y{background:#eceae4}
+.tM{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.tT{background:rgba(26,127,156,.14);box-shadow:inset 0 -2px 0 rgba(26,127,156,.55)}
+/* the Review margin (side panel) */
+.rvm{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);font:12.5px/1.4 var(--ui);color:var(--ink);display:flex;flex-direction:column;z-index:4}
+.rvm .rh{padding:10px 14px 0}
+.rvm .r1{display:flex;align-items:center;gap:8px}
+.rvm .r1 b{font:600 14px var(--ui)}
+.rvm .r1 .sp{flex:1}
+.pg2{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px;gap:2px}
+.pg2 span{padding:2px 10px;border-radius:5px;color:var(--ink2);font-size:12px}
+.pg2 .on{background:var(--ink);color:#fff;font-weight:600}
+.rounds{margin:8px 0 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+.rd2{display:flex;align-items:center;gap:8px;padding:5px 8px;border-top:1px solid var(--line2);font-size:12px}
+.rd2:first-child{border-top:0}
+.rd2 .nm{flex:1;min-width:0;white-space:nowrap}
+.rd2 .nm small{color:var(--ink3);font-size:11.5px}
+.rd2 .pr{width:34px;height:4px;border-radius:2px;background:var(--line);position:relative;flex:none}
+.rd2 .pr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink2)}
+.rd2 .ct{width:106px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums;flex:none;white-space:nowrap}
+.rd2.on{background:var(--accent-tint)}
+.rd2.on .nm{font-weight:600}
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0}
+.tg span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 6px;background:#fff;color:var(--ink3);font-size:11.5px}
+.tg span:before{content:"";width:11px;height:11px;border:1.5px solid var(--ink4);border-radius:3px;box-sizing:border-box;flex:none}
+.tg span.on{color:var(--ink);border-color:var(--ink3)}
+.tg span.on:before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
+.rvm .r3{display:flex;align-items:center;gap:8px;margin:9px 0 9px}
+.rvm .r3 .sp{flex:1}
+.rvm .r3 .btn{height:26px;font-size:12px;padding:0 10px}
+.rvm .addl{color:var(--accent);font-size:12px}
+.rvm .cards{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.rc{position:absolute;left:10px;right:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 8px;box-shadow:0 1px 3px rgba(0,0,0,.05);font:12.5px/1.38 var(--ui)}
+.rc .h{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rc .h svg{width:14px;height:14px;flex:none}
+.rc .h b{font-weight:600}
+.rc .h .wh{margin-left:auto}
+.rc .h small{color:var(--ink3);font-size:11.5px}
+.rc.pend .h svg{color:var(--gram)}.rc.nt .h svg{color:var(--note)}.rc.fixd .h svg{color:var(--fix)}
+.rc .x{color:var(--ink);margin:0 0 6px}
+.rc .x .q{font:italic 13.5px var(--text)}
+.rc .a{display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:6px}
+.rc .b{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff;color:var(--ink);font-size:12px;white-space:nowrap}
+.rc .b.p{border-color:var(--accent);color:var(--accent)}
+.rc .b kbd{margin-left:3px;font-size:10px;padding:0 4px}
+.rc .b svg{width:12px;height:12px}
+.rc.stale{background:#eef1f6;border-color:#c3cddd}
+.rc.stale .h svg{color:#6a7b96}
+.rc.stale .b{background:#f8f9fb}
+.rc.sel{border-color:var(--gram);box-shadow:0 0 0 3px rgba(58,111,216,.12),0 6px 18px rgba(0,0,0,.08)}
+.rc .was{background:var(--red-tint);border-radius:2px;text-decoration:line-through}.rc .now{background:rgba(46,139,87,.14);border-radius:2px}
+.rc .rep{border-left:2px solid var(--line);margin:0 0 5px 3px;padding:1px 0 1px 8px;color:var(--ink2)}
+.rc .rep b{color:var(--ink);font-weight:600}
+.rc .fold{display:flex;align-items:center;gap:6px;color:var(--accent);margin:0 0 5px 3px;padding-left:8px;border-left:2px dashed var(--line)}
+.rc .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.rc .fade{position:relative}
+.rc .rall{color:var(--accent);margin-top:3px;display:inline-block}
+.dotu{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cline{position:absolute;height:1.5px;background:var(--line);z-index:2}
+.s .gm{}
+</style><div class="s23"><div class="row"><div class="crop" style="width:760px"><div class="lbl">1 · Ctrl+Z scrolls to its place and says what it undid</div><div class="z" style="padding:0"><div class="inpage"><div class="pg"><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow.”</p><div class="flash"><span class="undid">Undone: scene break removed</span><div class="srule"></div><p class="first" style="text-indent:0">Outside, the rain had turned to the fine kind that does not fall so much as hang.</p></div></div><div class="mst"><span>Plain</span><span>2,418 words</span><span>p. 146 of 248</span><span style="margin-left:auto">Next: Edit ▸ Undo typing  ·  Ctrl+Z</span></div></div></div><div class="cap" style="padding:0 16px 12px">The text scrolls to the change and flashes it; the Edit menu names what Ctrl+Z will undo.</div></div><div style="display:flex;flex-direction:column;gap:20px"><div class="crop" style="width:580px"><div class="lbl">2 · A notice while it is the latest step</div><div class="z"><div class="notice info standing"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.3v4"/><circle cx="8" cy="5.1" r=".8" fill="currentColor" stroke="none"/></svg><span class="ntx"><b>40 moves</b> on the Board</span><span class="lk">Undo<kbd>Ctrl+Z</kbd></span><span class="nx">✕</span></div></div><div class="cap" style="padding:0 16px 12px">Stays until you type on or press ✕, never on a timer.</div></div><div class="crop" style="width:580px"><div class="lbl">3 · After you typed on, the same notice says Revert</div><div class="z"><div class="notice info standing"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.3v4"/><circle cx="8" cy="5.1" r=".8" fill="currentColor" stroke="none"/></svg><span class="ntx"><b>40 moves</b> on the Board</span><span class="lk">Revert</span><span class="nx">✕</span></div></div></div></div></div><div class="row"><div class="crop" style="width:520px"><div class="lbl">4 · History ▸ Today (status bar): today’s messages, no bell</div><div class="z"><div class="htp"><div class="mhd">Today</div><div class="hx"><span class="t">21:12</span><span class="w">40 moves on the Board</span><span class="lk">Revert</span></div><div class="hx"><span class="t">21:11</span><span class="w">Scene break removed in chapter 7</span><span class="g">—</span></div><div class="hx"><span class="t">21:10</span><span class="w">Fixed “teh” → “the” in chapter 7</span><span class="lk">Revert</span></div><div class="hx"><span class="t">20:40</span><span class="w">Marta · 150 changes taken (walk)</span><span class="lk">Revert</span></div><div class="hx"><span class="t">20:12</span><span class="w">Saved a version “Before Marta’s changes”</span><span class="g"></span></div><div class="ft"><span style="color:var(--ink3)">Waiting decisions are in Review, not here</span><span class="lk">All versions…</span></div></div><div class="sbar2"><span class="sb">Show ▾</span><span class="sb act"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg>History ▾</span><span style="width:210px"></span></div></div><div class="cap" style="padding:0 16px 12px">Revert shows where it still applies; a dash where nothing can be inverted.</div></div><div style="display:flex;flex-direction:column;gap:20px"><div class="crop" style="width:820px"><div class="lbl">5 · The result, honest about what it could not do</div><div class="z"><div class="notice fix"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg><span class="ntx">Reverted <b>38 of 40</b> moves; <b>2 scenes you edited since were kept</b></span><span class="lk">Show</span><span class="nx">✕</span></div></div></div><div class="crop" style="width:820px"><div class="lbl">6 · Which stack Ctrl+Z walks</div><div class="z"><div class="stk"><span class="lab">Manuscript</span><div class="step"><small>typing</small>“Nobody came…”</div><span class="cx"></span><div class="step"><small>typing</small>“…since Tuesday”</div><span class="cx"></span><div class="step"><small>Board</small>40 moves</div><span class="cx"></span><div class="step now"><small>typing</small>ten minutes</div></div><div class="stk" style="margin-top:10px"><span class="lab">Entry: Lena</span><div class="step"><small>field</small>Age: about 50</div><span class="cx"></span><div class="step now"><small>field</small>Knows: Kit</div></div><div class="stk" style="margin-top:10px"><span class="lab">Topic: Bars</span><div class="step now"><small>typing</small>a source</div></div><div class="cap"><b>Ctrl+Z</b> is linear and belongs to what you are looking at: the manuscript is one stack; each Codex entry, topic and field has its own. Taking back something older, like the 40 moves under ten minutes of typing, is <b>Revert</b>: a new step that inverts just that thing.</div></div></div></div></div></div>
+<div class="caption"><span class="id">S23</span><span class="scn">Undo and Revert.</span> Not a moment in the app: a board. Ctrl+Z walks back the last step and shows where. Moving 40 scenes on the Board leaves a notice that says Undo while it is the latest step and Revert after the writer typed on. History ▸ Today lists the day’s messages with Revert where it applies. Reverting 40 moves after typing says exactly what it could not do.<div class="vis"><b>On screen:</b> the flashed paragraph with “Undone: scene break removed”; the notice “40 moves on the Board” with Undo then with Revert; the History ▸ Today popover (times, messages, Revert, “All versions…”); “Reverted 38 of 40 moves; 2 scenes you edited since were kept · Show”; the three stacks (manuscript, Codex entry, topic) &nbsp;·&nbsp; <b>Not on screen:</b> a bell, a timer, Undo and Redo arrows in the strip, a Redo button</div></div>
+</body></html>

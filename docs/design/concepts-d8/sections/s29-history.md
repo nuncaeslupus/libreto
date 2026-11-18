@@ -1,0 +1,9 @@
+## s29-history: Versions and history
+
+History is File ▸ Versions & history, and also the History button in the status bar, where the popover shows today's messages first and a link to all of it. It opens as a sheet over the window with Esc to go back. Libreto keeps a version of the book often, without being asked: roughly at the end of each session, before any large action (a Rename everywhere, a review round, an agent's session) and at intervals while you write. Automatic versions are thinned over time, one an hour for the current week and one a day before that, and a version you save by name with Save a version… is never thinned.
+
+The list is grouped by day, and under each day by activity block, a stretch of work with the hours, what kind (✎ wrote, ⇅ planned, ✓ reviewed), the words added and removed, and a one-line summary. Show changes on a block opens that stretch as a redline in the page (the next screen). The named and notable versions sit under their day.
+
+The field at the top searches the past, not the present. Typing a phrase finds it in the earlier versions, narrowed by Scope (the book, a part, a chapter) and Since. When what you find is no longer in the book, the result says so, shows the text with the version and date it comes from, and offers Put back… with three places: where it was, to Discarded as a new scene, or at the cursor. Nothing is overwritten; putting back is a new step, and Open that version reads the whole old version without leaving today's text.
+
+**Changed from draft 7:** a search across past versions with Scope and Since, Put back… with where it goes, “Save a version…” and “versions” instead of snapshots, thinning stated in words, Show changes per block (F-D-48, F-D-49, F-D-51, F-D-53); the dated sessions-and-snapshots list becomes days and activity blocks.

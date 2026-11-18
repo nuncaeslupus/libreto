@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S21: Readers’ changes in the text</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s21 .col{font-size:17px}
+.s21 .chg{position:relative}
+.s21 .ini{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:7px;font:700 8.5px/1 var(--ui);vertical-align:2px;margin-right:2px;text-indent:0}
+.s21 .M .ini{background:#6f4fc9;color:#fff}.s21 .T .ini{background:#177089;color:#fff}.s21 .Y .ini{background:#55585e;color:#fff}
+.s21 .chg del{margin-right:4px;text-decoration:line-through;text-decoration-thickness:1.3px}
+.s21 .M del,.s21 .M ins{background:rgba(111,79,201,.14);text-decoration-color:#6f4fc9}
+.s21 .T del,.s21 .T ins{background:rgba(26,127,156,.14);text-decoration-color:#177089}
+.s21 .M ins,.s21 .T ins{text-decoration:none;border-bottom:1.5px solid currentColor}
+.s21 .M ins{border-color:#6f4fc9}.s21 .T ins{border-color:#177089}
+.s21 .yr{background:rgba(0,0,0,.06);border-bottom:1.5px solid var(--ink3);border-radius:2px}
+.s21 .dec{display:inline-flex;gap:2px;vertical-align:1px;margin-left:3px;text-indent:0;font:600 10px/1 var(--ui)}
+.s21 .dec i{font-style:normal;width:15px;height:15px;border-radius:4px;border:1px solid var(--line);background:#fff;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2)}
+.s21 .dec i:first-child{color:var(--fix);border-color:#bcd9c9}
+.s21 .merged{display:flex;align-items:center;gap:8px;font:12px var(--ui);color:var(--ink2);margin:2px 0 10px;text-indent:0;padding:4px 10px;background:var(--soft);border:1px solid var(--line2);border-radius:7px}
+.s21 .merged svg{width:13px;height:13px;color:var(--fix)}
+.s21 .merged .lk{margin-left:auto}
+.s21 .cf{margin:12px 0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font:14.5px/1.5 var(--text);text-indent:0;box-shadow:0 0 0 3px rgba(226,170,40,.14),0 2px 10px rgba(0,0,0,.05)}
+.s21 .cf .hd{display:flex;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line2);font:600 12.5px var(--ui)}
+.s21 .cf .hd small{font-weight:400;color:var(--ink3)}
+.s21 .cf .r{display:flex;gap:12px;padding:8px 14px;border-bottom:1px solid var(--line2)}
+.s21 .cf .r .l{width:76px;flex:none;font:600 10.5px/1.9 var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+.s21 .cf .r .l.m{color:#5b3fb0}
+.s21 .cf .r.t{background:#fafaf8}
+.s21 .cf .a .btn svg{width:13px;height:13px;color:var(--accent)}
+.s21 .cf .a{display:flex;gap:8px;align-items:center;padding:8px 14px;background:var(--soft);border-radius:0 0 10px 10px;font:12.5px var(--ui)}
+.s21 .cf .a .sp{flex:1}
+.s21 .cf mark{background:rgba(226,170,40,.28);border-radius:2px;padding:0 1px}
+.s21 .ug{margin:0 12px 0;background:#fff;border:1px solid var(--line);border-radius:9px}
+.s21 .ug .gh{display:flex;align-items:center;gap:6px;padding:7px 10px;font-weight:600}
+.s21 .ug .gh small{font-weight:400;color:var(--ink3);margin-left:4px}
+.s21 .ug .u{display:flex;gap:8px;padding:7px 10px;border-top:1px solid var(--line2);align-items:flex-start}
+.s21 .ug .u .q{font:italic 13px var(--text);color:var(--ink)}
+.s21 .ug .u small{display:block;color:var(--ink3);font:11.5px var(--ui)}
+.s21 .ug .u .lk{margin-left:auto;white-space:nowrap;font-size:12px}
+.s21 .rvm .sum2{margin:8px 14px 0;color:var(--ink2);font-size:12.5px}
+</style><style>
+.bb{position:absolute;left:calc(100% + 16px);width:19px;height:15px;border-radius:5px;text-indent:0;font:600 9.5px/15px var(--ui);text-align:center}
+.bb:after{content:"";position:absolute;left:4px;bottom:-4px;width:6px;height:6px;background:inherit;border-left:inherit;border-bottom:inherit;transform:skewY(-30deg) rotate(0deg);clip-path:polygon(0 0,100% 0,0 100%)}
+.bb.mine{background:#e2aa28;color:#fff}
+.bb.oth{background:#fff;border:1.5px solid #8f939a;color:#6b6f76}
+.bb.oth:after{display:none}
+.bb.oth i{position:absolute;left:3px;bottom:-5.5px;width:7px;height:7px;background:#fff;border-right:1.5px solid #8f939a;border-bottom:1.5px solid #8f939a;transform:skewX(35deg) rotate(0deg);clip-path:none;border-radius:0 0 2px 0}
+.bb.stk{width:auto;min-width:19px;padding:0 5px;background:#dcdad4;color:var(--ink2);border-radius:8px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.bb.stk:after{display:none}
+.wh{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.wh.lib{background:var(--ink2);color:#fff}.wh.ai{background:rgba(59,110,168,.12);color:var(--accent)}.wh.ai svg{width:12px;height:12px}
+.wh.M{background:#e8e1f6;color:#5b3fb0}.wh.T{background:#d9eef3;color:#177089}.wh.Y{background:#eceae4}
+.tM{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.tT{background:rgba(26,127,156,.14);box-shadow:inset 0 -2px 0 rgba(26,127,156,.55)}
+/* the Review margin (side panel) */
+.rvm{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);font:12.5px/1.4 var(--ui);color:var(--ink);display:flex;flex-direction:column;z-index:4}
+.rvm .rh{padding:10px 14px 0}
+.rvm .r1{display:flex;align-items:center;gap:8px}
+.rvm .r1 b{font:600 14px var(--ui)}
+.rvm .r1 .sp{flex:1}
+.pg2{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px;gap:2px}
+.pg2 span{padding:2px 10px;border-radius:5px;color:var(--ink2);font-size:12px}
+.pg2 .on{background:var(--ink);color:#fff;font-weight:600}
+.rounds{margin:8px 0 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+.rd2{display:flex;align-items:center;gap:8px;padding:5px 8px;border-top:1px solid var(--line2);font-size:12px}
+.rd2:first-child{border-top:0}
+.rd2 .nm{flex:1;min-width:0;white-space:nowrap}
+.rd2 .nm small{color:var(--ink3);font-size:11.5px}
+.rd2 .pr{width:34px;height:4px;border-radius:2px;background:var(--line);position:relative;flex:none}
+.rd2 .pr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink2)}
+.rd2 .ct{width:106px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums;flex:none;white-space:nowrap}
+.rd2.on{background:var(--accent-tint)}
+.rd2.on .nm{font-weight:600}
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0}
+.tg span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 6px;background:#fff;color:var(--ink3);font-size:11.5px}
+.tg span:before{content:"";width:11px;height:11px;border:1.5px solid var(--ink4);border-radius:3px;box-sizing:border-box;flex:none}
+.tg span.on{color:var(--ink);border-color:var(--ink3)}
+.tg span.on:before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
+.rvm .r3{display:flex;align-items:center;gap:8px;margin:9px 0 9px}
+.rvm .r3 .sp{flex:1}
+.rvm .r3 .btn{height:26px;font-size:12px;padding:0 10px}
+.rvm .addl{color:var(--accent);font-size:12px}
+.rvm .cards{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.rc{position:absolute;left:10px;right:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 8px;box-shadow:0 1px 3px rgba(0,0,0,.05);font:12.5px/1.38 var(--ui)}
+.rc .h{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rc .h svg{width:14px;height:14px;flex:none}
+.rc .h b{font-weight:600}
+.rc .h .wh{margin-left:auto}
+.rc .h small{color:var(--ink3);font-size:11.5px}
+.rc.pend .h svg{color:var(--gram)}.rc.nt .h svg{color:var(--note)}.rc.fixd .h svg{color:var(--fix)}
+.rc .x{color:var(--ink);margin:0 0 6px}
+.rc .x .q{font:italic 13.5px var(--text)}
+.rc .a{display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:6px}
+.rc .b{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff;color:var(--ink);font-size:12px;white-space:nowrap}
+.rc .b.p{border-color:var(--accent);color:var(--accent)}
+.rc .b kbd{margin-left:3px;font-size:10px;padding:0 4px}
+.rc .b svg{width:12px;height:12px}
+.rc.stale{background:#eef1f6;border-color:#c3cddd}
+.rc.stale .h svg{color:#6a7b96}
+.rc.stale .b{background:#f8f9fb}
+.rc.sel{border-color:var(--gram);box-shadow:0 0 0 3px rgba(58,111,216,.12),0 6px 18px rgba(0,0,0,.08)}
+.rc .was{background:var(--red-tint);border-radius:2px;text-decoration:line-through}.rc .now{background:rgba(46,139,87,.14);border-radius:2px}
+.rc .rep{border-left:2px solid var(--line);margin:0 0 5px 3px;padding:1px 0 1px 8px;color:var(--ink2)}
+.rc .rep b{color:var(--ink);font-weight:600}
+.rc .fold{display:flex;align-items:center;gap:6px;color:var(--accent);margin:0 0 5px 3px;padding-left:8px;border-left:2px dashed var(--line)}
+.rc .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.rc .fade{position:relative}
+.rc .rall{color:var(--accent);margin-top:3px;display:inline-block}
+.dotu{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cline{position:absolute;height:1.5px;background:var(--line);z-index:2}
+.s .gm{}
+</style><div class="win s21" style="width:1440px;height:900px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 7 · Lena’s warning</span><span class="sep">›</span><span class="dd">Lena lies about the back room</span></span></span><span class="modes views"><span class="on">Text</span><span>Board</span><span>Pages</span></span><span class="right"><span class="revbtn on" title="Review · Ctrl+Shift+V">Review<i class="n">12</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog on" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 3.2h3.5v9.6H10z" fill="currentColor" stroke="none"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="page"><div class="col" style="padding-top:30px"><div class="para"><p class="first">Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p></div><div class="para"><p>“Kit who?” Lena set a glass down <span class="chg M"><span class="ini">M</span><del>hard enough to make it ring</del><ins>harder than she meant to</ins><span class="dec"><i>✓</i><i>✗</i></span></span>. “Half the city’s called <span class="chg T"><span class="ini">T</span><del>Kit</del><ins>any Kit you like</ins><span class="dec"><i>✓</i><i>✗</i></span></span>.”</p></div><div class="para"><p>“Mine. Thin, nervous, writes everything down in a <span class="chg Y"><span class="yr">little green ledger</span></span>.” Vega slid a coin across the counter and left her hand on it. “He said he’d meet me <span class="chg M"><span class="ini">M</span><del>here at nine</del><ins>here at nine, no later</ins><span class="dec"><i>✓</i><i>✗</i></span></span>.”</p><div class="merged"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg><span>You and Marta changed different words: merged</span><span class="lk">Undo</span></div></div><div class="cf" data-m="cf"><div class="hd"><span class="wh M" title="M">M</span><span>You and Marta both changed this paragraph</span><small>choose which to use</small></div><div class="r t"><span class="l">Sent Nov 7</span><span>Lena looked at the coin, then at the door behind her, then at nothing at all.</span></div><div class="r"><span class="l">Yours</span><span>Lena looked at the coin, then at the door behind her, <mark>and at nothing</mark>.</span></div><div class="r"><span class="l m">Marta’s</span><span>Lena looked at the coin, then <mark>at the door. She would not look at Vega</mark>.</span></div><div class="a"><span class="btn">Use mine</span><span class="btn">Use Marta’s</span><span class="sp"></span><span class="btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.2 9.4 6.6 13.8 8 9.4 9.4 8 13.8 6.6 9.4 2.2 8l4.4-1.4z"/></svg>Merge for me</span><span style="color:var(--ink3)">≈0.01 €</span></div></div><div class="para"><p>“Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p></div></div></div><div class="rvm" data-m="rvm"><div class="rh"><div class="r1"><b>Review</b><span class="sp"></span><span class="pg2"><span class="on">Page</span><span>List</span></span></div><div class="rounds"><div class="rd2 on"><span class="wh M" title="M">M</span><span class="nm">Marta <small>· Nov 7</small></span><span class="pr"><i style="width:50%"></i></span><span class="ct">150 / 300</span></div><div class="rd2 on"><span class="wh T" title="T">T</span><span class="nm">Teo <small>· Nov 9</small></span><span class="pr"><i style="width:0"></i></span><span class="ct">0 / 41</span></div></div><div class="tg"><span class="on">Notes</span><span class="on">Suggestions</span><span>Fixed</span><span>Spelling</span><span>Unread</span><span>Resolved</span></div><div class="sum2" style="margin:9px 0 10px;margin-left:0">In this chapter: <b>11 changes</b> · 5 taken · 1 conflict</div></div><div class="ug"><div class="gh">▾ Unplaced comments (4)<small>words cut</small></div><div class="u"><span class="wh M" title="M">M</span><span><span class="q">“a green door that never opened”</span><small>ch. 7 · Marta · Nov 7</small></span><span class="lk">Place…</span></div><div class="u"><span class="wh M" title="M">M</span><span><span class="q">“the clock over the till”</span><small>ch. 7 · Marta · Nov 7</small></span><span class="lk">Place…</span></div><div class="u"><span class="wh T" title="T">T</span><span><span class="q">“Is Lena older than forty?”</span><small>ch. 7 · Teo · Nov 9</small></span><span class="lk">Place…</span></div><div class="u"><span class="wh M" title="M">M</span><span><span class="q">“two glasses, one dry”</span><small>ch. 7 · Marta · Nov 7</small></span><span class="lk">Place…</span></div></div></div></div><div class="status"><span class="sb m"><span class="chipst"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 7 3h2l4 10M5 9h6"/></svg>Plain<span class="dd" style="margin-left:-2px"></span></span></span><span class="sb m"><span class="dd">2,418 words</span></span><span class="sb m"><span class="dd">p. 146 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="ann wrap" style="left:20px;top:180px;--w:330px"><b>1</b><span>Each reader’s changes sit in the text: their initial and tint, ✓ takes the change, ✗ leaves yours</span></div><div class="ann wrap" style="left:20px;top:262px;--w:330px"><b>2</b><span>Different readers, different tints, the same sentence</span></div><div class="ann wrap" style="left:20px;top:460px;--w:330px"><b>3</b><span>Different words changed by you and Marta: merged on its own, and one click undoes it</span></div><div class="ann wrap" style="left:20px;top:600px;--w:330px"><b>4</b><span>A true conflict is one card with three rows: what you sent, yours, hers. Merge for me is the AI and shows its price</span></div><div class="ann wrap" style="left:760px;top:770px;--w:320px"><b>5</b><span>Comments whose words are gone are kept, grouped at the top of the margin, to place by hand</span></div></div>
+<div class="caption"><span class="id">S21</span><span class="scn">Readers’ changes in the text.</span> After the import, Review is open on chapter 7. Marta’s and Teo’s changes appear inline, each with an initial and a tint and a ✓ ✗. One paragraph was merged on its own because you and Marta changed different words. One paragraph is a real conflict and is a card with three rows.<div class="vis"><b>On screen:</b> Review pressed; inline changes by M (violet) and T (teal) with ✓ ✗; your own change marked gray; the merged line “You and Marta changed different words: merged · Undo”; the conflict card (Sent Nov 7 / Yours / Marta’s, Use mine · Use Marta’s · Merge for me ✦ ≈0.01 €); the margin with two rounds, the toggles, “Unplaced comments (4)” &nbsp;·&nbsp; <b>Not on screen:</b> a side-by-side compare sheet, per-paragraph “Yours | Marta’s” columns, the walk</div></div>
+</body></html>

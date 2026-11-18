@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="arsenal-source-sha256" content="06e2d38238e01e6f96ea28b7919cac6888428ddcae0b5425abfcffe5182c54b1">
+<title>Libreto — Specification (annotatable)</title>
+<style>
+:root{
+  --bg:#fbfaf7;--fg:#1d1c1a;--muted:#5f5c56;--line:#e3ded4;
+  --card:#ffffff;--accent:#0f766e;--accent2:#9a4a0b;--chip:#e8efed;
+  --note:#fffaf0;--note-line:#d9a441;--note-fg:#7a3b06;--code:#f1eee8;--link:#0f766e;
+  --measure:70ch;
+  --serif:Charter,"Bitstream Charter","Iowan Old Style","Sitka Text",Cambria,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font:17px/1.65 var(--sans);
+  padding-bottom:48px;
+}
+/* The document reads in a book face; the reader's own chrome (bars, buttons,
+   headings, notes) stays in the UI face, so the two never blur together. */
+.sec-body{font-family:var(--serif);font-size:1.06em;line-height:1.7}
+.sec-body table,.sec-body pre{font-family:var(--sans)}
+.sec-body pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.wrap{max-width:calc(var(--measure) + 120px);margin:0 auto;padding:0 16px}
+a{color:var(--link);text-underline-offset:2px}
+code{background:var(--code);padding:.08em .35em;border-radius:5px;font-size:.86em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-word}
+pre{background:var(--code);padding:12px;border-radius:8px;overflow:auto;font-size:.88em;line-height:1.5}
+pre code{background:none;padding:0;font-size:1em}
+.topbar{position:sticky;top:0;z-index:30;background:var(--bg);
+  border-bottom:1px solid var(--line);backdrop-filter:saturate(120%) blur(6px)}
+.topbar .wrap{display:flex;align-items:center;gap:8px;padding-top:10px;padding-bottom:10px}
+.brand{font-weight:700;font-size:16px;margin-right:auto;letter-spacing:.2px;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand small{font-weight:500;color:var(--muted);display:block;font-size:11px;letter-spacing:0}
+.btn{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--fg);
+  border-radius:9px;padding:8px 11px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.count{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
+.savestate{font-size:12px;font-weight:700;white-space:nowrap;transition:color .2s}
+.savestate.ok{color:var(--accent)}
+.savestate.warn{color:#9a4a0b}
+.statusbar{border-bottom:1px solid var(--line);background:var(--card)}
+.statusbar .wrap{padding:7px 16px;font-size:12px;color:var(--muted)}
+#warnbar{display:none;background:#fff4e5;border-bottom:1px solid var(--note-line);color:#7c2d12}
+#warnbar .wrap{padding:10px 16px;font-size:13px;line-height:1.45}
+.hero{padding:34px 0 8px}
+.hero h1{font-size:2rem;line-height:1.15;margin:.1em 0 .3em;letter-spacing:-.02em}
+.hero p{color:var(--muted);margin:.3em 0;max-width:var(--measure)}
+.help{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:4px 14px;margin:14px 0}
+.help summary{cursor:pointer;font-weight:600;padding:10px 0}
+.help ul{margin:.2em 0 1em;padding-left:1.2em}
+.help li{margin:.3em 0}
+.toc{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:4px 14px;margin:14px 0}
+.toc>summary{cursor:pointer;font-weight:700;padding:11px 0;font-size:15px}
+.toc-part{margin:2px 0;border-top:1px solid var(--line)}
+.toc-part>summary{cursor:pointer;padding:9px 2px;font-weight:600;font-size:14px}
+.toc-part ul{margin:.1em 0 .7em;padding-left:1.1em}
+.toc-part li{margin:.22em 0;font-size:13.5px;line-height:1.4}
+.toc-part a,.toc-flat a{text-decoration:none}
+.toc-flat{margin:.1em 0 .8em;padding-left:1.1em}
+.toc-flat li{margin:.25em 0;font-size:14px;line-height:1.4;break-inside:avoid}
+.toc-flat li.sub{margin-left:1.1em;font-size:13px}
+.toc-flat a:hover{text-decoration:underline}
+.toc-part a:hover{text-decoration:underline}
+.part{margin:30px 0}
+.part-title{font-size:1.45rem;line-height:1.25;border-bottom:2px solid var(--accent);
+  padding-bottom:8px;margin:18px 0 10px}
+.badge{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  vertical-align:middle;padding:3px 7px;border-radius:6px;margin-right:8px}
+.badge.spec,.badge.plan{background:var(--chip);color:var(--accent)}
+.badge.workspace{background:var(--chip);color:var(--accent2)}
+/* Two heading levels, told apart by size, weight and a rule: a ## section opens
+   with a full-width rule; a ### section sits indented under it on a side rule. */
+.sec{scroll-margin-top:72px}
+.sec.l2{padding:22px 0 6px;border-top:1px solid var(--line);margin-top:18px}
+.part>.sec.l2:first-of-type{border-top:none;margin-top:0}
+.sec.l3{margin:6px 0 6px 2px;padding:2px 0 2px 14px;border-left:3px solid var(--line)}
+.sec-h{margin:6px 0 8px;line-height:1.3}
+h3.sec-h{font-size:1.3rem;font-weight:750}
+h4.sec-h{font-size:1.08rem;font-weight:650;color:var(--fg)}
+.sec.bare>.sec-h{margin-bottom:2px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:700;
+  color:var(--accent);background:var(--chip);border-radius:6px;padding:2px 7px;margin-right:8px;vertical-align:middle}
+h4 .chip{font-size:11px;color:var(--muted)}
+.sec-title{vertical-align:middle}
+.sec-body{margin:.2em 0 .4em}
+.sec-body p,.sec-body li,.sec-body blockquote{max-width:var(--measure)}
+.sec-body p{margin:.6em 0}
+.sec-body ul,.sec-body ol{margin:.5em 0;padding-left:1.35em}
+.sec-body li{margin:.3em 0}
+.sec-body h4,.sec-body h5,.sec-body h6{font-size:1em;margin:1em 0 .3em}
+.sec-body blockquote{margin:.7em 0;padding:.5em .9em;border-left:3px solid var(--accent);
+  background:var(--code);border-radius:0 8px 8px 0;color:var(--fg)}
+.sec-body blockquote p{margin:.3em 0}
+.sec-body figure.drawspec{margin:.8em 0;overflow-x:auto}
+.sec-body figure.drawspec svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.sec-body table{border-collapse:separate;border-spacing:0;font-size:14px;line-height:1.45;margin:.8em 0;
+  display:block;width:max-content;max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.sec-body th,.sec-body td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+.sec-body tr:last-child td{border-bottom:none}
+.sec-body tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--chip) 45%,transparent)}
+.sec-body th{background:var(--chip);font-weight:700;font-size:12.5px;letter-spacing:.02em}
+.sec-body strong{font-weight:700}
+/* The note field: the one thing on the page that is the reviewer's, so it must
+   not read as more document — but an empty one must not shout over the text
+   either. Empty: a quiet dashed margin slip. Focused: it opens into a writing
+   card. Written in: a solid amber card that stands out on a skim. */
+.note{max-width:var(--measure);background:transparent;border:1.5px dashed var(--note-line);
+  border-radius:10px;padding:6px 12px;margin:14px 0 20px;opacity:.78;
+  transition:background .15s,box-shadow .15s,opacity .15s,padding .15s}
+.note:hover{opacity:1}
+.note:focus-within,.note.filled{opacity:1;background:var(--note);border-style:solid;
+  border-left:4px solid var(--note-line);padding:10px 14px}
+.note:focus-within{box-shadow:0 0 0 3px color-mix(in srgb,var(--note-line) 28%,transparent),0 6px 20px #0000000f}
+.note-head{display:flex;align-items:center;gap:8px;cursor:text}
+.note-ico{color:var(--note-fg);font-weight:800}
+.note-label{font-size:11px;font-weight:800;color:var(--note-fg);text-transform:uppercase;letter-spacing:.07em}
+.note-ref{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+/* While empty the label row collapses into the placeholder line beside the icon. */
+.note:not(.filled):not(:focus-within){display:flex;align-items:center;gap:8px}
+.note:not(.filled):not(:focus-within) .note-label,
+.note:not(.filled):not(:focus-within) .note-ref{display:none}
+.note:focus-within .note-head,.note.filled .note-head{margin-bottom:4px}
+.note-ta{display:block;width:100%;border:none;background:transparent;color:var(--fg);font:inherit;font-size:16px;
+  resize:none;outline:none;line-height:1.55;padding:2px 0;overflow:hidden;min-height:1.6em}
+.note:focus-within .note-ta{min-height:4.8em}
+.note-ta::placeholder{color:var(--muted);opacity:1;font-style:italic}
+.modal{position:fixed;inset:0;z-index:60;background:#0008;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-card{background:var(--card);border:1px solid var(--line);border-radius:14px;max-width:680px;width:100%;
+  max-height:86vh;display:flex;flex-direction:column;padding:16px}
+.modal-card h3{margin:.1em 0 .5em}
+.modal-card p{color:var(--muted);font-size:13.5px;margin:.2em 0 .6em}
+.modal-card textarea{width:100%;flex:1;min-height:220px;border:1px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:13px/1.5 ui-monospace,Menlo,monospace;padding:10px;resize:vertical}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.hidden-input{display:none}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:32px;z-index:70;background:#111;color:#fff;
+  padding:9px 14px;border-radius:9px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:.96}
+/* Phone width: smaller type, the hint dropped. */
+@media(max-width:600px){
+  body{font-size:16px}
+  .hero h1{font-size:1.45rem}
+  .part-title{font-size:1.25rem}
+  h3.sec-h{font-size:1.15rem}
+  h4.sec-h{font-size:1rem}
+  .sec.l3{padding-left:10px}
+  .statusbar .hint{display:none}
+  .topbar .btn{padding:7px 9px}
+  .toast{bottom:24px}
+}
+/* Block notes: a faint ✎ in the right margin of every paragraph, item and table. */
+.bn-host{position:relative}
+.bn-btn{position:absolute;top:0;right:-34px;width:26px;height:26px;border-radius:7px;border:1px solid transparent;
+  background:transparent;color:var(--note-fg);font-size:14px;line-height:1;cursor:pointer;opacity:.3;padding:0}
+.bn-host:hover>.bn-btn,.bn-btn:focus-visible,.bn-btn.has{opacity:1;border-color:var(--note-line);background:var(--note)}
+.bn-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.note.bnote{margin:6px 0 12px}
+li>.note.bnote{margin:6px 0}
+@media(max-width:820px){.bn-host{padding-right:30px}.bn-btn{right:0}}
+@media print{.topbar,.statusbar,.help,.bn-btn,.note:not(.filled){display:none}}
+/* Pictures: full column width, zoomed in place (see the zoom script). The frame
+   scrolls sideways; its height follows the picture, so the page scrolls past it. */
+.sec-body p:has(img){max-width:none}
+.zwrap{margin:.6em 0}
+.zbox{overflow-x:auto;overflow-y:hidden;touch-action:pan-x pan-y;border:1px solid var(--line);border-radius:8px;
+  background:#fff;overscroll-behavior-x:contain}
+.zbox>img,.zbox>svg{display:block;margin:0 auto;width:100%;max-width:none!important;height:auto;cursor:zoom-in;-webkit-user-drag:none;user-select:none}
+.zwrap.on .zbox>img,.zwrap.on .zbox>svg{cursor:zoom-out}
+.zbar{display:none;position:sticky;top:58px;z-index:5;align-items:center;gap:6px;padding:4px 0;background:var(--bg)}
+.zwrap.on .zbar{display:flex}
+.zbar button{font:inherit;font-size:14px;min-width:34px;height:30px;border:1px solid var(--line);border-radius:7px;
+  background:var(--card);color:var(--fg);cursor:pointer}
+.zpct{font-size:12px;color:var(--muted);min-width:3.4em;text-align:center}
+.zhint{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+/* Reviewed copy (--bake): the notes as text, no controls. */
+.note-text{white-space:pre-wrap;font-size:16px;line-height:1.55;overflow-wrap:anywhere}
+body.baked #btn-import,body.baked #btn-export,body.baked .savestate,body.baked .statusbar,body.baked .help,
+body.baked .bn-btn,body.baked #warnbar{display:none!important}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Libreto — Specification<small>annotatable reader · 2026-11-18</small></div>
+    <span class="savestate ok" id="savestate">✓ Auto-saving</span>
+    <button class="btn" id="btn-import">Import</button>
+    <button class="btn primary" id="btn-export">Save / Export</button>
+  </div>
+</div>
+<div class="statusbar"><div class="wrap"><span class="count" id="count">0 / 10 notes</span><span class="hint"> · notes save automatically; <strong>Save / Export</strong> keeps a file you can send back</span></div></div>
+<div id="warnbar"><div class="wrap"><strong>Heads up —</strong> this browser isn't storing your notes automatically (private/incognito mode or restricted file view). Tap <strong>Save / Export</strong> regularly.</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Libreto — Specification</h1>
+    <p>Read at your own pace and leave a note on any point you want to discuss.</p>
+  </div>
+  <details class="help">
+    <summary>How to annotate (tap)</summary>
+    <ul>
+      <li>Tap the note field under any section and type. Each note is tagged so your feedback maps to an exact point.</li>
+      <li>Tap <strong>✎</strong> at the right of any paragraph, list item or table to note on that exact spot — the box opens right below it, with the text still in view.</li>
+      <li><strong>Notes save automatically</strong> in this browser as you type.</li>
+      <li><strong>Save / Export</strong> downloads a Markdown file of your notes — the copy to send back. Tap whenever you pause, especially on a phone.</li>
+      <li><strong>Import</strong> reloads notes from a file you exported earlier (after clearing the browser or switching devices).</li>
+    </ul>
+  </details>
+  <details class="toc"><summary>Contents</summary>
+<ul class="toc-flat">
+<li><a href="#s-spec-intro">Preamble &amp; scope</a></li>
+<li><a href="#s-spec-the-verdict-in-ten-lines">The verdict in ten lines</a></li>
+<li><a href="#s-spec-where-a-writer-gets-lost-navigat">Where a writer gets lost (navigation)</a></li>
+<li><a href="#s-spec-breaking-it">Breaking it</a></li>
+<li><a href="#s-spec-the-writer-and-accessibility">The writer, and accessibility</a></li>
+<li><a href="#s-spec-deciding-and-going-back">Deciding and going back</a></li>
+<li><a href="#s-spec-structure-styles-and-the-book">Structure, styles and the book</a></li>
+<li><a href="#s-spec-the-ai-and-the-api">The AI and the API</a></li>
+<li><a href="#s-spec-what-draft-8-changes-in-one-para">What draft 8 changes, in one paragraph</a></li>
+<li><a href="#s-spec-the-full-reports">The full reports</a></li>
+</ul>
+</details>
+  <section class="part">
+<article class="sec l2" id="s-spec-intro" data-ref="SPEC · intro" data-label="Preamble &amp; scope" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">overview</span><span class="sec-title">Preamble &amp; scope</span></h3>
+<div class="sec-body"><p><strong>Revision</strong>: 1</p>
+<p>Status: <strong>for annotation.</strong> Draft 7 was read as if someone else had designed it, by six reviewers with one lens each: navigation, breaking it, the writer's experience and accessibility, deciding and going back, structure and the printed book, and the AI inside and outside. Together they wrote about 525 findings, 45 design choices with options, and a list of screens for draft 8. This page is the short version: what is wrong, ranked, and what draft 8 does about it. The full reports are in <code>critique-d7/</code> (A to F); each finding there has an id such as <code>F-B-80</code> (report B, finding 80), the scenario that breaks, and a fix.</p>
+<p>Draft 8 (<code>walkthrough-d8.md</code>, screens in <code>concepts-d8/</code>) is the answer. Where a choice is really yours, it is at the end of the walkthrough as a question with options.</p></div>
+<div class="note" data-for="s-spec-intro"><label class="note-head" for="n-s-spec-intro"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC · intro</span></label><textarea class="note-ta" data-key="s-spec-intro" id="n-s-spec-intro" data-label="Preamble &amp; scope" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-the-verdict-in-ten-lines" data-ref="SPEC › The verdict in ten lines" data-label="The verdict in ten lines" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">The verdict in ten lines</span></h3>
+<div class="sec-body"><ol>
+<li><strong>The six modes are two kinds of thing pretending to be one.</strong> Write, Review, Plan and Book are views of the same manuscript; Research and Codex are other collections. One exclusive switch for both kinds makes the left and right columns change meaning six times, makes Back cross "places" that are really one text, and leaves the writer unsure whether the cursor, the scroll or a pending Plan move survives a switch. (A: F-A-01)</li>
+<li><strong>Review is a layer, not a place.</strong> It is the same text, cursor and scroll with a margin and filters. As a mode it hides a reader's note on the very paragraph you are rewriting. (A, D)</li>
+<li><strong>Proposals have no lifecycle.</strong> A suggestion stores Was/Now; edit the paragraph afterwards and Apply either fails silently or puts old text over yours. With an AI pass, readers' copies and agents, this happens every day. (B: F-B-71, D: F-D-01)</li>
+<li><strong>"Undo is one list" contradicts itself.</strong> An old notice's Undo, undoing a whole Review walk while you typed, or a Plan Apply after typing are selective reverts, which a single linear stack cannot do. (D: F-D-41, B: F-B-89)</li>
+<li><strong>The four colors fail color-blind writers.</strong> Red, green and amber dotted underlines become the same olive for about one man in twelve; people's violet lands on pending blue. Blue is also links, buttons and selection. (C: F-C-37, D: F-D-63)</li>
+<li><strong>There are no failure states.</strong> Disk full, USB pulled, crash, a file changed outside Libreto, the project open on two computers, Dropbox conflict copies, the AI offline or cut off mid-proposal: none is drawn, and "Saved 19:32" can go on saying so while nothing is saved. (B: F-B-80 to F-B-83)</li>
+<li><strong>Styles live in the wrong place and have two looks.</strong> Styles are per user but the text tagged with them belongs to the project, so a project opened elsewhere, sent, restored or written through the API refers to styles that do not exist; and each style has a working look and a print look in two vocabularies, so the screen does not predict the page. (E: F-E-01, F-E-06)</li>
+<li><strong>Book is a parameter table, not a book designer.</strong> No front matter pages, contents, running-head rules, chapter-number formats, unnumbered prologue, opener design, widows and orphans, ebook preview or layout problems list; Print, Export and Share are three doors with different options and no dialog. (E)</li>
+<li><strong>The AI path drawn contradicts the specification, and the AI-first promise is invisible.</strong> The spec ships Claude Desktop through Libreto's connector (the writer's subscription); draft 7 draws an in-app key with a € budget and an automatic pass. External agents, the owner's main ambition, never appear on screen, and there is nowhere to put the book's intent (premise, voice, rules). (F: F-AI-01 to F-AI-03)</li>
+<li><strong>Nothing motivates and nothing helps at the blank page.</strong> No goals, no progress, no empty states; a newcomer gets a gray "Chapter 1" and five empty modes. Jargon (Codex, Reveal, Pending, Dismiss, snapshot, Reference panel, "card" meaning two things) and broken conventions (green underline = done, Ctrl+K, F8, hold Alt) make the rest harder than it needs to be. (C)</li>
+</ol></div>
+<div class="note" data-for="s-spec-the-verdict-in-ten-lines"><label class="note-head" for="n-s-spec-the-verdict-in-ten-lines"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › The verdict in ten lines</span></label><textarea class="note-ta" data-key="s-spec-the-verdict-in-ten-lines" id="n-s-spec-the-verdict-in-ten-lines" data-label="The verdict in ten lines" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-where-a-writer-gets-lost-navigat" data-ref="SPEC › Where a writer gets lost (navigation)" data-label="Where a writer gets lost (navigation)" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">Where a writer gets lost (navigation)</span></h3>
+<div class="sec-body"><p>Forty-six everyday goals were walked from a resting screen (A, §2.4). 23 have an obvious door, 15 only a hover, a right-click or a status-bar item, and <strong>8 have no door at all</strong>: applying a reader's Word notes (the writer tries File ▸ Open or Import, which builds a new project), changing how chapter headings print (the look is in Book, not in Format), undoing yesterday's fix, setting a word goal, reading chapter 2 while writing chapter 7 (no split view), finding the "tasks" Plan creates (they have no home), turning the AI off (Settings has no menu entry), and naming scenes with the AI (a ⋯ menu that is drawn nowhere). Five of the eight are missing doors a normal menu bar fixes for free.</p>
+<p>Fourteen kinds of layer exist (mode, column, panel, floating chat, peek, hover card, note card, popover, sheet, dialog, window, notice, bell, Focus), and Esc, Back and focus are defined for three. Collisions are undrawn: Find over Review's buttons, a notice, a tip and the Ask button in the same bottom band, Ask opened inside Focus. Back means four different things (Back, the panel's ‹, "Back to the text", Undo's icon beside it).</p></div>
+<div class="note" data-for="s-spec-where-a-writer-gets-lost-navigat"><label class="note-head" for="n-s-spec-where-a-writer-gets-lost-navigat"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Where a writer gets lost (navigation)</span></label><textarea class="note-ta" data-key="s-spec-where-a-writer-gets-lost-navigat" id="n-s-spec-where-a-writer-gets-lost-navigat" data-label="Where a writer gets lost (navigation)" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-breaking-it" data-ref="SPEC › Breaking it" data-label="Breaking it" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">Breaking it</span></h3>
+<div class="sec-body"><p>Report B tried to break every screen. The worst: hold-<code>Alt</code> and <code>Alt</code>+click are taken by Linux window managers and Electron's menu bar, on the platform version 1 ships on; <code>Ctrl+.</code> is the IBus emoji key; <code>F8</code>/<code>F11</code> need Fn on most laptops. The 1260 px rule leaves zero pixels for the gutter, and zoom 200 % makes the page wider than the window. A Spanish book gets English curly quotes; the middle dot used to show spaces in Was/Now is a real Catalan letter. Prologue prints as "1 · Prologue"; deleting a selection across a chapter heading is undefined; "Delete…" and "Move to Discarded" contradict each other; four marks on one word show one. At scale, hundreds of notes, ten on a line, a 2,000-word note or 30 replies cannot all sit level with their lines.</p></div>
+<div class="note" data-for="s-spec-breaking-it"><label class="note-head" for="n-s-spec-breaking-it"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Breaking it</span></label><textarea class="note-ta" data-key="s-spec-breaking-it" id="n-s-spec-breaking-it" data-label="Breaking it" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-the-writer-and-accessibility" data-ref="SPEC › The writer, and accessibility" data-label="The writer, and accessibility" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">The writer, and accessibility</span></h3>
+<div class="sec-body"><p>Three personas walked whole sessions (C): a first novelist with nothing (blank page by design), a mid-career novelist importing 120,000 words with two beta readers (the import is one sentence; their Word comments on an original file have no ids to land on; the first screen is a wall of red on 400 invented names), and an older writer with low vision (no dark, sepia or high-contrast theme; gray text at 3.3:1; notices that vanish after 20 seconds fail WCAG 2.2.1; fixed 320 px columns break under 150–200 % scaling; nothing said about screen readers). The vocabulary table in C §3 O1 proposes plain words for every coined term.</p></div>
+<div class="note" data-for="s-spec-the-writer-and-accessibility"><label class="note-head" for="n-s-spec-the-writer-and-accessibility"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › The writer, and accessibility</span></label><textarea class="note-ta" data-key="s-spec-the-writer-and-accessibility" id="n-s-spec-the-writer-and-accessibility" data-label="The writer, and accessibility" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-deciding-and-going-back" data-ref="SPEC › Deciding and going back" data-label="Deciding and going back" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">Deciding and going back</span></h3>
+<div class="sec-body"><p>Report D asks for review <strong>rounds</strong> (an import, an AI pass, an agent session) with progress, finish and Revert; a <strong>list view</strong> and bulk actions when there are hundreds; readers' changes <strong>inline</strong>, per change and three-way aware (what you sent, yours, theirs), with an automatic merge where you changed different words and the AI only for a real conflict; History with <strong>scope, date and search</strong> that works without an AI, a visible <strong>Save a version…</strong>, and "Put back" for a scene deleted three weeks ago; and a clean split between <strong>Undo</strong> (the last thing here) and <strong>Revert</strong> (that older thing).</p></div>
+<div class="note" data-for="s-spec-deciding-and-going-back"><label class="note-head" for="n-s-spec-deciding-and-going-back"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Deciding and going back</span></label><textarea class="note-ta" data-key="s-spec-deciding-and-going-back" id="n-s-spec-deciding-and-going-back" data-label="Deciding and going back" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-structure-styles-and-the-book" data-ref="SPEC › Structure, styles and the book" data-label="Structure, styles and the book" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">Structure, styles and the book</span></h3>
+<div class="sec-body"><p>Report E proposes styles that belong to the project (seeded from your own set), <strong>one look</strong> per style decided by the book's theme while your writing font is a personal setting; <strong>Pages</strong> as a book designer with themes, an outline of front matter, parts and chapters, click-to-edit on the preview and a list of layout problems; one <strong>Export</strong> dialog with profiles and a separate small <strong>Print</strong> dialog; <strong>Book details</strong> and <strong>Language &amp; typography</strong> (« », the dialogue dash, hyphenation, "Capítulo"); unnumbered chapters; front and back matter as written pages in the Navigator plus generated pages switched on in Pages; and a real Word import preview. Play and Paper cannot be served by this style model in version 1: either minimal tools for them, or show them as "later".</p></div>
+<div class="note" data-for="s-spec-structure-styles-and-the-book"><label class="note-head" for="n-s-spec-structure-styles-and-the-book"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › Structure, styles and the book</span></label><textarea class="note-ta" data-key="s-spec-structure-styles-and-the-book" id="n-s-spec-structure-styles-and-the-book" data-label="Structure, styles and the book" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-the-ai-and-the-api" data-ref="SPEC › The AI and the API" data-label="The AI and the API" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">The AI and the API</span></h3>
+<div class="sec-body"><p>Report F proposes connecting through the writer's Claude subscription first (Claude Desktop with Libreto's connector, as the specification says) and an API key as the advanced option; three levels instead of four (Off · When I ask · Also on its own, with one checkbox per automatic behavior and its estimated cost); the session-start catch-up <strong>offered</strong>, not silent; a <strong>Brief</strong> (premise, audience, voice, length, rules, threads, what the AI may do in this book) at the top of the Codex, sent with every request; stored scene summaries refreshed only when the text changes, so the AI reads deltas; an agent chip, per-session permissions, drafts accepted whole, edits grouped as a review round and "Revert this whole session"; an AI activity sheet; and a task-shaped tool set for agents (orient, read with a token budget, propose, check), with every edit addressed by paragraph and the hash of the text it was based on, so nothing stale is ever applied.</p></div>
+<div class="note" data-for="s-spec-the-ai-and-the-api"><label class="note-head" for="n-s-spec-the-ai-and-the-api"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › The AI and the API</span></label><textarea class="note-ta" data-key="s-spec-the-ai-and-the-api" id="n-s-spec-the-ai-and-the-api" data-label="The AI and the API" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-what-draft-8-changes-in-one-para" data-ref="SPEC › What draft 8 changes, in one paragraph" data-label="What draft 8 changes, in one paragraph" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">What draft 8 changes, in one paragraph</span></h3>
+<div class="sec-body"><p><strong>No modes.</strong> One window: the Navigator on the left with <strong>Book · Codex · Research</strong>, the open document in the center, a side panel on the right that shows one thing (reference, the Review margin, the Ask conversation, or Book layout). The manuscript has three <strong>views</strong>, Text, Board and Pages, in a switch that only appears when the manuscript is open. <strong>Review is a toggle</strong> beside the same text. Marks get <strong>shapes</strong> (wavy, dashed, thin, tint) so color is never the only cue; the words become conventional (Accept, Reject, Fixed for you, Leave as is, versions). Undo and <strong>Revert</strong> are separate. Proposals go <strong>out of date</strong> instead of overwriting. Failure states, goals, empty states, themes, a Brief, the agent's presence and the book designer are drawn. The fallback with four modes (Write, Plan, Notebook, Book) is drawn too, so you can compare the two cuts.</p></div>
+<div class="note" data-for="s-spec-what-draft-8-changes-in-one-para"><label class="note-head" for="n-s-spec-what-draft-8-changes-in-one-para"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › What draft 8 changes, in one paragraph</span></label><textarea class="note-ta" data-key="s-spec-what-draft-8-changes-in-one-para" id="n-s-spec-what-draft-8-changes-in-one-para" data-label="What draft 8 changes, in one paragraph" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+<article class="sec l2" id="s-spec-the-full-reports" data-ref="SPEC › The full reports" data-label="The full reports" data-part="Critique D7">
+<h3 class="sec-h"><span class="chip">▸</span><span class="sec-title">The full reports</span></h3>
+<div class="sec-body"><table>
+<thead>
+<tr>
+<th>Report</th>
+<th>Lens</th>
+<th>Findings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="critique-d7/A-navigation.md">A</a></td>
+<td>Information architecture and navigation: the map of every place and layer, 46 goals with their steps</td>
+<td>~70</td>
+</tr>
+<tr>
+<td><a href="critique-d7/B-break-it.md">B</a></td>
+<td>Breaking it: long names, sizes, keys, languages, scale, failures, structure edge cases</td>
+<td>~115</td>
+</tr>
+<tr>
+<td><a href="critique-d7/C-writer.md">C</a></td>
+<td>The writer's experience, a benchmark of 16 tools, accessibility measured on the CSS</td>
+<td>~110</td>
+</tr>
+<tr>
+<td><a href="critique-d7/D-review.md">D</a></td>
+<td>Review, readers' copies, History, Undo, notices, AI proposals</td>
+<td>~80</td>
+</tr>
+<tr>
+<td><a href="critique-d7/E-book.md">E</a></td>
+<td>Structure, styles, Book, print, export, import, Play and Paper</td>
+<td>~80</td>
+</tr>
+<tr>
+<td><a href="critique-d7/F-ai-api.md">F</a></td>
+<td>The AI in the app, token economy, the API for agents writing a whole book</td>
+<td>~70</td>
+</tr>
+</tbody>
+</table></div>
+<div class="note" data-for="s-spec-the-full-reports"><label class="note-head" for="n-s-spec-the-full-reports"><span class="note-ico" aria-hidden="true">✎</span><span class="note-label">Your note</span><span class="note-ref">SPEC › The full reports</span></label><textarea class="note-ta" data-key="s-spec-the-full-reports" id="n-s-spec-the-full-reports" data-label="The full reports" data-part="Critique D7" rows="1" placeholder="Add a note on this section…"></textarea></div>
+</article>
+</section>
+</div>
+
+<input type="file" id="file-import" class="hidden-input" accept=".md,.markdown,.json,text/markdown,application/json">
+
+<div class="modal" id="modal">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Your notes</h3>
+    <p>Downloaded as a Markdown file. You can also copy the text below and paste it back.</p>
+    <textarea id="modal-ta" readonly></textarea>
+    <div class="modal-actions">
+      <button class="btn primary" id="modal-copy">Copy</button>
+      <button class="btn" id="modal-dl">Download again</button>
+      <button class="btn" id="modal-close">Close</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>var SPEC_SEED_NOTES={};</script>
+<script>
+(function(){
+  var NS = 'libreto-critique-d7-v1:';
+  // A reviewed copy (--bake) shows only the notes it was built with: nothing from
+  // this browser's storage, nothing editable.
+  var BAKED = false;
+  var tas = Array.prototype.slice.call(document.querySelectorAll('.note-ta'));
+
+  function autoGrow(t){t.style.height='auto';t.style.height=(t.scrollHeight)+'px';}
+  function setFilled(t){var box=t.closest('.note');if(box){box.classList.toggle('filled',t.value.trim()!=='');}}
+  function updateCount(){
+    var n=0;tas.forEach(function(t){if(t.value.trim()!=='')n++;});
+    var el=document.getElementById('count');if(el){el.textContent=n+' / '+tas.length+' notes';}
+    return n;
+  }
+  var lsOK=true,dirty=false;
+  try{localStorage.setItem('__vs__','1');localStorage.removeItem('__vs__');}catch(e){lsOK=false;}
+  var WARN='⚠ Not saving — tap Save / Export';
+  function nowStamp(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+  function setState(txt,cls){var el=document.getElementById('savestate');if(el){el.textContent=txt;el.className='savestate '+(cls||'');}}
+  // An edit still inside the 350 ms debounce is saved on the way out, so closing
+  // the page right after typing (no blur) no longer loses it (#541).
+  function flushSaves(){Object.keys(pending).forEach(function(k){clearTimeout(saveTimers[k]);save(pending[k]);});pending={};}
+  window.addEventListener('pagehide',flushSaves);
+  window.addEventListener('beforeunload',function(e){flushSaves();if(!lsOK&&dirty){e.preventDefault();e.returnValue='';}});
+
+  var saveTimers={},pending={};
+  function save(t){
+    if(!lsOK){dirty=true;setState(WARN,'warn');return;}
+    var k=NS+t.dataset.key;
+    try{
+      // An empty note is stored as "", not removed: a missing key means "never
+      // touched" and the loader falls back to the seed, so removing it brought a
+      // seeded note back after the reviewer had deliberately cleared it (#477).
+      localStorage.setItem(k,t.value.trim()===''?'':t.value);
+      // A block note keeps its quote beside it, so it still says what it was
+      // about after its paragraph changes (export and re-seed read `<key>~q`).
+      if(t.closest('.bnote')){localStorage.setItem(k+'~q',t.dataset.quote||'');}
+      dirty=true;setState('✓ Saved '+nowStamp(),'ok');
+    }catch(e){dirty=true;lsOK=false;document.getElementById('warnbar').style.display='block';setState(WARN,'warn');}
+  }
+  var SEED=(typeof SPEC_SEED_NOTES!=='undefined')?SPEC_SEED_NOTES:{};
+  function wire(t){
+    // Seed first, then let storage override it. With the read inside the same
+    // try as the seed, a throwing localStorage skipped the seed too and the
+    // reader came up empty exactly when it could save nothing (#477).
+    if(Object.prototype.hasOwnProperty.call(SEED,t.dataset.key)){
+      var sv=SEED[t.dataset.key];if(typeof sv==='string'){t.value=sv;}}
+    if(!BAKED){try{var v=localStorage.getItem(NS+t.dataset.key);if(v!=null){t.value=v;}}catch(e){}}
+    autoGrow(t);setFilled(t);
+    t.addEventListener('input',function(){
+      autoGrow(t);setFilled(t);updateCount();dirty=true;
+      var k=t.dataset.key;pending[k]=t;
+      clearTimeout(saveTimers[k]);
+      saveTimers[k]=setTimeout(function(){delete pending[k];save(t);},350);
+    });
+    t.addEventListener('blur',function(){
+      save(t);
+      // An emptied block note folds away again; its ✎ stays to reopen it.
+      var box=t.closest('.bnote');
+      if(box&&t.value.trim()===''){closeBlock(box);}
+    });
+  }
+  tas.forEach(wire);
+
+  // ---- Block notes: a ✎ beside every paragraph, list item and table. The key is
+  // the section id plus a hash of the block's text, so a note stays with its
+  // paragraph when others are added around it; `<key>~q` carries the quoted text.
+  function hash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0;}return (h>>>0).toString(36);}
+  function plain(el){var c=el.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('.bn-btn,.bnote,ul,ol'),function(x){x.remove();});
+    return c.textContent.replace(/\s+/g,' ').trim();}
+  function quoteOf(text){return text.length>90?text.slice(0,87)+'…':text;}
+  var hosts={},blockBtn={};
+  function hostsOf(body){
+    var out=[];
+    Array.prototype.forEach.call(body.children,function(el){
+      var tag=el.tagName;
+      if(tag==='UL'||tag==='OL'){Array.prototype.forEach.call(el.querySelectorAll('li'),function(li){out.push(li);});return;}
+      if(tag==='HR')return;
+      if(tag==='TABLE'||tag==='PRE'||tag==='FIGURE'){
+        // These scroll sideways; the ✎ goes on a wrapper so it does not scroll away.
+        var w=document.createElement('div');el.parentNode.insertBefore(w,el);w.appendChild(el);el=w;}
+      out.push(el);
+    });
+    return out;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('article.sec'),function(art){
+    var body=art.querySelector(':scope > .sec-body');if(!body)return;
+    var seen={};
+    hostsOf(body).forEach(function(el){
+      var text=plain(el);if(text==='')return;
+      var h=hash(text);seen[h]=(seen[h]||0)+1;
+      var key=art.id+'~'+h+(seen[h]>1?'-'+seen[h]:'');
+      el.classList.add('bn-host');el.dataset.bkey=key;el.dataset.quote=quoteOf(text);
+      var b=document.createElement('button');
+      b.type='button';b.className='bn-btn';b.textContent='✎';
+      b.title='Note on this';b.setAttribute('aria-label','Add a note on this point');
+      b.addEventListener('click',function(e){e.preventDefault();openBlock(key,true);});
+      el.appendChild(b);hosts[key]=el;blockBtn[key]=b;
+    });
+  });
+  // A key with no `~` is a section note whose section is gone; it goes to the
+  // unplaced area, never into whatever element happens to share its id (#541).
+  function openBlock(key,focus,quote){
+    var t=null;tas.forEach(function(x){if(x.dataset.key===key)t=x;});
+    if(!t){
+      var host=hosts[key],art=key.indexOf('~')<0?null:document.getElementById(key.split('~')[0]);
+      if(!host&&!art)art=unplaced();
+      var q=host?host.dataset.quote:(quote||'');
+      var box=document.createElement('div');box.className='note bnote';
+      var head=document.createElement('label');head.className='note-head';
+      var ico=document.createElement('span');ico.className='note-ico';ico.textContent='✎';
+      var lab=document.createElement('span');lab.className='note-label';lab.textContent='Your note';
+      var ref=document.createElement('span');ref.className='note-ref';
+      ref.textContent=host?'¶ '+q:(q?'¶ (text changed) '+q:'¶ text changed since this note');
+      head.appendChild(ico);head.appendChild(lab);head.appendChild(ref);
+      t=document.createElement('textarea');t.className='note-ta';t.rows=1;
+      t.placeholder='Note on this point…';t.dataset.key=key;t.dataset.quote=q;
+      if(art){t.dataset.label=art.dataset.label||'';t.dataset.part=art.dataset.part||'';t.dataset.ref=art.dataset.ref||'';}
+      box.appendChild(head);box.appendChild(t);
+      if(host&&host.tagName==='LI'){host.appendChild(box);}
+      else if(host){host.parentNode.insertBefore(box,host.nextSibling);}
+      else{var sn=art.querySelector(':scope > .note');art.insertBefore(box,sn);}
+      tas.push(t);wire(t);
+      if(blockBtn[key])blockBtn[key].classList.add('has');
+      updateCount();
+    }
+    if(focus)t.focus();
+    return t;
+  }
+  // Notes whose section no longer exists (a heading renamed or removed) are never
+  // dropped: they collect here, after the document, and still export.
+  function unplaced(){
+    var u=document.getElementById('bn-unplaced');
+    if(!u){u=document.createElement('article');u.id='bn-unplaced';u.className='sec l2';
+      u.dataset.label='Unplaced notes';u.dataset.ref='unplaced';u.dataset.part='Unplaced notes';
+      var h=document.createElement('h3');h.className='sec-h';h.textContent='Unplaced notes — their section changed';
+      u.appendChild(h);var parts=document.querySelectorAll('section.part');
+      var last=parts[parts.length-1];(last||document.body).appendChild(u);}
+    return u;
+  }
+  function closeBlock(box){
+    var t=box.querySelector('.note-ta');var i=tas.indexOf(t);if(i>=0)tas.splice(i,1);
+    if(blockBtn[t.dataset.key])blockBtn[t.dataset.key].classList.remove('has');
+    box.remove();updateCount();
+  }
+  // Reopen every block note that has text, from the seed or this browser —
+  // including one whose paragraph changed, which lands at the end of its section.
+  (function(){
+    var keys={};
+    Object.keys(SEED).forEach(function(k){keys[k]=1;});
+    if(!BAKED){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+      if(k&&k.indexOf(NS)===0)keys[k.slice(NS.length)]=1;}}catch(e){}}
+    Object.keys(keys).sort().forEach(function(k){
+      if(/~q$/.test(k))return;
+      var v=null;
+      if(!BAKED){try{v=localStorage.getItem(NS+k);}catch(e){}}
+      if(v==null&&typeof SEED[k]==='string')v=SEED[k];
+      var q=null;try{q=localStorage.getItem(NS+k+'~q');}catch(e){}
+      if(q==null&&typeof SEED[k+'~q']==='string')q=SEED[k+'~q'];
+      if(v&&v.trim()!=='')openBlock(k,false,q||'');
+    });
+  })();
+  // Reviewed copy: each note becomes its text at full length, and an empty field goes.
+  if(BAKED){
+    document.body.classList.add('baked');
+    tas.forEach(function(t){
+      var box=t.closest('.note');
+      if(t.value.trim()===''){box.remove();return;}
+      var d=document.createElement('div');d.className='note-text';d.textContent=t.value;
+      t.replaceWith(d);box.classList.add('filled');
+      var lab=box.querySelector('.note-label');if(lab)lab.textContent='Review note';
+    });
+    return;
+  }
+  updateCount();
+  if(lsOK){setState('✓ Auto-saving','ok');}else{document.getElementById('warnbar').style.display='block';setState(WARN,'warn');}
+
+  function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1900);}
+  function pad(n){return n<10?'0'+n:''+n;}
+  function today(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+  function stamp(){var d=new Date();return today()+'-'+pad(d.getHours())+pad(d.getMinutes());}
+  // Named like the reader, <repo>-<doc>-v<N>-<YYYY-MM-DD-HHMM>-notes.md, stamped at export.
+  function exportName(){return 'libreto-critique-d7-v1-'+stamp()+'-notes.md';}
+
+  function buildExport(){
+    var byPart={},order=[],data={},n=0;
+    // Document order, so a block note sits beside its section's own note.
+    tas.slice().sort(function(a,b){return a.compareDocumentPosition(b)&4?-1:1;}).forEach(function(t){
+      var v=t.value.trim();if(v==='')return;n++;
+      data[t.dataset.key]=t.value;
+      if(t.closest('.bnote')){data[t.dataset.key+'~q']=t.dataset.quote||'';}
+      var part=t.dataset.part||'Other';
+      if(!byPart[part]){byPart[part]=[];order.push(part);}
+      byPart[part].push({label:t.dataset.label,ref:t.dataset.ref||keyFromDom(t.dataset.key,t),
+                         quote:t.closest('.bnote')?(t.dataset.quote||''):null,note:t.value});
+    });
+    var lines=['# Specification notes','','_Exported '+today()+' · '+n+' note'+(n===1?'':'s')+'._','',
+      '> Send this file back to continue the review. Notes are embedded as data at the bottom','> so importing this file restores them in the reader.',''];
+    order.forEach(function(part){
+      lines.push('## '+part,'');
+      byPart[part].forEach(function(it){
+        lines.push('**'+it.label+'**  `'+it.ref+'`');
+        if(it.quote!==null){lines.push(it.quote?'> ¶ _“'+it.quote+'”_':'> ¶ _(text changed since this note)_','>');}
+        it.note.split('\n').forEach(function(ln){lines.push('> '+ln);});
+        lines.push('');
+      });
+    });
+    // Which page wrote this, so an import into a different page can say so.
+    lines.push('<!-- SPEC-NOTES-DOC libreto-critique-d7-v1 -->');
+    lines.push('<!-- SPEC-NOTES-DATA');
+    lines.push(JSON.stringify(data));
+    lines.push('-->');
+    return{text:lines.join('\n'),n:n};
+  }
+  function keyFromDom(domkey,t){var box=t.closest('.note');var r=box?box.querySelector('.note-ref'):null;return r?r.textContent:domkey;}
+
+  function download(name,text){
+    try{var blob=new Blob([text],{type:'text/markdown'});var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');a.href=url;a.download=name;
+        document.body.appendChild(a);a.click();
+        setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);return true;}catch(e){return false;}
+  }
+
+  var modal=document.getElementById('modal');
+  var modalTa=document.getElementById('modal-ta');
+  // A real dialog: focus moves in and comes back, and the page behind is inert
+  // so Tab cannot wander off under the overlay (#541).
+  var modalReturn=null;
+  function setInert(on){Array.prototype.forEach.call(document.body.children,function(c){if(c!==modal)c.inert=on;});}
+  function openModal(text){modalTa.value=text;modalReturn=document.activeElement;
+    modal.classList.add('open');setInert(true);document.getElementById('modal-copy').focus();}
+  function closeModal(){if(!modal.classList.contains('open'))return;
+    modal.classList.remove('open');setInert(false);
+    if(modalReturn&&modalReturn.focus)modalReturn.focus();modalReturn=null;}
+
+  document.getElementById('btn-export').addEventListener('click',function(){
+    var r=buildExport();
+    if(r.n===0){toast('No notes yet — add some first.');return;}
+    var saved=download(exportName(),r.text);openModal(r.text);
+    // download() returning only means the download was REQUESTED; a browser can
+    // still block or drop it. So `dirty` — what arms the unload warning — is
+    // cleared only on a confirmed copy: the clipboard promise fulfilling.
+    var cp=null;
+    try{if(navigator.clipboard&&navigator.clipboard.writeText){cp=navigator.clipboard.writeText(r.text);}}catch(e){cp=null;}
+    if(cp&&typeof cp.then==='function'){cp.then(function(){dirty=false;setState('✓ Copied to clipboard '+nowStamp(),'ok');},function(){});}
+    if(!saved){setState('⚠ Download blocked — copy the notes from this box','warn');
+               toast('Download blocked — copy the notes before leaving');return;}
+    setState('Download requested '+nowStamp(),'ok');
+    toast('Download requested — '+r.n+' note'+(r.n===1?'':'s'));
+  });
+
+  document.getElementById('modal-copy').addEventListener('click',function(){
+    // Success is reported only once a copy actually happened: the legacy
+    // execCommand returned true, or the clipboard promise fulfilled. Claiming it
+    // before writeText settled told the reviewer a rejected copy had worked (#477).
+    function report(ok){if(ok){dirty=false;setState('✓ Copied to clipboard '+nowStamp(),'ok');}
+                        toast(ok?'Copied to clipboard':'Select the text and copy');}
+    modalTa.select();var legacy=false;try{legacy=document.execCommand('copy')===true;}catch(e){}
+    if(legacy){report(true);return;}
+    var p=null;
+    try{if(navigator.clipboard&&navigator.clipboard.writeText){p=navigator.clipboard.writeText(modalTa.value);}}catch(e){p=null;}
+    if(p&&typeof p.then==='function'){p.then(function(){report(true);},function(){report(false);});}
+    else{report(false);}
+  });
+  document.getElementById('modal-dl').addEventListener('click',function(){download(exportName(),modalTa.value);toast('Download requested');});
+  document.getElementById('modal-close').addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  modal.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+  // buildExport only ever writes strings, but an import takes whatever the file
+  // holds: an object arrives as "[object Object]", an array joins on commas,
+  // null becomes "null" — each then persisted over notes the reviewer wrote.
+  // The realistic trigger is a hand-edited or truncated export, not an attack;
+  // it just fails in the least useful way, silently and destructively. Skip
+  // anything that is not a string and say how many were skipped.
+  function applyData(obj){
+    var applied=0,skipped=0;
+    // Every note gets a textarea first — including a section note whose section
+    // is gone, which lands under "Unplaced notes" instead of being dropped (#541).
+    Object.keys(obj).forEach(function(k){
+      if(!/~q$/.test(k)&&typeof obj[k]==='string'&&obj[k].trim()!==''){
+        openBlock(k,false,typeof obj[k+'~q']==='string'?obj[k+'~q']:'');}
+    });
+    tas.forEach(function(t){
+      if(!Object.prototype.hasOwnProperty.call(obj,t.dataset.key))return;
+      var v=obj[t.dataset.key];
+      if(typeof v!=='string'){skipped++;return;}
+      t.value=v;save(t);autoGrow(t);setFilled(t);applied++;
+    });
+    updateCount();return{applied:applied,skipped:skipped};
+  }
+  document.getElementById('file-import').addEventListener('change',function(e){
+    var f=e.target.files[0];if(!f)return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      var txt=String(rd.result||'');var obj=null;
+      // Last LINE-ANCHORED marker. A plain lastIndexOf lands inside the JSON
+      // string of a note that mentions the marker, and the import then reads as
+      // a corrupt file — the same defect the Python seeder had (#239).
+      var mk=/^[ \t]*<!--[ \t]*SPEC-NOTES-DATA/gm,mm=null,mx;
+      while((mx=mk.exec(txt))!==null){mm=mx;}
+      try{
+        if(mm){var after=txt.slice(mm.index+mm[0].length);var jstart=after.indexOf('{');var jend=after.lastIndexOf('}');
+                  if(jstart>=0&&jend>jstart){obj=JSON.parse(after.slice(jstart,jend+1));}}
+        else{obj=JSON.parse(txt);}
+      }catch(err){obj=null;}
+      if(!obj){toast('Could not read notes from that file');return;}
+      var dm=/^<!-- SPEC-NOTES-DOC (\S+) -->/m.exec(txt);
+      if(dm&&dm[1]!=='libreto-critique-d7-v1'&&
+         !confirm('That file holds notes for '+dm[1]+', not for this page (libreto-critique-d7-v1). Import anyway?'))return;
+      var r=applyData(obj);
+      toast('Imported '+r.applied+' note'+(r.applied===1?'':'s')+
+            (r.skipped?' ('+r.skipped+' skipped — not text)':''));
+    };
+    rd.readAsText(f);e.target.value='';
+  });
+  document.getElementById('btn-import').addEventListener('click',function(){document.getElementById('file-import').click();});
+})();
+
+// ---- Pictures and SVG diagrams zoom in place, never over the page. Tap or click one: it
+// widens to the window (a wide screen shows more of it), grows, and pushes the text below it down, so scrolling on reaches the note field
+// at its normal size. Pinch, Ctrl+wheel or a trackpad pinch on the picture zooms the
+// picture only; one finger (or a mouse drag) pans it. Tap again: back to fit.
+(function(){
+  var FIRST=2.5,MAX=12;
+  Array.prototype.forEach.call(document.querySelectorAll('.sec-body img,.sec-body svg'),function(img){
+    if(img.parentNode.closest('svg,button'))return;
+    var wrap=document.createElement('div');wrap.className='zwrap';
+    var bar=document.createElement('div');bar.className='zbar';
+    bar.innerHTML='<button type="button" data-z="out" aria-label="Zoom out">−</button>'+
+      '<span class="zpct"></span><button type="button" data-z="in" aria-label="Zoom in">+</button>'+
+      '<button type="button" data-z="fit">Fit</button>'+
+      '<span class="zhint">tap the picture to zoom out · pinch or Ctrl+wheel zooms it</span>';
+    var box=document.createElement('div');box.className='zbox';
+    img.parentNode.insertBefore(wrap,img);wrap.appendChild(bar);wrap.appendChild(box);box.appendChild(img);
+    img.tabIndex=0;img.title='Tap to zoom';
+    var s=1;
+    // s is relative to the column; zoomed, the frame spans the window less a 16px gutter.
+    function col(){return wrap.parentNode.clientWidth;}
+    function span(){var W=document.documentElement.clientWidth-32;
+      wrap.style.width=W+'px';wrap.style.marginLeft=(16-wrap.parentNode.getBoundingClientRect().left)+'px';}
+    // Scale to ns, keeping the point under (cx,cy) where it was on screen.
+    function set(ns,cx,cy){
+      ns=Math.max(1,Math.min(MAX,ns));
+      var r=img.getBoundingClientRect(),fx=(cx-r.left)/r.width,fy=(cy-r.top)/r.height;
+      s=ns;wrap.classList.toggle('on',s>1);
+      if(s>1)span();else{wrap.style.width='';wrap.style.marginLeft='';}
+      img.style.width=s>1?(col()*s)+'px':'';
+      var r2=img.getBoundingClientRect();
+      box.scrollLeft+=r2.left+fx*r2.width-cx;
+      window.scrollBy(0,r2.top+fy*r2.height-cy);
+      bar.querySelector('.zpct').textContent=Math.round(s*100)+'%';
+    }
+    function mid(){var r=box.getBoundingClientRect();
+      return[r.left+r.width/2,(Math.max(r.top,0)+Math.min(r.bottom,innerHeight))/2];}
+    // First tap: the window's full width on a wide screen; FIRST on a phone, where the column already is the window.
+    function toggle(cx,cy){var r=(document.documentElement.clientWidth-32)/col();set(s>1?1:(r>1.5?r:FIRST),cx,cy);}
+    var drag=null,moved=false;
+    img.addEventListener('click',function(e){if(moved){moved=false;return;}toggle(e.clientX,e.clientY);});
+    img.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();var m=mid();toggle(m[0],m[1]);}});
+    bar.addEventListener('click',function(e){var z=e.target.dataset&&e.target.dataset.z;if(!z)return;var m=mid();
+      set(z==='in'?s*1.5:z==='out'?s/1.5:1,m[0],m[1]);});
+    box.addEventListener('wheel',function(e){if(!e.ctrlKey)return;e.preventDefault();
+      set(s*Math.exp(-Math.max(-50,Math.min(50,e.deltaY))*0.01),e.clientX,e.clientY);},{passive:false});
+    // Two fingers on the picture zoom the picture; the page's own pinch is off here.
+    var pin=null;
+    function dist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
+    box.addEventListener('touchstart',function(e){if(e.touches.length===2)pin={d:dist(e.touches),s:s};},{passive:true});
+    box.addEventListener('touchmove',function(e){if(!pin||e.touches.length!==2)return;e.preventDefault();
+      set(pin.s*dist(e.touches)/pin.d,(e.touches[0].clientX+e.touches[1].clientX)/2,(e.touches[0].clientY+e.touches[1].clientY)/2);},{passive:false});
+    box.addEventListener('touchend',function(e){if(e.touches.length<2)pin=null;});
+    // A mouse drag pans a zoomed picture: sideways in its frame, up and down the page.
+    img.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse'||s===1)return;
+      e.preventDefault();drag=[e.clientX,e.clientY];moved=false;});
+    addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-drag[0],dy=e.clientY-drag[1];
+      if(Math.abs(dx)+Math.abs(dy)>4)moved=true;box.scrollLeft-=dx;window.scrollBy(0,-dy);drag=[e.clientX,e.clientY];});
+    addEventListener('pointerup',function(){drag=null;});
+    addEventListener('resize',function(){if(s>1){wrap.style.marginLeft='';span();img.style.width=(col()*s)+'px';}});
+  });
+})();
+</script>
+</body>
+</html>
