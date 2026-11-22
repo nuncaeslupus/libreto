@@ -1,6 +1,6 @@
 # Libreto — Specification
 
-> Readable copy of the specification: the document and its pictures. Generated 2026-11-18. The annotatable version is [`libreto-screens-d8-v1-2026-11-18-0529-reader.html`](libreto-screens-d8-v1-2026-11-18-0529-reader.html).
+> Readable copy of the specification: the document and its pictures. Generated 2026-11-22. The annotatable version is [`libreto-screens-d8-v1-2026-11-22-1701-reader.html`](libreto-screens-d8-v1-2026-11-22-1701-reader.html).
 
 ## Preamble & scope
 
@@ -52,7 +52,7 @@ Four ways back, and each does one thing. Esc closes the innermost thing in front
 
 **Changed from draft 7:** new page. Draft 7 had six modes and no single picture of where things live; the navigation critique (A-01, A-02, A-12) asked for one map and for one meaning of Back, Esc and Undo.
 
-![The map of the whole app](libreto-screens-d8-v1-2026-11-18-0529-img/01-s00-the-map-of-the-whole-app.jpg)
+![The map of the whole app](libreto-screens-d8-v1-2026-11-22-1701-img/01-s00-the-map-of-the-whole-app.jpg)
 
 ## S01 · Start
 
@@ -64,7 +64,7 @@ The right column holds Recent projects (each with its look), "Explore a sample b
 
 **Changed from draft 7:** Play and Paper are visible but honest ("later") instead of live choices; language of the book, an optional goal, the sample book and the import door are new; the long-title rule is drawn (critique B).
 
-![Start](libreto-screens-d8-v1-2026-11-18-0529-img/02-s01-start.jpg)
+![Start](libreto-screens-d8-v1-2026-11-22-1701-img/02-s01-start.jpg)
 
 ## S02 · The empty first chapter
 
@@ -76,7 +76,7 @@ The status bar says "0 words · Saved": nothing is missing and nothing is lost, 
 
 **Changed from draft 7:** the empty chapter is new. Draft 7 dropped a new writer into a blank page with no way in except knowing the modes (critique C).
 
-![The empty first chapter](libreto-screens-d8-v1-2026-11-18-0529-img/03-s02-the-empty-first-chapter.jpg)
+![The empty first chapter](libreto-screens-d8-v1-2026-11-22-1701-img/03-s02-the-empty-first-chapter.jpg)
 
 ## S03 · Write, the first minute
 
@@ -90,7 +90,7 @@ The status bar shows the style at the cursor, words against today's goal (the ri
 
 **Changed from draft 7:** no mode switch, Undo arrows or bell; marks differ by shape (wavy, dashed, thin solid, tint); notes show as a tint plus a bubble; buttons say Accept, Reject, Undo, Leave as is.
 
-![Write, the first minute](libreto-screens-d8-v1-2026-11-18-0529-img/04-s03-write-the-first-minute.jpg)
+![Write, the first minute](libreto-screens-d8-v1-2026-11-22-1701-img/04-s03-write-the-first-minute.jpg)
 
 ## S04 · The marks, up close
 
@@ -102,7 +102,7 @@ The last card is for a change you cannot see. When Marta turns a straight apostr
 
 **Changed from draft 7:** four colors with dotted underlines became four shapes (critique C accessibility); the color-blind check, the stack for many things on one word and the look-alike card are new.
 
-![The marks, up close](libreto-screens-d8-v1-2026-11-18-0529-img/05-s04-the-marks-up-close.jpg)
+![The marks, up close](libreto-screens-d8-v1-2026-11-22-1701-img/05-s04-the-marks-up-close.jpg)
 
 ## S05 · Coming back
 
@@ -116,7 +116,7 @@ After a long gap the same card says how long it has been ("Sunday Nov 8 · 10 da
 
 **Changed from draft 7:** a card with Where you were, the goal and an offered catch-up replaces the bare notice; the bell is gone, and the long-gap case is drawn (critique C, F).
 
-![Coming back](libreto-screens-d8-v1-2026-11-18-0529-img/06-s05-coming-back.jpg)
+![Coming back](libreto-screens-d8-v1-2026-11-22-1701-img/06-s05-coming-back.jpg)
 
 ## S06 · The Navigator on Book
 
@@ -128,7 +128,7 @@ Resting the mouse between two rows shows a blue line and a small +. Its menu off
 
 **Changed from draft 7:** the section switch, Front and Back groups, unnumbered chapters, clamped titles and pinned Discarded and Unplaced are new; the + offers Unnumbered chapter (critique A, E).
 
-![The Navigator on Book](libreto-screens-d8-v1-2026-11-18-0529-img/07-s06-the-navigator-on-book.jpg)
+![The Navigator on Book](libreto-screens-d8-v1-2026-11-22-1701-img/07-s06-the-navigator-on-book.jpg)
 
 ## S07 · The Navigator on Codex, Research, and a filter
 
@@ -140,7 +140,7 @@ On Book, typing in the filter replaces the list with what matches: titles and te
 
 **Changed from draft 7:** Codex and Research are sections of one Navigator rather than modes; the Brief and Threads lead Codex; the filter state is explicit about what it locks (critique A).
 
-![The Navigator on Codex, Research, and a filter](libreto-screens-d8-v1-2026-11-18-0529-img/08-s07-the-navigator-on-codex-research-and-a-filter.jpg)
+![The Navigator on Codex, Research, and a filter](libreto-screens-d8-v1-2026-11-22-1701-img/08-s07-the-navigator-on-codex-research-and-a-filter.jpg)
 
 ## S08 · Scene breaks and structure edits
 
@@ -152,7 +152,7 @@ A paste that contains headings could start many chapters at once. Libreto pastes
 
 **Changed from draft 7:** notices say Undo or Revert and state counts; the delete notice offers Discarded; the many-chapter paste is a case of its own; breaks accept and reject like any suggestion (critique B).
 
-![Scene breaks and structure edits](libreto-screens-d8-v1-2026-11-18-0529-img/09-s08-scene-breaks-and-structure-edits.jpg)
+![Scene breaks and structure edits](libreto-screens-d8-v1-2026-11-22-1701-img/09-s08-scene-breaks-and-structure-edits.jpg)
 
 ## S09 · Styles
 
@@ -164,7 +164,7 @@ Styles belong to the book, so it prints the same anywhere; "Save to my styles" a
 
 **Changed from draft 7:** Emphasis and Strong are labeled Italic and Bold; styles are per book with Save to my styles; the dialog uses face roles and size steps, and warns about look-alikes; free text colors are gone (critique E).
 
-![Styles](libreto-screens-d8-v1-2026-11-18-0529-img/10-s09-styles.jpg)
+![Styles](libreto-screens-d8-v1-2026-11-22-1701-img/10-s09-styles.jpg)
 
 ## S10 · Ask while typing
 
@@ -176,7 +176,7 @@ With no AI connected there is no AI actions group, and the last row is gray and 
 
 **Changed from draft 7:** the Do group stays but the question row is no longer always preselected (it was, whenever an AI was connected, so Enter on a short search asked the AI instead of going); AI actions show their cost (F-B).
 
-![Ask while typing](libreto-screens-d8-v1-2026-11-18-0529-img/11-s10-ask-while-typing.jpg)
+![Ask while typing](libreto-screens-d8-v1-2026-11-22-1701-img/11-s10-ask-while-typing.jpg)
 
 ## S11 · Ask, a conversation
 
@@ -188,7 +188,7 @@ Every suggestion stores the text it was based on. If that text has changed since
 
 **Changed from draft 7:** the conversation is docked, not floating, and no longer hides the Reference panel (A, F); proposals gained a lifecycle and the Out of date state (D-12); the context strip and per-answer cost are new (F-3); Take proposed/Keep mine became Accept/Reject/Edit.
 
-![Ask, a conversation](libreto-screens-d8-v1-2026-11-18-0529-img/12-s11-ask-a-conversation.jpg)
+![Ask, a conversation](libreto-screens-d8-v1-2026-11-22-1701-img/12-s11-ask-a-conversation.jpg)
 
 ## S12 · Quick look and the side panel
 
@@ -200,7 +200,7 @@ A link to the text moves the page and Back returns; a link to another entry move
 
 **Changed from draft 7:** "peek" is now quick look and opens with Ctrl+click, not Alt+click, which Linux desktops take (C); the panel also holds research topics and read-only chapters, replacing a separate beside-the-text screen (A, N12).
 
-![Quick look and the side panel](libreto-screens-d8-v1-2026-11-18-0529-img/13-s12-quick-look-and-the-side-panel.jpg)
+![Quick look and the side panel](libreto-screens-d8-v1-2026-11-22-1701-img/13-s12-quick-look-and-the-side-panel.jpg)
 
 ## S13 · Show names and styles
 
@@ -210,7 +210,7 @@ Provenance is shown the same quiet way. A sentence that the AI wrote, that you a
 
 **Changed from draft 7:** was "Hold Alt"; now a toggle with a plain name, tints instead of underlines under names so marks stay unambiguous, color-blind safe by shape (C-10), and AI provenance as a hatched bar (D-16, F-14).
 
-![Show names and styles](libreto-screens-d8-v1-2026-11-18-0529-img/14-s13-show-names-and-styles.jpg)
+![Show names and styles](libreto-screens-d8-v1-2026-11-22-1701-img/14-s13-show-names-and-styles.jpg)
 
 ## S14 · Everything open, the text in the middle
 
@@ -220,7 +220,7 @@ The inset is the honest version at 1280 px. There the Navigator and the side pan
 
 **Changed from draft 7:** the chapter list and Reference panel became the Navigator and the side panel, both always one thing at a time; the 1280 px case is now drawn instead of ignored (B, C-11).
 
-![Everything open, the text in the middle](libreto-screens-d8-v1-2026-11-18-0529-img/15-s14-everything-open-the-text-in-the-middle.jpg)
+![Everything open, the text in the middle](libreto-screens-d8-v1-2026-11-22-1701-img/15-s14-everything-open-the-text-in-the-middle.jpg)
 
 ## S15 · Focus and the sprint
 
@@ -230,7 +230,7 @@ A sprint is started from View ▸ Sprint (25 minutes by default) and adds one th
 
 **Changed from draft 7:** Focus no longer shares a screen with "hide the columns" (that key was dropped); the sprint, its bar and its ending are new (C-14).
 
-![Focus and the sprint](libreto-screens-d8-v1-2026-11-18-0529-img/16-s15-focus-and-the-sprint.jpg)
+![Focus and the sprint](libreto-screens-d8-v1-2026-11-22-1701-img/16-s15-focus-and-the-sprint.jpg)
 
 ## S16 · Notes while you write
 
@@ -242,7 +242,7 @@ Which notes the gutter shows is a choice in the status bar's Show menu: Notes: M
 
 **Changed from draft 7:** others' notes are no longer invisible in Write; they are hollow gray bubbles you can switch on or off, and the note is typed beside its line (D critique, hidden feedback).
 
-![Notes while you write](libreto-screens-d8-v1-2026-11-18-0529-img/17-s16-notes-while-you-write.jpg)
+![Notes while you write](libreto-screens-d8-v1-2026-11-22-1701-img/17-s16-notes-while-you-write.jpg)
 
 ## S17 · The Review margin
 
@@ -254,7 +254,7 @@ Cards are of a few kinds. A continuity finding offers Fix here, Fix there and Wh
 
 **Changed from draft 7:** Review is a toggle beside the text with rounds, an Unread filter and a Resolved filter, out-of-date cards and folded threads (F-D-01, F-D-20, F-D-36).
 
-![The Review margin](libreto-screens-d8-v1-2026-11-18-0529-img/18-s17-the-review-margin.jpg)
+![The Review margin](libreto-screens-d8-v1-2026-11-22-1701-img/18-s17-the-review-margin.jpg)
 
 ## S18 · Review as a list
 
@@ -266,7 +266,7 @@ Ticking rows (or Shift+click for a range) raises a bar with bulk actions: "3 sel
 
 **Changed from draft 7:** a list view with bulk actions and an agreement group replaces one long scroll of cards (F-D-20, F-D-30, F-D-31).
 
-![Review as a list](libreto-screens-d8-v1-2026-11-18-0529-img/19-s18-review-as-a-list.jpg)
+![Review as a list](libreto-screens-d8-v1-2026-11-22-1701-img/19-s18-review-as-a-list.jpg)
 
 ## S19 · Review all
 
@@ -278,7 +278,7 @@ The keys act on the card only while it has focus. Clicking in the text lets you 
 
 **Changed from draft 7:** stable progress, no Esc trap, and a per-round Revert instead of "Undo all" (F-D-22, F-D-23, F-D-24, F-D-25).
 
-![Review all](libreto-screens-d8-v1-2026-11-18-0529-img/20-s19-review-all.jpg)
+![Review all](libreto-screens-d8-v1-2026-11-22-1701-img/20-s19-review-all.jpg)
 
 ## S20 · A reader's copy comes back
 
@@ -290,7 +290,7 @@ If the book moved on since you sent it, a warning says so ("38 % of paragraphs c
 
 **Changed from draft 7:** a real import step with author mapping, counts, duplicate detection and a staleness warning, plus the drop-a-file door (F-D-13, F-D-14, F-D-16, F-D-18).
 
-![A reader's copy comes back](libreto-screens-d8-v1-2026-11-18-0529-img/21-s20-a-reader-s-copy-comes-back.jpg)
+![A reader's copy comes back](libreto-screens-d8-v1-2026-11-22-1701-img/21-s20-a-reader-s-copy-comes-back.jpg)
 
 ## S21 · Readers' changes in the text
 
@@ -302,7 +302,7 @@ Comments whose words no longer exist are not lost. They are grouped as "Unplaced
 
 **Changed from draft 7:** inline, three-way and per reader, replacing side-by-side Yours | Marta's blocks (F-D-07, F-D-08, F-D-09, F-D-19).
 
-![Readers' changes in the text](libreto-screens-d8-v1-2026-11-18-0529-img/22-s21-readers-changes-in-the-text.jpg)
+![Readers' changes in the text](libreto-screens-d8-v1-2026-11-22-1701-img/22-s21-readers-changes-in-the-text.jpg)
 
 ## S22 · Send a copy
 
@@ -314,7 +314,7 @@ Sending also saves a version, named "Sent to Marta · Nov 7, 18:32", listed in F
 
 **Changed from draft 7:** options for open-only notes, excluded AI notes and marking changes since the last copy, and the sent copy is a "version" in History (F-D-37, F-D-38).
 
-![Send a copy](libreto-screens-d8-v1-2026-11-18-0529-img/23-s22-send-a-copy.jpg)
+![Send a copy](libreto-screens-d8-v1-2026-11-22-1701-img/23-s22-send-a-copy.jpg)
 
 ## S23 · Undo and Revert
 
@@ -326,7 +326,7 @@ Notices that report a change say Undo while it is the latest step, and Revert on
 
 **Changed from draft 7:** one global Undo list and a bell are replaced by per-document stacks, Revert for older things, and the History popover (F-D-41, F-D-42, F-D-43, F-D-58).
 
-![Undo and Revert](libreto-screens-d8-v1-2026-11-18-0529-img/24-s23-undo-and-revert.jpg)
+![Undo and Revert](libreto-screens-d8-v1-2026-11-22-1701-img/24-s23-undo-and-revert.jpg)
 
 ## S24 · Board view
 
@@ -338,7 +338,7 @@ Unplaced (scenes written but not in the book, not printed, not counted) and Disc
 
 **Changed from draft 7:** moves apply immediately with a notice, Undo and Add to Review instead of an Apply/Discard bar and a moves menu (A-5, D-9); the board shares the window with the Navigator and the side panel instead of being its own mode; the column variant is dropped.
 
-![Board view](libreto-screens-d8-v1-2026-11-18-0529-img/25-s24-board-view.jpg)
+![Board view](libreto-screens-d8-v1-2026-11-22-1701-img/25-s24-board-view.jpg)
 
 ## S25 · A Codex entry
 
@@ -350,7 +350,7 @@ The status bar tells the truth about the AI's reading of this entry: how far it 
 
 **Changed from draft 7:** the Codex is no longer a mode but the Navigator's second section, with the Brief and Threads above People; the AI controls are on the entry itself (For the AI, Never send, the cost line) (F-S18b); Back says where it goes; the “When the AI reads” card is gone.
 
-![A Codex entry](libreto-screens-d8-v1-2026-11-18-0529-img/26-s25-a-codex-entry.jpg)
+![A Codex entry](libreto-screens-d8-v1-2026-11-22-1701-img/26-s25-a-codex-entry.jpg)
 
 ## S26 · The Brief
 
@@ -362,7 +362,7 @@ Its second job is the AI. The Brief is sent with every AI request, so the AI sta
 
 **Changed from draft 7:** new screen. The book's intent, targets and the AI permission had no home and were scattered across settings (F-AI-45, F-AI-46).
 
-![The Brief](libreto-screens-d8-v1-2026-11-18-0529-img/27-s26-the-brief.jpg)
+![The Brief](libreto-screens-d8-v1-2026-11-22-1701-img/27-s26-the-brief.jpg)
 
 ## S27 · A research topic
 
@@ -374,7 +374,7 @@ The side panel lists what the topic links to: the entries, the chapters that men
 
 **Changed from draft 7:** Research is the Navigator's third section instead of a mode, and its topic opens in the center under a breadcrumb; the right-click menu is the same, with the fact going to the Codex from any topic.
 
-![A research topic](libreto-screens-d8-v1-2026-11-18-0529-img/28-s27-a-research-topic.jpg)
+![A research topic](libreto-screens-d8-v1-2026-11-22-1701-img/28-s27-a-research-topic.jpg)
 
 ## S28 · Find, Replace and Rename
 
@@ -386,7 +386,7 @@ A name is not an ordinary word. When the Find field reads a name in the Codex, t
 
 **Changed from draft 7:** “Style” in Options reads “Only in style”, the box never changes a name silently (Rename everywhere is its own dialog with unchecked common words, F-B-97), and the box no longer shows a Codex hint under every name search, only a link.
 
-![Find, Replace and Rename](libreto-screens-d8-v1-2026-11-18-0529-img/29-s28-find-replace-and-rename.jpg)
+![Find, Replace and Rename](libreto-screens-d8-v1-2026-11-22-1701-img/29-s28-find-replace-and-rename.jpg)
 
 ## S29 · Versions and history
 
@@ -398,7 +398,7 @@ The field at the top searches the past, not the present. Typing a phrase finds i
 
 **Changed from draft 7:** a search across past versions with Scope and Since, Put back… with where it goes, “Save a version…” and “versions” instead of snapshots, thinning stated in words, Show changes per block (F-D-48, F-D-49, F-D-51, F-D-53); the dated sessions-and-snapshots list becomes days and activity blocks.
 
-![Versions and history](libreto-screens-d8-v1-2026-11-18-0529-img/30-s29-versions-and-history.jpg)
+![Versions and history](libreto-screens-d8-v1-2026-11-22-1701-img/30-s29-versions-and-history.jpg)
 
 ## S30 · Changes since
 
@@ -410,7 +410,7 @@ Hover a paragraph and Restore appears: it puts that paragraph back as it was at 
 
 **Changed from draft 7:** this screen is new; draft 7 could only compare a whole version in two columns inside History. Now the redline lives in the page with per-paragraph Restore and moved/rewritten labels (F-D-54, F-D-55).
 
-![Changes since](libreto-screens-d8-v1-2026-11-18-0529-img/31-s30-changes-since.jpg)
+![Changes since](libreto-screens-d8-v1-2026-11-22-1701-img/31-s30-changes-since.jpg)
 
 ## S31 · Pages
 
@@ -422,7 +422,7 @@ The right panel is Book layout: a Theme (Classic here), the trim (6 × 9 in), an
 
 **Changed from draft 7:** Book mode becomes a view of the same window; thumbnails are replaced by an outline with page ranges and front/back matter; a Theme replaces the table of print styles; one Export… replaces three format buttons (F-E-36, F-E-51, F-E-61).
 
-![Pages](libreto-screens-d8-v1-2026-11-18-0529-img/32-s31-pages.jpg)
+![Pages](libreto-screens-d8-v1-2026-11-22-1701-img/32-s31-pages.jpg)
 
 ## S32 · Pages, an element clicked
 
@@ -434,7 +434,7 @@ Below the window, the panel it came from: “Layout issues 3” opens a list in 
 
 **Changed from draft 7:** clicking the preview edits the element in the side panel, replacing a dialog of print styles; layout problems get a plain list that jumps to the page (F-E-46, F-E-49).
 
-![Pages, an element clicked](libreto-screens-d8-v1-2026-11-18-0529-img/33-s32-pages-an-element-clicked.jpg)
+![Pages, an element clicked](libreto-screens-d8-v1-2026-11-22-1701-img/33-s32-pages-an-element-clicked.jpg)
 
 ## S33 · Book details
 
@@ -446,7 +446,7 @@ The interface language stays the one the writer chose in Settings; only the book
 
 **Changed from draft 7:** book information and typography rules get a home in File, apart from Settings and apart from the layout; ISBN, pen name and generated words are new (F-E-41, F-E-72).
 
-![Book details](libreto-screens-d8-v1-2026-11-18-0529-img/34-s33-book-details.jpg)
+![Book details](libreto-screens-d8-v1-2026-11-22-1701-img/34-s33-book-details.jpg)
 
 ## S34 · Export and Print
 
@@ -458,7 +458,7 @@ Print… is its own, smaller dialog, because printing is not exporting. It asks 
 
 **Changed from draft 7:** three format buttons and a notes checkbox become one dialog with profiles; printing a working copy is separated from exporting (F-E-60, F-E-61).
 
-![Export and Print](libreto-screens-d8-v1-2026-11-18-0529-img/35-s34-export-and-print.jpg)
+![Export and Print](libreto-screens-d8-v1-2026-11-22-1701-img/35-s34-export-and-print.jpg)
 
 ## S35 · Bring in a Word manuscript
 
@@ -470,7 +470,7 @@ After Import the book opens, and a card at the top of the Navigator says what Li
 
 **Changed from draft 7:** import becomes a preview with editable rules and a single result card, instead of a silent conversion (F-E-64, F-E-65, F-E-66).
 
-![Bring in a Word manuscript](libreto-screens-d8-v1-2026-11-18-0529-img/36-s35-bring-in-a-word-manuscript.jpg)
+![Bring in a Word manuscript](libreto-screens-d8-v1-2026-11-22-1701-img/36-s35-bring-in-a-word-manuscript.jpg)
 
 ## S36 · Statistics, goals and shape
 
@@ -482,7 +482,7 @@ The Shape tab looks at the book rather than at the days. One column per chapter 
 
 **Changed from draft 7:** a Goals tab with a deadline-driven quota and a day calendar, and a Shape tab, join Words, Sessions and Who appears where; the ring in the status bar replaces a separate goals screen (F-C-52, F-C-54).
 
-![Statistics, goals and shape](libreto-screens-d8-v1-2026-11-18-0529-img/37-s36-statistics-goals-and-shape.jpg)
+![Statistics, goals and shape](libreto-screens-d8-v1-2026-11-22-1701-img/37-s36-statistics-goals-and-shape.jpg)
 
 ## S37 · Settings, AI
 
@@ -494,7 +494,7 @@ The disclosure is a live line, not a warning box: "This book: 1,204 AI words, 2.
 
 **Changed from draft 7:** one provider chosen from two cards (subscription first, key advanced) instead of a provider list; levels are Off / When I ask / Also on its own with checkboxes and a cost estimate; the disclosure is a live percentage instead of a warning box.
 
-![Settings, AI](libreto-screens-d8-v1-2026-11-18-0529-img/38-s37-settings-ai.jpg)
+![Settings, AI](libreto-screens-d8-v1-2026-11-22-1701-img/38-s37-settings-ai.jpg)
 
 ## S38 · An agent at work
 
@@ -506,7 +506,7 @@ Nothing the agent writes lands in the manuscript text. Edits to existing text ar
 
 **Changed from draft 7:** new. Agents had no screen; this adds the chip, the per-session permission dialog, quotas and the draft-scene lifecycle (F-AI-04).
 
-![An agent at work](libreto-screens-d8-v1-2026-11-18-0529-img/39-s38-an-agent-at-work.jpg)
+![An agent at work](libreto-screens-d8-v1-2026-11-22-1701-img/39-s38-an-agent-at-work.jpg)
 
 ## S39 · A draft from an agent
 
@@ -518,7 +518,7 @@ The writer can leave notes on a draft exactly as in the book: an amber tint behi
 
 **Changed from draft 7:** new. Draft scenes from agents are shown read-only with provenance, checks and three explicit outcomes, instead of arriving as ordinary text.
 
-![A draft from an agent](libreto-screens-d8-v1-2026-11-18-0529-img/40-s39-a-draft-from-an-agent.jpg)
+![A draft from an agent](libreto-screens-d8-v1-2026-11-22-1701-img/40-s39-a-draft-from-an-agent.jpg)
 
 ## S40 · AI activity
 
@@ -530,7 +530,7 @@ Sessions: each agent session with its goal and what it changed. A running or fin
 
 **Changed from draft 7:** new sheet; draft 7 had only a warning box and a log link. Disclosure is now measured per chapter and exportable, and agent sessions can be reverted whole.
 
-![AI activity](libreto-screens-d8-v1-2026-11-18-0529-img/41-s40-ai-activity.jpg)
+![AI activity](libreto-screens-d8-v1-2026-11-22-1701-img/41-s40-ai-activity.jpg)
 
 ## S41 · Settings
 
@@ -542,7 +542,7 @@ The same name can exist in both scopes on purpose. My styles seeds every new boo
 
 **Changed from draft 7:** one window with two scopes and a cross-scope search instead of Settings and Project settings as two windows that link to each other.
 
-![Settings](libreto-screens-d8-v1-2026-11-18-0529-img/42-s41-settings.jpg)
+![Settings](libreto-screens-d8-v1-2026-11-22-1701-img/42-s41-settings.jpg)
 
 ## S42 · Reading & seeing
 
@@ -554,7 +554,7 @@ Below the dialog, the same Text view in Dark and in Sepia (the page and chrome r
 
 **Changed from draft 7:** new. Draft 7 had interface size only and no themes; this adds themes, reading fonts, scalable geometry and measured contrast.
 
-![Reading & seeing](libreto-screens-d8-v1-2026-11-18-0529-img/43-s42-reading-seeing.jpg)
+![Reading & seeing](libreto-screens-d8-v1-2026-11-22-1701-img/43-s42-reading-seeing.jpg)
 
 ## S43 · Help, tips and tutorials
 
@@ -566,7 +566,7 @@ A tutorial runs in the writer's own project and points at the real control: here
 
 **Changed from draft 7:** Help opens on the focused control with its drawing, tips have "Show me" and "Not this one again", and tutorials name their step and a Leave button; the tutorial moved from the chapter list to Review.
 
-![Help, tips and tutorials](libreto-screens-d8-v1-2026-11-18-0529-img/44-s43-help-tips-and-tutorials.jpg)
+![Help, tips and tutorials](libreto-screens-d8-v1-2026-11-22-1701-img/44-s43-help-tips-and-tutorials.jpg)
 
 ## S44 · A long book and long names
 
@@ -578,7 +578,7 @@ Long words behave. A sixty-character web address wraps at the column edge, in th
 
 **Changed from draft 7:** new screen. It answers the "break it" critique on long titles, part names, untitled scenes, the 200-chapter breadcrumb, long names in the panel head, and duplicate names (F-B-22, F-B-24, F-B-68, F-B-69, F-B-70).
 
-![A long book and long names](libreto-screens-d8-v1-2026-11-18-0529-img/45-s44-a-long-book-and-long-names.jpg)
+![A long book and long names](libreto-screens-d8-v1-2026-11-22-1701-img/45-s44-a-long-book-and-long-names.jpg)
 
 ## S45 · Zoom, interface size and window width
 
@@ -590,7 +590,7 @@ On a 2560 pixel window the columns hug the page with a gap of 48 pixels and the 
 
 **Changed from draft 7:** new screen replacing the window-sizes screen. Draft 7's 1260 px breakpoint, 200 % zoom, interface size and six Spanish mode labels all overflowed (F-B-16 to F-B-20, F-B-32, F-A-70); the model now has three view labels, scaled columns and a defined order of what gives way.
 
-![Zoom, interface size and window width](libreto-screens-d8-v1-2026-11-18-0529-img/46-s45-zoom-interface-size-and-window-width.jpg)
+![Zoom, interface size and window width](libreto-screens-d8-v1-2026-11-22-1701-img/46-s45-zoom-interface-size-and-window-width.jpg)
 
 ## S46 · When things go wrong
 
@@ -602,7 +602,7 @@ The AI fails in the place where it was asked. Offline, a question waits and is s
 
 **Changed from draft 7:** new screen. Draft 7 drew no failure state at all (F-B-72, F-B-73, F-B-75, F-B-80, F-B-81, F-B-82, F-B-83, F-B-86).
 
-![When things go wrong](libreto-screens-d8-v1-2026-11-18-0529-img/47-s46-when-things-go-wrong.jpg)
+![When things go wrong](libreto-screens-d8-v1-2026-11-22-1701-img/47-s46-when-things-go-wrong.jpg)
 
 ## S47 · All the menus
 
@@ -614,7 +614,7 @@ Below are the right-click menus for six places: text with a selection, text with
 
 **Changed from draft 7:** the old inventory screens now show seven menus with Settings, Revert, Close project, Insert ▸ Note, Show names and styles and the Navigator sections added, and Reports removed (F-A-19 to F-A-26).
 
-![All the menus](libreto-screens-d8-v1-2026-11-18-0529-img/48-s47-all-the-menus.jpg)
+![All the menus](libreto-screens-d8-v1-2026-11-22-1701-img/48-s47-all-the-menus.jpg)
 
 ## S48 · Settings, Keys, on a Spanish keyboard
 
@@ -626,7 +626,7 @@ The search box finds a command or a key, a Flagged filter lists only rows with a
 
 **Changed from draft 7:** replaces the plain keys list. Draft 7 listed keys without checking them (Alt+click, Ctrl+., F8 and Ctrl+Alt combinations all collide on Linux or with Spanish layouts); see F-B-01 to F-B-10 and the "Keys on this system" request.
 
-![Settings, Keys, on a Spanish keyboard](libreto-screens-d8-v1-2026-11-18-0529-img/49-s48-settings-keys-on-a-spanish-keyboard.jpg)
+![Settings, Keys, on a Spanish keyboard](libreto-screens-d8-v1-2026-11-22-1701-img/49-s48-settings-keys-on-a-spanish-keyboard.jpg)
 
 ## S49 · Empty places
 
@@ -638,7 +638,7 @@ None of these invents content, shows a bare zero, or opens a tutorial.
 
 **Changed from draft 7:** new screen. Draft 7 left every empty state to the imagination (F-B-113, and the motivation lens asking for empty states that say what goes there and how).
 
-![Empty places](libreto-screens-d8-v1-2026-11-18-0529-img/50-s49-empty-places.jpg)
+![Empty places](libreto-screens-d8-v1-2026-11-22-1701-img/50-s49-empty-places.jpg)
 
 ## S50 · The alternative, four modes
 
@@ -650,7 +650,7 @@ Nothing else in this draft depends on this cut.
 
 **Changed from draft 7:** new comparison page. It is option B of the navigation critique (A, O-1), drawn only for comparison (N14); draft 8 follows option A.
 
-![The alternative, four modes](libreto-screens-d8-v1-2026-11-18-0529-img/51-s50-the-alternative-four-modes.jpg)
+![The alternative, four modes](libreto-screens-d8-v1-2026-11-22-1701-img/51-s50-the-alternative-four-modes.jpg)
 
 ## What changed in draft 8, and why
 
