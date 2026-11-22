@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S34: Export and Print</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s34 .ex{display:flex;min-height:0;flex:1}
+.s34 .prof{width:300px;flex:none;border-right:1px solid var(--line2);padding:10px;background:var(--soft)}
+.s34 .prof .pr{padding:9px 11px;border-radius:8px;font-size:13px;line-height:1.35}
+.s34 .prof .pr small{display:block;color:var(--ink3);font-size:11.5px;margin-top:1px}
+.s34 .prof .pr.on{background:#fff;box-shadow:0 0 0 1.5px var(--accent)}
+.s34 .prof .pr.on b{color:var(--ink)}
+.s34 .prof .pr b{font-weight:600}
+.s34 .opt{flex:1;padding:16px 22px;font-size:13px}
+.s34 .opt h4{margin:0 0 2px;font:600 14px var(--ui)}
+.s34 .opt .sub{color:var(--ink3);font-size:12px;margin-bottom:12px}
+.s34 .opt .ck,.s34 .pd .ck{display:flex;align-items:center;gap:9px;padding:5px 0;width:auto;height:auto;border:0;background:none;justify-content:flex-start}
+.s34 .opt .ck small{color:var(--ink3);font-size:11.5px}
+.s34 .frm{display:grid;grid-template-columns:96px 1fr;gap:8px 10px;align-items:center;margin-top:10px}
+.s34 .frm .k{color:var(--ink2)}
+.s34 .inp{padding:6px 10px;font-size:13px;display:flex;align-items:center;min-height:30px}
+.s34 .inp.dd:after{margin-left:auto}
+.s34 .fact{margin:12px 0;padding:8px 11px;border-radius:7px;background:var(--soft);color:var(--ink2);font-size:12px;border:1px solid var(--line2)}
+.s34 .pd{padding:14px 20px;font-size:13px}
+.s34 .pd .q{font:600 12px var(--ui);color:var(--ink2);margin:6px 0 4px}
+.s34 .pd .ch{display:flex;align-items:flex-start;gap:9px;padding:4px 0}
+.s34 .pd .ch small{display:block;color:var(--ink3);font-size:11.5px}
+.s34 .dlg.in{position:relative;z-index:1}
+.s34 .side .ann{position:relative;left:auto;top:auto;margin-bottom:16px}
+</style><style>
+.pg8 .nav{width:320px}
+.pg8 .nav .navbody{padding:0 8px}
+.pg8 .nrow{padding:3px 4px}
+.pg8 .nrow .pr{margin-left:auto;font-size:11.5px;color:var(--ink3);padding-left:8px;flex:none;font-variant-numeric:tabular-nums}
+.pg8 .nrow.cur .pr{color:var(--ink2)}
+.pg8 .nrow.fm .t{color:var(--ink)}
+.pg8 .nrow.fm.off .t{color:var(--ink3)}
+.pg8 .nrow.fm .cb{margin:0 3px 0 0}
+.pg8 .nrow.fm .gen{font-size:10.5px;color:var(--ink3);margin-left:auto;flex:none}
+.pg8 .nrow.fm .wr{width:14px;flex:none}
+.pg8 .nrow .pg-n{width:16px}
+.bookbg{position:absolute;inset:0;background:#e9e9e6}
+.bk-top{position:absolute;left:0;right:0;top:12px;display:flex;justify-content:center;align-items:center;gap:10px;font-size:12.5px;color:var(--ink2);z-index:3}
+.bk-bot{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;align-items:center;gap:12px;font-size:12px;color:var(--ink2);z-index:3}
+.spread{position:absolute;left:50%;top:58px;transform:translateX(-50%);display:flex;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+.spread .pp{width:318px;height:478px;background:#fff;position:relative;padding:40px 36px 44px;font:10.2px/1.5 var(--text);color:var(--ink);overflow:hidden;text-align:justify;hyphens:auto}
+.spread .pp+.pp{border-left:1px solid #ececea}
+.spread .pp p{margin:0;text-indent:1.4em}
+.spread .pp p.first{text-indent:0}
+.spread .rh{text-align:center;font-size:7.4px;letter-spacing:.22em;color:var(--ink2);margin-bottom:14px;text-transform:uppercase}
+.spread .pn{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:9.5px;color:var(--ink2)}
+.spread .sink{height:150px}
+.spread .opener{text-align:center;position:relative}
+.spread .cnum{font-size:8.6px;letter-spacing:.3em;color:var(--ink2);font-variant:small-caps;text-transform:uppercase}
+.spread .ctl{font:italic 20px var(--text);margin:7px 0 26px}
+.spread .dc{float:left;font:34px/28px var(--text);padding:3px 5px 0 0;margin-top:1px}
+.spread .sc{font-variant:small-caps;letter-spacing:.05em}
+.spread .hd-sel{margin-bottom:14px;outline:2px solid var(--accent);outline-offset:5px;border-radius:2px;background:var(--accent-tint)}
+.lay8{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);z-index:4;display:flex;flex-direction:column;font-size:12.5px}
+.lay8 .lh{display:flex;align-items:center;gap:8px;padding:12px 16px 8px;font:600 13.5px var(--ui)}
+.lay8 .lh .iss{margin-left:auto;font:500 11.5px var(--ui);color:var(--warn);border:1px solid #e6c49c;background:#fdf3e6;border-radius:11px;padding:1px 9px;white-space:nowrap}
+.lay8 .lb{padding:0 16px;flex:1;min-height:0;overflow:hidden}
+.lay8 .fr{display:flex;align-items:center;gap:8px;padding:4px 0;min-height:32px}
+.lay8 .fr .k{width:96px;flex:none;color:var(--ink2)}
+.lay8 .inp{padding:4px 9px;font-size:12.5px;display:inline-flex;align-items:center;height:26px;box-sizing:border-box}
+.lay8 .inp.dd:after{margin-left:auto}
+.lay8 .ck{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;width:auto;height:auto;border:0;background:none;white-space:nowrap;justify-content:flex-start}
+.lay8 .grp{border-top:1px solid var(--line);padding:9px 0 3px}
+.lay8 .grp .gt{display:flex;align-items:center;gap:7px;font-weight:600;font-size:12.5px;min-height:22px}
+.lay8 .grp .gt svg{width:10px;height:10px;color:var(--ink3)}
+.lay8 .grp .gt small{margin-left:auto;font-weight:400;color:var(--ink3);font-size:11.5px}
+.lay8 .grp .bd{padding:4px 0 2px 17px}
+.lay8 .lf{flex:none;padding:12px 16px 14px;border-top:1px solid var(--line2);display:flex;justify-content:flex-end}
+.lay8 .btn.pri{height:30px;padding:0 20px}
+.lay8 .grp.warn .gt small{color:var(--warn)}
+</style><div class="win pg8 s34" style="width:1440px;height:940px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog on" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M2.5 3.2H6v9.6H2.5z" fill="currentColor" stroke="none"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 7 · Lena’s warning</span></span></span><span class="modes views"><span>Text</span><span>Board</span><span class="on">Pages</span></span><span class="right"><span class="revbtn" title="Review · Ctrl+Shift+V">Review<i class="n">12</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog on" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 3.2h3.5v9.6H10z" fill="currentColor" stroke="none"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="nav"><div class="navsec"><span class="modes secs"><span class="on">Book</span><span>Codex</span><span>Research</span></span></div><div class="navtop"><div class="filter"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span>Filter</span></div></div><div class="navbody"><div class="nrow grp"><span class="cv"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span><span class="t">Front</span></div><div class="nrow fm"><span class="cb on"></span><span class="t">Half-title</span><span class="gen">generated</span></div><div class="nrow fm"><span class="cb on"></span><span class="t">Title</span><span class="gen">generated</span></div><div class="nrow fm"><span class="cb on"></span><span class="t">Copyright</span><span class="gen">generated</span></div><div class="nrow fm"><span class="wr"></span><span class="t">Dedication</span><span class="gen">written</span></div><div class="nrow fm"><span class="wr"></span><span class="t">Epigraph</span><span class="gen">not written</span></div><div class="nrow fm off"><span class="cb"></span><span class="t">Contents</span><span class="gen">generated</span></div><div class="nrow part"><span class="cv"></span><span class="t">Part One: Winter</span><span class="pr" style="font-weight:400;letter-spacing:0;text-transform:none">p. 1</span></div><div class="nrow"><span class="cv"></span><span class="n">1</span><span class="t">Rain on the glass</span><span class="pr">3–26</span></div><div class="nrow"><span class="cv"></span><span class="n">2</span><span class="t">The bartender</span><span class="pr">27–46</span></div><div class="nrow"><span class="cv"></span><span class="n">3</span><span class="t">A note under the office door</span><span class="pr">47–64</span></div><div class="nrow"><span class="cv"></span><span class="n">4</span><span class="t">Quarter past three</span><span class="pr">65–84</span></div><div class="nrow"><span class="cv"></span><span class="n">5</span><span class="t">Kit’s ledger</span><span class="pr">85–110</span></div><div class="nrow"><span class="cv"></span><span class="n">6</span><span class="t">The back room</span><span class="pr">111–146</span></div><div class="nrow cur"><span class="cv"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span><span class="n">7</span><span class="t">Lena’s warning</span><span class="pr">147–158</span></div><div class="nrow"><span class="cv"></span><span class="n">8</span><span class="t">Closing time</span><span class="pr">159–174</span></div><div class="nrow"><span class="cv"></span><span class="n">9</span><span class="t">The pawnshop</span><span class="pr">175–182</span></div><div class="nrow part"><span class="cv"></span><span class="t">Part Two: Spring</span><span class="pr" style="font-weight:400;letter-spacing:0;text-transform:none">p. 183</span></div><div class="nrow"><span class="cv"></span><span class="n">10</span><span class="t">Station steps</span><span class="pr">185–188</span></div><div class="nrow"><span class="cv"></span><span class="n">11</span><span class="t">The back room, finally</span><span class="pr">189–238</span></div><div class="nrow grp"><span class="cv"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span><span class="t">Back</span></div><div class="nrow fm"><span class="wr"></span><span class="t">Acknowledgments</span><span class="gen">written</span></div><div class="nrow fm"><span class="wr"></span><span class="t">About the author</span><span class="gen">written</span></div></div></div><div class="bookbg"></div><div class="bk-top">Preview as<span class="seg"><span class="on">Print</span><span>Ebook</span><span>Manuscript</span></span></div><div class="spread">
+  <div class="pp"><div class="rh">Nora Quiles</div><p class="first">The back room was smaller than the stories made it. A table, two chairs that did not match, a safe with its door ajar and nothing inside but a ledger clip and the smell of oil. Vega stood in the doorway and let her eyes do the walking.</p><p>“Nobody uses it,” Lena said behind her. “Not since the spring.”</p><p>“Somebody wiped the table.”</p><p>Lena did not answer that. She went back to the bar, and after a while the glasses started again, one after another, as if nothing in the world had been said.</p><div class="pn">146</div></div>
+  <div class="pp"><div class="sink"></div><div class="opener"><div class="cnum">Chapter seven</div><div class="ctl">Lena’s warning</div></div>
+   <p class="first"><span class="dc">T</span><span class="sc">he Blue Lamp was half empty by ten,</span> which was how Vega liked it. The jukebox had given up on the evening, and the only sound was Lena drying glasses that were already dry.</p>
+   <p>“You’re early,” Lena said without looking up. “Or late. I can never tell with you.”</p><p>Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p><div class="pn">147</div></div>
+</div><div class="bk-bot"><span>‹</span><span>Pages 146–147 of 248</span><span>›</span></div><div class="lay8"><div class="lh">Book layout<span class="iss">Layout issues 3</span></div><div class="lb">
+  <div class="fr"><span class="k">Theme</span><span class="inp dd" style="width:190px"><span>Classic</span></span></div><div class="fr"><span class="k">Trim</span><span class="inp dd" style="width:190px"><span>Trade · 6 × 9 in</span></span></div>
+  <div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg>Type<small>Charter · 11 pt</small></div><div class="bd"><div class="fr"><span class="k">Body face</span><span class="inp dd" style="width:120px"><span>Charter</span></span></div><div class="fr"><span class="k">Size</span><span class="inp dd" style="width:120px"><span>11 pt</span></span></div><div class="ck"><span class="cb on"></span>Justified, hyphenated</div></div></div>
+  <div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>Chapter openers<small>one third sink</small></div></div><div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>Headers &amp; page numbers<small>author · title · footer</small></div></div><div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>Breaks<small>* * *</small></div></div><div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>Pictures &amp; notes<small>notes at chapter end</small></div></div><div class="grp"><div class="gt"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>Fine typography<small>on</small></div></div>
+  </div><div class="lf"><span class="btn pri">Export…</span></div></div></div><div class="status"><span class="sb m"><svg class="ring" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--line)" stroke-width="2"/><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ink2)" stroke-width="2" stroke-dasharray="29.4 34.6" transform="rotate(-90 7 7)"/></svg><span class="dd">54,300 words</span></span><span class="sb m"><span class="dd">p. 146 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="scrim"></div><div class="dlg s34" style="left:290px;top:110px;width:860px;height:480px">
+ <div class="dlg-h">Export<small>File ▸ Export…</small><span class="x">✕</span></div>
+ <div class="ex"><div class="prof">
+  <div class="pr on"><b>Print PDF</b><small>For KDP and IngramSpark: 6 × 9 in, fonts embedded</small></div>
+  <div class="pr"><b>Reading PDF</b><small>For a screen or a printer at home</small></div>
+  <div class="pr"><b>EPUB</b><small>For ebook stores and e-readers</small></div>
+  <div class="pr"><b>Word manuscript</b><small>Standard manuscript format, for an editor or a contest</small></div>
+  <div class="pr"><b>Word for a reader</b><small>Your text with notes; their changes can come back</small></div>
+ </div>
+ <div class="opt"><h4>Print PDF for KDP and IngramSpark</h4><div class="sub">The book as laid out in Pages: Classic, Trade 6 × 9 in, 248 pages.</div>
+  <div class="ck"><span class="cb"></span>Include my notes <small>in the margin of the PDF</small></div>
+  <div class="ck"><span class="cb"></span>Include Not printed scenes</div>
+  <div class="ck"><span class="cb on"></span>Cover page <small>from Book details</small></div>
+  <div class="ck"><span class="cb"></span>Bleed and crop marks <small>only if your printer asks</small></div>
+  <div class="fact">Layout issues 3 are still open. The file will print them as they are. <span class="lk">Show them</span></div>
+  <div class="frm"><span class="k">File name</span><span class="inp">The Blue Lamp – print.pdf</span><span class="k">Save in</span><span class="inp dd"><span>~/Books/The Blue Lamp/exports</span></span></div>
+ </div></div>
+ <div class="dlg-f"><span class="snap" style="font-size:12px;color:var(--ink3)">Each export is kept as a version: “Exported Print PDF”</span><span class="sp"></span><span class="btn q">Cancel</span><span class="btn pri">Export</span></div></div><div class="ann wrap" style="left:1160px;top:130px;--w:250px"><b>1</b><span>Profiles are rows: pick what the file is for, and its few options appear on the right</span></div><div class="ann wrap" style="left:1160px;top:270px;--w:250px"><b>2</b><span>Only the options that matter for this profile: notes, Not printed scenes, cover page, bleed</span></div><div class="ann wrap" style="left:1160px;top:420px;--w:250px"><b>3</b><span>Open layout issues are mentioned, never a blocker</span></div><div class="ann wrap" style="left:1160px;top:530px;--w:250px"><b>4</b><span>One Export button; the result is kept as a version</span></div></div><div class="below s34"><div class="crop" style="width:560px"><div class="lbl">File ▸ Print… is its own small dialog</div><div style="padding:14px"><div class="dlg s34 in" style="width:520px">
+ <div class="dlg-h">Print<small>File ▸ Print…</small><span class="x">✕</span></div>
+ <div class="pd"><div class="q">What</div>
+  <div class="ch"><span class="rd on"></span><span>Working copy<small>A4, double spaced, my notes in the margin ☑</small></span></div>
+  <div class="ch"><span class="rd"></span><span>Book pages<small>6 × 9 in on A4, centered · crop marks ☐</small></span></div>
+  <div class="q" style="margin-top:12px">Range</div>
+  <div class="ch" style="gap:22px"><span style="display:flex;gap:8px;align-items:center"><span class="rd"></span>Whole book</span><span style="display:flex;gap:8px;align-items:center"><span class="rd on"></span>Chapter 7</span><span style="display:flex;gap:8px;align-items:center"><span class="rd"></span>Pages <span class="inp" style="min-height:26px;padding:2px 8px;width:80px;color:var(--ink3)">147–158</span></span></div>
+ </div>
+ <div class="dlg-f"><span class="snap" style="font-size:12px;color:var(--ink3)">12 sheets</span><span class="sp"></span><span class="btn q">Cancel</span><span class="btn pri">Print…</span></div></div></div></div>
+ <div class="side" style="width:560px;padding-top:6px"><div class="ann wrap" style="left:0px;top:0px;--w:380px"><b>5</b><span>Working copy: your text on A4, double spaced, with your notes in the margin. For a proofreader or a red pen</span></div><div class="ann wrap" style="left:0px;top:0px;--w:380px"><b>6</b><span>Book pages: the pages as in Pages, centered on A4</span></div><div class="ann wrap" style="left:0px;top:0px;--w:380px"><b>7</b><span>The range: the whole book, this chapter, or pages. Print… then opens the system’s own dialog</span></div></div></div>
+<div class="caption"><span class="id">S34</span><span class="scn">Export and Print.</span> The Export dialog opened from the Export… button in Pages, with the profile Print PDF selected. Under the window: the separate Print dialog.<div class="vis"><b>On screen:</b> Export: profiles as rows (Print PDF for KDP and IngramSpark, Reading PDF, EPUB, Word manuscript, Word for a reader) with one line each; the selected profile’s options (Include my notes, Include Not printed scenes, Cover page, Bleed and crop marks), a note on the open layout issues, File name, Save in, Export; Print: What (Working copy, A4, double spaced, notes in margin / Book pages, 6 × 9 on A4), Range (Whole book, Chapter 7, Pages), Print… &nbsp;·&nbsp; <b>Not on screen:</b> one dialog per format, a progress bar, a preview inside the dialog (Pages is the preview)</div></div>
+</body></html>

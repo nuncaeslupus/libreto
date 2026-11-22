@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S38: An agent at work</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<div class="s38"><style>
+.s38 .agentchip{font-weight:500}
+.s38 .agentchip svg{width:13px;height:13px;color:var(--gram)}
+.s38 .apop{position:absolute;z-index:40;width:392px;background:var(--paper);border:1px solid #dcdcd8;border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.06);font-size:12.5px;line-height:1.45}
+.s38 .apop:before{content:"";position:absolute;right:92px;top:-6px;width:10px;height:10px;background:var(--paper);border-left:1px solid #dcdcd8;border-top:1px solid #dcdcd8;transform:rotate(45deg)}
+.s38 .ap-h{display:flex;align-items:center;gap:8px;padding:11px 14px 9px;border-bottom:1px solid var(--line2)}
+.s38 .ap-h b{font-weight:600;font-size:13.5px}
+.s38 .ap-h .gray{margin-left:auto}
+.s38 .ap-r{display:flex;gap:10px;padding:7px 14px;border-top:1px solid var(--line2)}
+.s38 .ap-h+.ap-r{border-top:0}
+.s38 .ap-r>.ap-k{width:62px;flex:none;color:var(--ink3);font:600 10.5px var(--ui);letter-spacing:.07em;text-transform:uppercase;padding-top:2px}
+.s38 .ap-r>.ap-v{flex:1;min-width:0}
+.s38 .gray{color:var(--ink3);font-size:12px}
+.s38 .ap-g{display:flex;flex-wrap:wrap;gap:4px 12px}
+.s38 .ap-g span{display:inline-flex;gap:5px;align-items:center}
+.s38 .ap-g .no{color:var(--ink3)}
+.s38 .mbar{display:inline-block;width:120px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;vertical-align:1px}
+.s38 .mbar i{display:block;height:100%;background:var(--gram)}
+.s38 code{font:11.5px ui-monospace,monospace;color:var(--ink2);display:block}
+.s38 .ap-f{display:flex;gap:8px;padding:9px 14px;border-top:1px solid var(--line2);background:var(--soft);border-radius:0 0 12px 12px}
+.s38 .ap-f .btn{height:26px}
+.s38 .nrow .gc.in{color:var(--gram)}
+.s38 .dlg{position:relative}
+.s38 .dh{padding:14px 20px 4px;font:600 16px var(--ui)}
+.s38 .dsub{padding:0 20px 8px;color:var(--ink2);font-size:12.5px}
+.s38 .dl{padding:6px 20px;display:flex;flex-direction:column;gap:7px;font-size:13px}
+.s38 .dl .opt2{align-items:flex-start}
+.s38 .dl .opt2 .cb{margin-top:2px}
+.s38 .dl .opt2 small{display:block;color:var(--ink3);font-size:12px}
+.s38 .dl .opt2.off{color:var(--ink3)}
+.s38 .dl .opt2.off .cb{background:var(--soft);border-color:var(--line)}
+.s38 .dl hr{border:0;border-top:1px solid var(--line2);margin:3px 0;width:100%}
+.s38 .dsv{display:flex;align-items:center;gap:8px;color:var(--fix);font-size:12.5px;padding:6px 20px 10px}
+.s38 .col p{margin:0}
+</style><style>
+.sx{font-size:13px;color:var(--ink)}
+.sx-h{display:flex;align-items:center;gap:14px;padding:11px 16px 11px 20px;border-bottom:1px solid var(--line2);flex:none}
+.sx-h b{font:600 15px var(--ui)}
+.sx-h .seg{margin-left:6px}
+.sx-h .seg span{padding:4px 13px}
+.sx-h .filter{margin:0 0 0 auto;width:300px;height:30px;padding:0 10px}
+.sx-h .x{color:var(--ink3);font-size:14px;width:24px;text-align:center}
+.sx-body{display:flex;flex:1;min-height:0}
+.sx-nav{width:184px;flex:none;background:var(--soft);border-right:1px solid var(--line2);padding:10px 8px;font-size:13px}
+.sx-nav div{padding:7px 12px;border-radius:7px;color:var(--ink2)}
+.sx-nav div small{display:block;font-size:11px;color:var(--ink3);margin-top:1px}
+.sx-nav div.on{background:var(--paper);box-shadow:0 0 0 1px var(--line);font-weight:600;color:var(--ink)}
+.sx-nav div.na{color:var(--ink4)}
+.sx-nav div.na small{color:var(--ink4)}
+.sx-main{flex:1;min-width:0;padding:14px 24px 12px;overflow:hidden}
+.sx-sub{font-size:12px;color:var(--ink3);margin:0 0 8px}
+.sx-sec{font:600 10.5px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin:14px 0 7px}
+.sx-sec:first-child{margin-top:0}
+.sx-row{display:flex;gap:16px;align-items:center;padding:8px 0;border-top:1px solid var(--line2)}
+.sx-row:first-of-type{border-top:0}
+.sx-row>.k{width:150px;flex:none;font-weight:600;font-size:12.5px}
+.sx-row>.v{flex:1;min-width:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sx .gray{color:var(--ink3);font-size:12px}
+.sx .ddb{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:7px;padding:3px 10px;font-size:12.5px;background:var(--paper);min-width:120px}
+.sx .ddb:after{content:"▾";margin-left:auto;color:var(--ink3);font-size:10px}
+.sx .opt2{display:flex;align-items:center;gap:8px;padding:2px 0}
+.sx .inp{padding:3px 9px;font-size:12.5px}
+.sx .lk{color:var(--accent)}
+.hit{background:rgba(226,170,40,.32);border-radius:2px}
+</style><div class="win" style="width:1440px;height:900px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog on" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M2.5 3.2H6v9.6H2.5z" fill="currentColor" stroke="none"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 11 · The back room, finally</span><span class="sep">›</span><span class="dd">Kit opens the door</span></span></span><span class="modes views"><span class="on">Text</span><span>Board</span><span>Pages</span></span><span class="right"><span class="agentchip"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.2 9.4 6.6 13.8 8 9.4 9.4 8 13.8 6.6 9.4 2.2 8l4.4-1.4z"/></svg>Claude Code · drafting ch. 12 · 7 proposals<span class="stop"></span></span><span class="revbtn" title="Review · Ctrl+Shift+V">Review<i class="n">19</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="nav"><div class="navsec"><span class="modes secs"><span class="on">Book</span><span>Codex</span><span>Research</span></span></div><div class="navtop"><div class="filter"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg><span>Filter</span></div></div><div class="navbody"><div class="nrow part"><span class="cv"></span><span class="t">Part Two: Spring</span></div><div class="nrow"><span class="cv"></span><span class="n">10</span><span class="t">Station steps</span></div><div class="nrow cur"><span class="cv"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></svg></span><span class="n">11</span><span class="t">The back room, finally</span></div><div class="srow here"><span class="t">Kit opens the door</span></div><div class="srow"><span class="t">What the ledger says</span></div><div class="nrow"><span class="cv"></span><span class="n">12</span><span class="t">Vega follows Kit</span><span class="gc in">agent</span></div><div class="srow draft"><span class="t">Vega follows Kit to the station</span><span class="dtag">draft</span></div><div class="srow draft"><span class="t">The ledger changes hands</span><span class="dtag">draft</span></div><div class="nrow"><span class="cv"></span><span class="n">13</span><span class="t">The pawnshop at night</span><span class="gc in">agent</span></div><div class="nrow"><span class="cv"></span><span class="n">14</span><span class="t">Teo’s question</span><span class="gc in">agent</span></div><div class="nrow"><span class="cv"></span><span class="n">15</span><span class="t">Harbor Street, empty</span></div><div class="nrow"><span class="cv"></span><span class="n"></span><span class="t" style="color:var(--ink2)">Back matter</span></div><div class="nrow pinned"><span class="cv"></span><span class="t">Discarded</span><span class="gc">3</span></div></div></div><div class="page"><div class="col" style="padding-top:40px"><div class="chap"><div class="num">CHAPTER 11</div><h1>The back room, finally</h1></div><div class="para"><p class="first">The door gave on the second push. Kit stood aside to let her pass, the green ledger held flat against his chest as if the room might ask for it.</p></div><div class="para"><p>It was smaller than the story had made it. A table, two chairs, a lamp with its shade turned to the wall, and on the table a ring of dust where something round had stood for years and was gone.</p></div><div class="para"><p>“Nobody’s been in here since Tuesday,” Vega said, and heard how it sounded in Lena’s voice.</p></div><div class="para"><p>Kit laughed once, without any air in it. “Tuesday,” he said. “That is what she tells everyone.”<span class="cursor"></span></p></div></div></div><span class="askbtn" title="Ask · Ctrl+K"><svg class="logo" width="13" height="13" viewBox="0 0 20 20"><g stroke="#3b6ea8" stroke-width="1.8" stroke-linejoin="round" fill="rgba(59,110,168,.16)"><path d="M10 2.4 12.1 7.9 17.6 10l-5.5 2.1L10 17.6l-2.1-5.5L2.4 10l5.5-2.1z"/></g></svg></span></div><div class="status"><span class="sb m"><span class="chipst"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 7 3h2l4 10M5 9h6"/></svg>Plain<span class="dd" style="margin-left:-2px"></span></span></span><span class="sb m"><svg class="ring" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--line)" stroke-width="2"/><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ink2)" stroke-width="2" stroke-dasharray="28.0 34.6" transform="rotate(-90 7 7)"/></svg><span class="dd">812 of 1,000 today</span></span><span class="sb m"><span class="dd">p. 208 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="apop" style="right:56px;top:100px">
+  <div class="ap-h"><span class="who" style="background:rgba(58,111,216,.12);color:var(--gram)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.2 9.4 6.6 13.8 8 9.4 9.4 8 13.8 6.6 9.4 2.2 8l4.4-1.4z"/></svg></span><b>Claude Code</b><span class="gray">session since 14:02 · 38 min</span></div>
+  <div class="ap-r"><span class="ap-k">Goal</span><span class="ap-v">Draft chapters 12–14 from the outline</span></div>
+  <div class="ap-r"><span class="ap-k">Scope</span><span class="ap-v">ch. 12–14 <span class="gray">· reads the whole book and the Brief</span></span></div>
+  <div class="ap-r"><span class="ap-k">Grants</span><span class="ap-v ap-g"><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg>Read</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg>Propose edits</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg>Draft new scenes</span><span class="no">✕ Change the text directly</span></span></div>
+  <div class="ap-r"><span class="ap-k">Quota</span><span class="ap-v">7 of 50 proposals waiting <span class="mbar"><i style="width:14%"></i></span><br>5,880 of 20,000 words <span class="mbar"><i style="width:29%"></i></span></span></div>
+  <div class="ap-r"><span class="ap-k">Last calls</span><span class="ap-v"><code>get_context  scene 12.1</code><code>propose_scene  “Vega follows Kit…”</code><code>check  name, point of view</code></span></div>
+  <div class="ap-f"><span class="btn">Pause</span><span class="btn red">■ Stop</span><span class="gray" style="margin-left:auto;align-self:center">Revert the session: AI activity</span></div>
+</div><div class="ann wrap" style="left:700px;top:108px;--w:250px"><b>1</b><span>The agent chip appears only while an agent works. It names the agent, the chapter and what waits; ■ stops it at once</span></div><div class="ann wrap" style="left:20px;top:530px;--w:250px"><b>2</b><span>Scope: the agent writes only in ch. 12–14 and cannot change your text. You keep writing here</span></div><div class="ann wrap" style="left:20px;top:640px;--w:270px"><b>3</b><span>New scenes arrive as blue draft scenes, never in the middle of your text; each is accepted whole or discarded</span></div><div class="ann wrap" style="left:1030px;top:470px;--w:280px"><b>4</b><span>Quotas make a runaway session impossible: 50 waiting proposals, 20,000 words</span></div></div><div class="below" style="position:relative;height:500px"><div class="crop" style="width:690px"><div class="lbl">First time: the dialog the agent’s request opens</div><div style="padding:16px 24px 20px;background:var(--soft)"><div class="dlg sx" style="width:640px">
+  <div class="dh">Claude Code wants to work on The Blue Lamp</div>
+  <div class="dsub">It connected through Libreto’s connector on this computer. Choose what it may do in this session.</div>
+  <div class="dl">
+    <span class="opt2"><span class="cb on"></span><span>Read the book, the Codex and the Brief</span></span>
+    <span class="opt2"><span class="cb on"></span><span>Propose edits<small>They arrive in Review as one round; nothing changes until you accept.</small></span></span>
+    <span class="opt2"><span class="cb on"></span><span>Draft new scenes<small>They arrive as blue draft scenes in the Navigator.</small></span></span>
+    <span class="opt2 off"><span class="cb"></span><span>Change the text directly <small>Never offered: your text only changes when you accept.</small></span></span>
+    <hr>
+    <div class="sx-row" style="padding:2px 0;border:0"><span class="k" style="width:70px;font-weight:600">Scope</span><span class="v"><span class="ddb" style="min-width:170px">Chapters 12–14</span><span class="gray">writes here, reads everywhere</span></span></div>
+    <div class="sx-row" style="padding:2px 0;border:0"><span class="k" style="width:70px;font-weight:600">Quotas</span><span class="v"><span class="inp">50</span><span class="gray">proposals waiting ·</span><span class="inp">20,000</span><span class="gray">words</span></span></div>
+  </div>
+  <div class="dsv"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="m5.2 8.3 1.9 1.9 3.9-4"/></svg>A version is saved first (always): “Before Claude Code, 14:02”.</div>
+  <div class="dlg-f"><span class="btn q">Deny</span><span class="sp"></span><span class="btn">Always allow these</span><span class="btn pri">Allow for this session</span></div>
+</div></div></div><div class="ann wrap" style="left:760px;top:150px;--w:330px"><b>5</b><span>Grants are per session. “Always allow these” remembers the same grants for this agent, and Settings ▸ AI can undo that</span></div><div class="ann wrap" style="left:760px;top:270px;--w:330px"><b>6</b><span>A version is saved before the agent touches anything, so the whole session can be reverted from AI activity</span></div></div></div>
+<div class="caption"><span class="id">S38</span><span class="scn">An agent at work.</span> The writer is in chapter 11 while Claude Code drafts chapters 12–14 from the outline. The chip in the strip says so; its popover shows the goal, scope, grants, quotas and last calls. Two blue draft scenes already wait under chapter 12. Below: the dialog the agent’s first request opened.<div class="vis"><b>On screen:</b> the Text view of chapter 11; the Navigator with chapters 12–14 marked “agent” and two blue italic draft scenes (“draft” tag) under chapter 12; the strip chip “✦ Claude Code · drafting ch. 12 · 7 proposals · ■” and Review 19 (the usual 12 plus the agent’s 7); the popover (Goal, Scope, Grants read ✓ propose ✓ draft scenes ✓ change the text directly ✕, Quota 7 of 50 waiting · 5,880 of 20,000 words, Last calls, Pause · Stop); the dialog “Claude Code wants to work on The Blue Lamp” with its checklist, scope, quotas, “A version is saved first (always)” and Allow for this session · Always allow these · Deny &nbsp;·&nbsp; <b>Not on screen:</b> an agent writing into the manuscript text, a bell, the agent’s own window, a setting that lets agents change the text without you</div></div>
+</body></html>

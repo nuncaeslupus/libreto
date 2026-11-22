@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S22: Send a copy</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s22 .dlg{left:370px;top:100px;width:700px;font:13px var(--ui)}
+.s22 .dlg-b{padding:12px 22px 4px}
+.s22 .q{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.s22 .blk{margin-bottom:14px}
+.s22 .inp{display:flex;align-items:center;gap:6px;border:1px solid var(--accent);border-radius:7px;padding:4px 8px;box-shadow:0 0 0 3px var(--accent-tint)}
+.s22 .chip{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:1px 8px 1px 3px}
+.s22 .chip i{font-style:normal;color:var(--ink3)}
+.s22 .row{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.s22 .ch{display:inline-flex;align-items:center;gap:7px}
+.s22 .ch small{color:var(--ink3);font-size:12px}
+.s22 .sel{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:2px 9px;background:#fff;margin-left:4px}
+.s22 .po{display:flex;align-items:center;gap:8px;margin:7px 0;color:var(--ink)}
+.s22 .po small{color:var(--ink3);font-size:12px}
+.s22 .po .lb{width:92px;color:var(--ink2)}
+.s22 .hint{font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.45}
+.s22 .snap{font-size:12px;color:var(--ink2);white-space:nowrap}
+.s22 .snap b{font-weight:600;color:var(--ink)}
+.s22b{display:flex;gap:24px;padding:20px 28px 24px;background:#e3e3e0;align-items:flex-start}
+.s22b .crop{width:680px}
+.s22b .hl{padding:6px 0}
+.s22b .hr{display:flex;gap:12px;align-items:center;padding:8px 16px;font-size:13px;border-top:1px solid var(--line2)}
+.s22b .hr .t{width:110px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.s22b .hr .w{flex:1}
+.s22b .hr .w small{display:block;color:var(--ink3);font-size:11.5px}
+.s22b .hr.new{background:var(--accent-tint)}
+.s22b .gh2{font:600 10.5px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:8px 16px 2px}
+.s22b .side{align-self:center;max-width:520px;font:13.5px/1.55 var(--ui);color:var(--ink2);width:auto;background:none;border:0;display:block}
+</style><style>
+.bb{position:absolute;left:calc(100% + 16px);width:19px;height:15px;border-radius:5px;text-indent:0;font:600 9.5px/15px var(--ui);text-align:center}
+.bb:after{content:"";position:absolute;left:4px;bottom:-4px;width:6px;height:6px;background:inherit;border-left:inherit;border-bottom:inherit;transform:skewY(-30deg) rotate(0deg);clip-path:polygon(0 0,100% 0,0 100%)}
+.bb.mine{background:#e2aa28;color:#fff}
+.bb.oth{background:#fff;border:1.5px solid #8f939a;color:#6b6f76}
+.bb.oth:after{display:none}
+.bb.oth i{position:absolute;left:3px;bottom:-5.5px;width:7px;height:7px;background:#fff;border-right:1.5px solid #8f939a;border-bottom:1.5px solid #8f939a;transform:skewX(35deg) rotate(0deg);clip-path:none;border-radius:0 0 2px 0}
+.bb.stk{width:auto;min-width:19px;padding:0 5px;background:#dcdad4;color:var(--ink2);border-radius:8px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.bb.stk:after{display:none}
+.wh{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.wh.lib{background:var(--ink2);color:#fff}.wh.ai{background:rgba(59,110,168,.12);color:var(--accent)}.wh.ai svg{width:12px;height:12px}
+.wh.M{background:#e8e1f6;color:#5b3fb0}.wh.T{background:#d9eef3;color:#177089}.wh.Y{background:#eceae4}
+.tM{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.tT{background:rgba(26,127,156,.14);box-shadow:inset 0 -2px 0 rgba(26,127,156,.55)}
+/* the Review margin (side panel) */
+.rvm{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);font:12.5px/1.4 var(--ui);color:var(--ink);display:flex;flex-direction:column;z-index:4}
+.rvm .rh{padding:10px 14px 0}
+.rvm .r1{display:flex;align-items:center;gap:8px}
+.rvm .r1 b{font:600 14px var(--ui)}
+.rvm .r1 .sp{flex:1}
+.pg2{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px;gap:2px}
+.pg2 span{padding:2px 10px;border-radius:5px;color:var(--ink2);font-size:12px}
+.pg2 .on{background:var(--ink);color:#fff;font-weight:600}
+.rounds{margin:8px 0 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+.rd2{display:flex;align-items:center;gap:8px;padding:5px 8px;border-top:1px solid var(--line2);font-size:12px}
+.rd2:first-child{border-top:0}
+.rd2 .nm{flex:1;min-width:0;white-space:nowrap}
+.rd2 .nm small{color:var(--ink3);font-size:11.5px}
+.rd2 .pr{width:34px;height:4px;border-radius:2px;background:var(--line);position:relative;flex:none}
+.rd2 .pr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink2)}
+.rd2 .ct{width:106px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums;flex:none;white-space:nowrap}
+.rd2.on{background:var(--accent-tint)}
+.rd2.on .nm{font-weight:600}
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0}
+.tg span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 6px;background:#fff;color:var(--ink3);font-size:11.5px}
+.tg span:before{content:"";width:11px;height:11px;border:1.5px solid var(--ink4);border-radius:3px;box-sizing:border-box;flex:none}
+.tg span.on{color:var(--ink);border-color:var(--ink3)}
+.tg span.on:before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
+.rvm .r3{display:flex;align-items:center;gap:8px;margin:9px 0 9px}
+.rvm .r3 .sp{flex:1}
+.rvm .r3 .btn{height:26px;font-size:12px;padding:0 10px}
+.rvm .addl{color:var(--accent);font-size:12px}
+.rvm .cards{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.rc{position:absolute;left:10px;right:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 8px;box-shadow:0 1px 3px rgba(0,0,0,.05);font:12.5px/1.38 var(--ui)}
+.rc .h{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rc .h svg{width:14px;height:14px;flex:none}
+.rc .h b{font-weight:600}
+.rc .h .wh{margin-left:auto}
+.rc .h small{color:var(--ink3);font-size:11.5px}
+.rc.pend .h svg{color:var(--gram)}.rc.nt .h svg{color:var(--note)}.rc.fixd .h svg{color:var(--fix)}
+.rc .x{color:var(--ink);margin:0 0 6px}
+.rc .x .q{font:italic 13.5px var(--text)}
+.rc .a{display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:6px}
+.rc .b{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff;color:var(--ink);font-size:12px;white-space:nowrap}
+.rc .b.p{border-color:var(--accent);color:var(--accent)}
+.rc .b kbd{margin-left:3px;font-size:10px;padding:0 4px}
+.rc .b svg{width:12px;height:12px}
+.rc.stale{background:#eef1f6;border-color:#c3cddd}
+.rc.stale .h svg{color:#6a7b96}
+.rc.stale .b{background:#f8f9fb}
+.rc.sel{border-color:var(--gram);box-shadow:0 0 0 3px rgba(58,111,216,.12),0 6px 18px rgba(0,0,0,.08)}
+.rc .was{background:var(--red-tint);border-radius:2px;text-decoration:line-through}.rc .now{background:rgba(46,139,87,.14);border-radius:2px}
+.rc .rep{border-left:2px solid var(--line);margin:0 0 5px 3px;padding:1px 0 1px 8px;color:var(--ink2)}
+.rc .rep b{color:var(--ink);font-weight:600}
+.rc .fold{display:flex;align-items:center;gap:6px;color:var(--accent);margin:0 0 5px 3px;padding-left:8px;border-left:2px dashed var(--line)}
+.rc .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.rc .fade{position:relative}
+.rc .rall{color:var(--accent);margin-top:3px;display:inline-block}
+.dotu{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cline{position:absolute;height:1.5px;background:var(--line);z-index:2}
+.s .gm{}
+</style><div class="win s22" style="width:1440px;height:900px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 7 · Lena’s warning</span><span class="sep">›</span><span class="dd">Lena lies about the back room</span></span></span><span class="modes views"><span class="on">Text</span><span>Board</span><span>Pages</span></span><span class="right"><span class="revbtn" title="Review · Ctrl+Shift+V">Review<i class="n">12</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="page"><div class="col" style="padding-top:40px"><div class="chap"><div class="num">CHAPTER 7</div><h1>Lena’s warning</h1></div><p class="first">The Blue Lamp was half empty by ten, which was how Vega liked it. The jukebox had given up on the evening, and the only sound was Lena drying glasses that were already dry, one after another, as if the cloth could rub the night off them.</p><p>“You’re early,” Lena said without looking up. “Or late. I can never tell with you.”</p><p>Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p><p>“Kit who?” Lena set a glass down hard enough to make it ring. “Half the city’s called Kit.”</p><p>“Mine. Thin, nervous, writes everything down in a little green ledger.” Vega slid a coin across the counter and left her hand on it. “He said he’d meet me here at nine.”</p><p>Lena looked at the coin, then at the door behind her, then at nothing at all. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p><p><span class="thought">It was a good lie.</span> Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</p><p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.”</p><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow. And don’t ask Kit what he saw.”</p><p>Outside, the rain had turned to the fine kind that does not fall so much as hang. Vega walked the long way around, past the station steps, because it was the way Kit always walked.</p></div></div><div class="scrim"></div></div><div class="status"><span class="sb m"><span class="chipst"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 7 3h2l4 10M5 9h6"/></svg>Plain<span class="dd" style="margin-left:-2px"></span></span></span><span class="sb m"><span class="dd">2,418 words</span></span><span class="sb m"><span class="dd">p. 146 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="dlg"><div class="dlg-h">Send a copy<small>File ▸ Share</small><span class="x">✕</span></div><div class="dlg-b"><div class="blk"><div class="q">To whom</div><div class="inp"><span class="chip"><span class="wh M" title="M">M</span>Marta<i>✕</i></span><span style="color:var(--ink3)">add a reader…</span></div><div class="hint">Readers are kept with the book, so Libreto knows who a returned copy is from.</div></div><div class="blk"><div class="q">Format</div><div class="row"><span class="ch"><span class="rd on"></span>Word <small>(.docx, notes as comments)</small></span><span class="ch"><span class="rd"></span>PDF</span><span class="ch"><span class="rd"></span>Libreto file <small>(for a reader who has Libreto)</small></span></div></div><div class="blk"><div class="q">What goes in</div><div class="po"><span class="lb">Notes</span><span class="sel">Open only ▾</span><small>resolved notes stay out</small></div><div class="po"><span class="lb">AI notes</span><span class="sel">excluded ▾</span><small>the AI’s findings never travel with a copy unless you include them</small></div><div class="po"><span class="cb on"></span>Mark my changes since the last copy to Marta <small>(Oct 20) as tracked changes</small></div><div class="po"><span class="lb">You appear as</span><span style="color:var(--ink)">“The author”</span><small>· <span class="lk">Book details</span></small></div></div><div class="blk"><div class="q">Where</div><div class="row"><span class="ch"><span class="rd"></span>Save to a folder</span><span class="ch"><span class="rd on"></span>Email <small>your email program, the file attached</small></span></div></div></div><div class="dlg-f"><span class="snap">Also saves a version: <b>Sent to Marta · Nov 7, 18:32</b></span><span class="sp"></span><span class="btn">Cancel</span><span class="btn pri">Send</span></div></div><div class="ann wrap" style="left:20px;top:170px;--w:320px"><b>1</b><span>To whom, format, what goes in, where: one small dialog</span></div><div class="ann wrap" style="left:20px;top:400px;--w:320px"><b>2</b><span>Notes: open ones only by default; the AI’s notes are excluded by default</span></div><div class="ann wrap" style="left:20px;top:500px;--w:320px"><b>3</b><span>Your own edits since the last copy go out as tracked changes, so Marta sees what is new</span></div><div class="ann wrap" style="left:1090px;top:700px;--w:300px"><b>4</b><span>Sending saves a named version, listed in File ▸ Versions & history; the returned copy is compared with it</span></div></div><div class="s22b"><div class="crop"><div class="lbl">File ▸ Versions & history, a moment later</div><div class="hl"><div class="gh2">Today</div><div class="hr new"><span class="t">18:32</span><span class="w"><b>Sent to Marta · Nov 7</b><small>Word · 2,418 words · notes: open only</small></span><span class="lk">Compare with now</span><span class="lk">Open</span></div><div class="hr"><span class="t">17:04</span><span class="w">Autosaved<small>before your last editing session</small></span><span class="lk">Open</span></div></div></div><div class="side">When Marta’s copy comes back, Libreto compares it with this version: what she changed is what differs from what you sent, not from what you have now (S20, S21).</div></div>
+<div class="caption"><span class="id">S22</span><span class="scn">Send a copy.</span> File ▸ Share ▸ Send a copy… over the dimmed text. Marta is the reader, the format is Word, and the copy goes by email. Sending also saves a version, shown below as it appears in File ▸ Versions & history.<div class="vis"><b>On screen:</b> the dialog (To whom with the chip Marta; Format Word ● PDF Libreto file; Notes: Open only ▾; AI notes: excluded ▾; ☑ Mark my changes since the last copy to Marta (Oct 20); You appear as; Where Folder / Email ●; the line “Also saves a version: Sent to Marta · Nov 7, 18:32”; Cancel · Send); under it the Versions list with that version &nbsp;·&nbsp; <b>Not on screen:</b> a receive dialog, a Compare sheet, accounts or sync</div></div>
+</body></html>

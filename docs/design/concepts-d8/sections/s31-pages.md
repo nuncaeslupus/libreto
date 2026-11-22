@@ -1,0 +1,9 @@
+## s31-pages: Pages
+
+Pages is the third view of the manuscript, next to Text and Board, and it is where the book looks like a book. You reach it with the view switch in the strip or `Ctrl+3`. The Navigator on the left turns into the book outline: a Front group (Half-title, Title, Copyright, Dedication, Epigraph, Contents), the parts and chapters with the pages each one occupies, and a Back group (Acknowledgments, About the author). The chapter you were writing stays selected, and its spread appears in the middle.
+
+Pages written by you, such as the dedication or the acknowledgments, are rows you open and type in. Pages Libreto generates, such as the half-title, the copyright page and the contents, are rows with a tick: switch them on or off and the page count follows. The center shows the spread as it will print, with a running head and folio on the left page and the chapter opener on the right: a sink of one third of the page, “CHAPTER SEVEN”, the title, a drop cap and a first line in small caps. “Preview as” switches the same book between Print, Ebook and Manuscript, so a writer sees what each export will carry.
+
+The right panel is Book layout: a Theme (Classic here), the trim (6 × 9 in), and groups of settings (Type, Chapter openers, Headers & page numbers, Breaks, Pictures & notes, Fine typography), folded until opened. “Layout issues 3” in its header lists what looks wrong on a page, such as a lonely line at the top of a page. There is one way out, Export…; printing on paper is File ▸ Print… and has its own small dialog. The writing font and page color you chose for Text never change the book; only the theme does.
+
+**Changed from draft 7:** Book mode becomes a view of the same window; thumbnails are replaced by an outline with page ranges and front/back matter; a Theme replaces the table of print styles; one Export… replaces three format buttons (F-E-36, F-E-51, F-E-61).

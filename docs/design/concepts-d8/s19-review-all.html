@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Libreto concept S19: Review all, the walk</title>
+<link rel="stylesheet" href="d4.css">
+</head><body style="width:1440px;background:#d9d9d6">
+<style>
+.s19 .tM2{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.s19 .del{text-decoration:line-through;color:var(--ink3)}
+.s19 .tsel{outline:2px solid rgba(111,79,201,.55);outline-offset:2px;border-radius:2px}
+.s19 .para{position:relative}
+.s19 .walk{padding:12px 14px 0}
+.s19 .walk .t1{display:flex;align-items:center;gap:8px}
+.s19 .walk .t1 b{font:600 14px var(--ui)}.s19 .walk .t1 .sp{flex:1}
+.s19 .walk .t2{display:flex;align-items:center;gap:7px;margin:9px 0 0;font-size:13.5px}
+.s19 .walk .t2 b{font-weight:600}
+.s19 .walk .pb{height:4px;border-radius:2px;background:var(--line);margin-top:9px;position:relative}
+.s19 .walk .pb i{position:absolute;left:0;top:0;bottom:0;width:50%;border-radius:2px;background:#6f4fc9}
+.s19 .stop{border:1px solid var(--line);border-radius:6px;background:#fff;padding:3px 11px;font:500 12.5px var(--ui)}
+.s19 .rc .b{padding:3px 8px}
+.s19 .rc .b kbd{font-size:10.5px;padding:0 5px}
+.s19 .rc .a{gap:6px}
+.s19 .wfoot{position:absolute;left:14px;right:14px;bottom:12px;color:var(--ink3);font-size:11.5px;line-height:1.45;border-top:1px solid var(--line);padding-top:8px}
+.s19 .wfoot b{font-weight:600;color:var(--ink2)}
+.below.s19b{display:flex;gap:24px;padding:20px 28px 22px;align-items:flex-start}
+.s19b .endp{width:340px;background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:12px 14px 14px;font:12.5px/1.45 var(--ui);color:var(--ink)}
+.s19b .endp h4{margin:0 0 4px;font:600 14px var(--ui)}
+.s19b .endp .big{font:600 15px var(--ui);margin:6px 0 2px}
+.s19b .endp .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.s19b .endp .b{border:1px solid var(--line);border-radius:6px;padding:3px 10px;background:#fff}
+.s19b .endp .b.p{border-color:var(--accent);color:var(--accent)}
+.s19b .endp .b.r{color:var(--red);border-color:#e3b3a8}
+.s19b .endp small{color:var(--ink3);font-size:11.5px}
+.s19b .note2{max-width:640px;font:13px/1.5 var(--ui);color:var(--ink2);align-self:center}
+</style><style>
+.bb{position:absolute;left:calc(100% + 16px);width:19px;height:15px;border-radius:5px;text-indent:0;font:600 9.5px/15px var(--ui);text-align:center}
+.bb:after{content:"";position:absolute;left:4px;bottom:-4px;width:6px;height:6px;background:inherit;border-left:inherit;border-bottom:inherit;transform:skewY(-30deg) rotate(0deg);clip-path:polygon(0 0,100% 0,0 100%)}
+.bb.mine{background:#e2aa28;color:#fff}
+.bb.oth{background:#fff;border:1.5px solid #8f939a;color:#6b6f76}
+.bb.oth:after{display:none}
+.bb.oth i{position:absolute;left:3px;bottom:-5.5px;width:7px;height:7px;background:#fff;border-right:1.5px solid #8f939a;border-bottom:1.5px solid #8f939a;transform:skewX(35deg) rotate(0deg);clip-path:none;border-radius:0 0 2px 0}
+.bb.stk{width:auto;min-width:19px;padding:0 5px;background:#dcdad4;color:var(--ink2);border-radius:8px;box-shadow:-3px 1px 0 -1px #c8c6c0}
+.bb.stk:after{display:none}
+.wh{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#e6e4df;color:var(--ink2);font:600 10px/1 var(--ui);padding:0 5px;flex:none}
+.wh.lib{background:var(--ink2);color:#fff}.wh.ai{background:rgba(59,110,168,.12);color:var(--accent)}.wh.ai svg{width:12px;height:12px}
+.wh.M{background:#e8e1f6;color:#5b3fb0}.wh.T{background:#d9eef3;color:#177089}.wh.Y{background:#eceae4}
+.tM{background:rgba(111,79,201,.14);box-shadow:inset 0 -2px 0 rgba(111,79,201,.55)}
+.tT{background:rgba(26,127,156,.14);box-shadow:inset 0 -2px 0 rgba(26,127,156,.55)}
+/* the Review margin (side panel) */
+.rvm{position:absolute;right:0;top:0;bottom:0;width:340px;background:var(--soft);border-left:1px solid var(--line);font:12.5px/1.4 var(--ui);color:var(--ink);display:flex;flex-direction:column;z-index:4}
+.rvm .rh{padding:10px 14px 0}
+.rvm .r1{display:flex;align-items:center;gap:8px}
+.rvm .r1 b{font:600 14px var(--ui)}
+.rvm .r1 .sp{flex:1}
+.pg2{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px;gap:2px}
+.pg2 span{padding:2px 10px;border-radius:5px;color:var(--ink2);font-size:12px}
+.pg2 .on{background:var(--ink);color:#fff;font-weight:600}
+.rounds{margin:8px 0 0;border:1px solid var(--line);border-radius:8px;background:#fff}
+.rd2{display:flex;align-items:center;gap:8px;padding:5px 8px;border-top:1px solid var(--line2);font-size:12px}
+.rd2:first-child{border-top:0}
+.rd2 .nm{flex:1;min-width:0;white-space:nowrap}
+.rd2 .nm small{color:var(--ink3);font-size:11.5px}
+.rd2 .pr{width:34px;height:4px;border-radius:2px;background:var(--line);position:relative;flex:none}
+.rd2 .pr i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink2)}
+.rd2 .ct{width:106px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums;flex:none;white-space:nowrap}
+.rd2.on{background:var(--accent-tint)}
+.rd2.on .nm{font-weight:600}
+.tg{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0}
+.tg span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 6px;background:#fff;color:var(--ink3);font-size:11.5px}
+.tg span:before{content:"";width:11px;height:11px;border:1.5px solid var(--ink4);border-radius:3px;box-sizing:border-box;flex:none}
+.tg span.on{color:var(--ink);border-color:var(--ink3)}
+.tg span.on:before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
+.rvm .r3{display:flex;align-items:center;gap:8px;margin:9px 0 9px}
+.rvm .r3 .sp{flex:1}
+.rvm .r3 .btn{height:26px;font-size:12px;padding:0 10px}
+.rvm .addl{color:var(--accent);font-size:12px}
+.rvm .cards{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.rc{position:absolute;left:10px;right:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px 8px;box-shadow:0 1px 3px rgba(0,0,0,.05);font:12.5px/1.38 var(--ui)}
+.rc .h{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.rc .h svg{width:14px;height:14px;flex:none}
+.rc .h b{font-weight:600}
+.rc .h .wh{margin-left:auto}
+.rc .h small{color:var(--ink3);font-size:11.5px}
+.rc.pend .h svg{color:var(--gram)}.rc.nt .h svg{color:var(--note)}.rc.fixd .h svg{color:var(--fix)}
+.rc .x{color:var(--ink);margin:0 0 6px}
+.rc .x .q{font:italic 13.5px var(--text)}
+.rc .a{display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:6px}
+.rc .b{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff;color:var(--ink);font-size:12px;white-space:nowrap}
+.rc .b.p{border-color:var(--accent);color:var(--accent)}
+.rc .b kbd{margin-left:3px;font-size:10px;padding:0 4px}
+.rc .b svg{width:12px;height:12px}
+.rc.stale{background:#eef1f6;border-color:#c3cddd}
+.rc.stale .h svg{color:#6a7b96}
+.rc.stale .b{background:#f8f9fb}
+.rc.sel{border-color:var(--gram);box-shadow:0 0 0 3px rgba(58,111,216,.12),0 6px 18px rgba(0,0,0,.08)}
+.rc .was{background:var(--red-tint);border-radius:2px;text-decoration:line-through}.rc .now{background:rgba(46,139,87,.14);border-radius:2px}
+.rc .rep{border-left:2px solid var(--line);margin:0 0 5px 3px;padding:1px 0 1px 8px;color:var(--ink2)}
+.rc .rep b{color:var(--ink);font-weight:600}
+.rc .fold{display:flex;align-items:center;gap:6px;color:var(--accent);margin:0 0 5px 3px;padding-left:8px;border-left:2px dashed var(--line)}
+.rc .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.rc .fade{position:relative}
+.rc .rall{color:var(--accent);margin-top:3px;display:inline-block}
+.dotu{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cline{position:absolute;height:1.5px;background:var(--line);z-index:2}
+.s .gm{}
+</style><div class="win s19" style="width:1440px;height:900px"><div class="titlebar"><span class="appic"></span><div class="wtitle">The Blue Lamp — Libreto</div><div class="wctl"><span>–</span><span>▢</span><span>✕</span></div></div><div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Help</span></div><div class="strip"><span class="ib tog" title="Navigator · Ctrl+Shift+L"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M6 2.5v11"/></svg></span><span class="gap"></span><span class="ib "><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg></span><span class="ib off"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></span><span class="gap"></span><span class="crumbs8"><span class="crumbs"><span class="dd ch">Chapter 7 · Lena’s warning</span><span class="sep">›</span><span class="dd">Lena lies about the back room</span></span></span><span class="modes views"><span class="on">Text</span><span>Board</span><span>Pages</span></span><span class="right"><span class="revbtn on" title="Review · Ctrl+Shift+V">Review<i class="n">12</i></span><span class="gap"></span><span class="ib fnd" title="Find · Ctrl+F"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4.6"/><path d="m10.5 10.5 3.5 3.5"/></svg></span><span class="ib tog on" title="Side panel · Ctrl+Shift+R"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.5" width="12.4" height="11" rx="1.8"/><path d="M10 3.2h3.5v9.6H10z" fill="currentColor" stroke="none"/><path d="M10 2.5v11"/></svg></span></span></div><div class="content"><div class="page"><div class="col" style="padding-top:0px"><div style="height:40px"></div><div class="para"><p class="first">Vega took the stool at the end of the bar, the one with a view of the back-room door. “Has Kit been in?”</p></div><div class="para"><p>“Kit who?” Lena set a glass down <span class="del tM2" data-m="chg">hard enough to make it ring</span> <span class="tM2 tsel" data-m="chg2">harder than she meant to</span>. “Half the city’s called Kit.”</p></div><div class="para"><p>“Mine. Thin, nervous, writes everything down in a little green ledger.” Vega slid a coin across the counter and left her hand on it. “He said he’d meet me here at nine.”</p></div><div class="para"><p>Lena looked at the coin, then at the door behind her. “Nobody came in at nine. Nobody’s been in that room since Tuesday.”</p></div><div class="para"><p><i>It was a good lie.</i> Vega had heard worse from people who were paid to tell them. But there was a wet ring on the bar by the back-room door, and a second glass upside down on the drainer, still beaded.</p></div><div class="para"><p>“Lena,” she said quietly, “if he’s in trouble, I’d rather hear it from you.”</p></div><div class="para"><p>“Then hear this.” Lena leaned close enough that Vega could smell the lemon on her hands. “Go home. Don’t come back to the Blue Lamp tomorrow. And don’t ask Kit what he saw.”</p></div><div class="para"><p>Outside, the rain had turned to the fine kind that does not fall so much as hang. Vega walked the long way around, past the station steps, because it was the way Kit always walked.</p></div></div></div><div class="rvm" data-m="rvm"><div class="walk" data-m="walk"><div class="t1"><b>Review all</b><span class="sp"></span><span class="stop">■ Stop</span></div><div class="t2"><span class="wh M" title="M">M</span><span><b>Marta</b> · decided 150 · left 150</span></div><div class="pb"><i></i></div></div><div class="rc pend sel" style="top:106px;left:10px;right:12px"><div class="h"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><circle cx="5.2" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="8" cy="8" r=".95" fill="currentColor" stroke="none"/><circle cx="10.8" cy="8" r=".95" fill="currentColor" stroke="none"/></svg><b>Change</b><small>5 words</small><span class="wh M" title="M">M</span></div><div class="x"><span class="was">hard enough to make it ring</span><br><span class="now">harder than she meant to</span></div><div class="a"><span class="b p"><i style="font-style:normal">✓</i>Accept<kbd>Enter</kbd></span><span class="b"><i style="font-style:normal">✗</i>Reject<kbd>Delete</kbd></span><span class="b">Skip<kbd>S</kbd></span><span class="b"><i style="font-style:normal">✎</i>Edit<kbd>E</kbd></span></div></div><div class="wfoot"><b>Stop</b> or close the margin at any time: it resumes where you stop. The keys act on the card; click in the text to type, and the walk waits.</div></div></div><div class="status"><span class="sb m"><span class="chipst"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 7 3h2l4 10M5 9h6"/></svg>Plain<span class="dd" style="margin-left:-2px"></span></span></span><span class="sb m"><span class="dd">2,418 words</span></span><span class="sb m"><span class="dd">p. 146 of 248</span></span><span class="sb saved">Saved 19:32</span><span class="sp"></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 2.5 4 4-6 6H3.5v-4z"/><path d="M2 14.5h12"/></svg><span class="dd">Show</span></span><span class="sb m"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.6"/></svg><span class="dd">History</span></span><span class="vsep"></span><span class="zoom"><span>–</span><span class="track"><span class="knob" style="left:33.33333333333333%"></span></span><span>+</span><span class="pct">100%</span></span><span class="sb ic kb" title="Keys for where you are · F1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M4.5 9.8h7"/></svg></span></div><div class="ann wrap" style="left:20px;top:160px;--w:330px"><b>1</b><span>The header counts what is decided and what is left: it does not move when you skip or the list changes</span></div><div class="ann wrap" style="left:20px;top:250px;--w:330px"><b>2</b><span>Which cards are in the walk follows the filters and the round you chose</span></div><div class="ann wrap" style="left:20px;top:330px;--w:330px"><b>3</b><span>The text scrolls to the line; the card sits level with it and Marta’s change is outlined in her tint</span></div><div class="ann wrap" style="left:20px;top:430px;--w:330px"><b>4</b><span>The keys are inside the buttons; Edit lets you change the words before accepting</span></div><div class="ann wrap" style="left:20px;top:520px;--w:330px"><b>5</b><span>A stray click in the text does not end the walk: it waits while you type</span></div></div><div class="below s19b"><div class="endp"><small style="text-transform:uppercase;letter-spacing:.06em">At the end of the walk</small><h4>Marta · Nov 7</h4><div class="big">Decided 296 · Skipped 4</div><small>Accepted 210 · Rejected 86 · the 4 skipped are still open in Review</small><div class="row"><span class="b p">Show the 4 skipped</span><span class="b r">Revert this round</span></div></div><div class="endp"><small style="text-transform:uppercase;letter-spacing:.06em">Coming back after stopping at 150</small><h4>Marta · Nov 7</h4><div class="big">Decided 150 · left 150</div><small>The walk picks up at the next undecided card</small><div class="row"><span class="b p">Review all ▶</span><span class="b">Revert this round</span></div></div><div class="note2">Revert this round puts back every text change Marta’s round made, as one step. What it cannot revert because you edited the words afterwards stays, and the result says so (see S23).</div></div>
+<div class="caption"><span class="id">S19</span><span class="scn">Review all, the walk.</span> The writer pressed Review all ▶ on Marta’s round. The margin is now a walk: one card at a time, level with its line, the text scrolled to Marta’s change. Half the round is decided. Below the window, two small frames: the end of the walk, and what the margin offers when you come back after stopping.<div class="vis"><b>On screen:</b> Review pressed; the walk header (Review all, ■ Stop, “Marta · decided 150 · left 150”, a progress bar); the change card (old words struck, new words below, ✓ Accept Enter, ✗ Reject Delete, Skip S, ✎ Edit E); the text with Marta’s change in her tint, outlined; the footer “resumes where you stop”; in the frames, “Decided 296 · Skipped 4” with Show the 4 skipped and Revert this round, and the resume state &nbsp;·&nbsp; <b>Not on screen:</b> a position like “4 / 12”, the navigator, the Ask button, other cards (the walk shows one)</div></div>
+</body></html>

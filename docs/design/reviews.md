@@ -12,8 +12,10 @@ Every round of the Libreto concept was reviewed on an annotatable reader (claude
 | Walkthrough, draft 5 | 2026-11-13 | [libreto-screens-d5 (reviewed)](concepts-d4/libreto-screens-d5-v1-2026-11-11-0006-reviewed.md) | 73 | [HTML](concepts-d4/libreto-screens-d5-v1-2026-11-11-0006-reader.html) |
 | Walkthrough, draft 6 | 2026-11-15 | [libreto-screens-d6 (reviewed)](concepts-d4/libreto-screens-d6-v1-2026-11-13-1917-reviewed.md) | 80 | [HTML](concepts-d4/libreto-screens-d6-v1-2026-11-13-1917-reader.html) |
 | Walkthrough, draft 7 | in review | [libreto-screens-d7](concepts-d4/libreto-screens-d7-v1-2026-11-15-1931-reader.md) | — | [HTML](concepts-d4/libreto-screens-d7-v1-2026-11-15-1931-reader.html) |
+| Outside critique of draft 7 | in review | [libreto-critique-d7](libreto-critique-d7-v1-2026-11-18-0517-reader.md) (summary [critique-d7.md](critique-d7.md), six reports in `critique-d7/`) | — | [HTML](libreto-critique-d7-v1-2026-11-18-0517-reader.html) |
+| Walkthrough, draft 8 | in review | [libreto-screens-d8](concepts-d8/libreto-screens-d8-v1-2026-11-22-1701-reader.md) | — | [HTML](concepts-d8/libreto-screens-d8-v1-2026-11-22-1701-reader.html) |
 
-The notes exports themselves are in `concepts/review-notes-*.md` and `../../status/*-notes.md`; the current text of the walkthrough is `walkthrough.md`, and its screens are built from `concepts-d4/`.
+The notes exports themselves are in `concepts/review-notes-*.md` and `../../status/*-notes.md`; the current text of the walkthrough is `walkthrough-d8.md` (draft 7: `walkthrough.md`), and its screens are built from `concepts-d8/` (drafts 4 to 7: `concepts-d4/`).
 
 To add a round: build the reader (`create_reader.py --input <the screens document> --output-dir <its folder>` writes `<stem>-reader.html` and, beside it, `<stem>-reader.md` with the pictures in `<stem>-img/`), review it and export the notes, then
 
