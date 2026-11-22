@@ -18,6 +18,60 @@ being a changelog nobody reads.
 
 Format: `## [X.Y.Z] - YYYY-MM-DD`, newest first, plain bullets below.
 
+## [5.34.1] - 2026-11-22
+
+Fixes to pictures in reader notes (5.34.0), from a review of the vendored copy.
+
+- **Re-baking after a redaction no longer leaves the old screenshot behind.** `--bake` / the
+  Markdown copy now deletes the picture files it wrote earlier and no longer links, so a
+  removed private screenshot is not committed with the new copy.
+- **Picture edge cases.** The re-bake cleanup also covers `.bmp`/`.tif` files copied without
+  Pillow; an import never swaps a damaged picture for a same-named intact one from another
+  folder; Save / Export no longer waits forever when the browser's picture store aborts; and
+  `downloads` counts pictures as committed only beside their Markdown.
+- **The reviewed copy keeps its pictures in `<stem>-reviewed-img/`**, not the regular copy's
+  `<stem>-img/`: both numbered their files from 01, so one run could overwrite a picture the
+  other still linked. Commit the reviewed `.md` together with its own `-reviewed-img/`.
+- **Save / Export** waits for the stored pictures to load, so an export clicked just after a
+  reload no longer leaves them out. Closing the page while a picture is still being attached
+  or saved now warns.
+- **Removing a picture** acts on the picture you clicked, not its position, so it can no
+  longer delete a stored picture that was not on screen. Removing the *last* picture that a
+  rebuilt reader was seeded with now stays removed after a reload.
+- **Attaching**: an unreadable picture says so instead of "Picture attached", and an empty
+  block note no longer closes while a second picture is still being attached to it.
+- **Import**: with two `.zip` exports chosen together, each picture comes from the archive
+  that supplied the notes; a member that fails its length/CRC check is reported as damaged
+  and not imported. `create_reader.py --notes` names a damaged picture and still seeds the
+  notes and the other pictures, instead of stopping with a traceback.
+- **Rebuilding**: a note that quotes the reader's own `__SEED_PICTURES__` placeholder no
+  longer breaks the page, and a picture-only note stays at its section when that section
+  lost its body (instead of moving to *Unplaced notes*).
+- **`reader_check.py downloads`** still warns about a `.zip` export when only its Markdown
+  is tracked and its pictures are not.
+
+## [5.34.0] - 2026-11-22
+
+- **Pictures in reader notes.** In an annotatable reader, paste a screenshot (Ctrl+V / ⌘V)
+  into a note field or drop a picture file on it: it shows as a thumbnail under the note
+  (tap to enlarge, × to remove) and stays across reloads. A paste that also carries text
+  (spreadsheet cells, a word-processor passage) pastes the text only. Large pictures are downscaled to
+  1600 px on the long edge. They are kept in the browser's IndexedDB, not localStorage, so
+  they do not crowd out note text; if the browser refuses to store one, the note says so and
+  the picture still goes out with the next export.
+- **An export with pictures is a `.zip`** — `…-notes.md` plus `…-notes-img/NN.png|jpg`,
+  each picture linked under its note. Unzip it beside the reader and commit both; the
+  session reads the Markdown and opens a picture only when a note needs it.
+  `create_reader.py --notes` accepts the `.zip` (or the unzipped `.md`), re-seeds a rebuilt
+  reader with the pictures, and `--bake` writes them into the reviewed copy's `-img/`.
+  A text-only export is unchanged: one `.md`.
+- **Import** takes the `.zip`, or a `.md` chosen together with its pictures, and reports how
+  many notes landed under *Unplaced notes* because their section is gone. To move notes
+  from an older reader into a regenerated one: Save / Export in the old one *before*
+  regenerating (a rebuild removes it), then Import in the new one — exports from earlier
+  versions import as before.
+- `reader_check.py downloads` also names a `…-notes.zip` left in Downloads.
+
 ## [5.33.1] - 2026-11-22
 
 - **`references/ci-minutes.md` no longer tells you a dispatch unblocks a merge.** A
